@@ -70,3 +70,6 @@ infra/postgres/novo_analista.sql
 infra/scripts/monitorar_docker_tailscale.ps1
 .claude/skills/
 projetos/wcs/
+
+# Configuracao local do assistente de IA (permissoes de comando desta maquina)
+.claude/
