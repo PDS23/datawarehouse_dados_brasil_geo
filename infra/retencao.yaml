@@ -32,3 +32,5 @@ tabelas:
     dependentes:
       - {tabela: resultados.desmatamento_imovel, coluna: id_imovel_sicar}
       - {tabela: resultados.desmatamento_imovel_controle, coluna: id_imovel_sicar}   # por ultimo: referencia a mesma versao
+  - tabela: vetorial.funai_terras_indigenas
+    chave: [terrai_codigo]

@@ -5,7 +5,7 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 76,
+   "linhas": 78,
    "bytes": 90112,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
@@ -100,7 +100,7 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 44,
+   "linhas": 46,
    "bytes": 90112,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 15,
+   "linhas": 16,
    "bytes": 32768,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,7 +448,7 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 71,
+   "linhas": 95,
    "bytes": 65536,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
@@ -903,7 +903,7 @@
    "sch": "dim",
    "nome": "fontes",
    "view": false,
-   "linhas": 5,
+   "linhas": 6,
    "bytes": 49152,
    "coment": "Órgãos e sistemas de onde vêm os dados. Quase toda tabela aponta para cá por id_fonte.",
    "cols": [
@@ -1936,6 +1936,206 @@
    ]
   },
   {
+   "id": "vetorial.funai_terras_indigenas",
+   "sch": "vetorial",
+   "nome": "funai_terras_indigenas",
+   "view": false,
+   "linhas": 665,
+   "bytes": 30949376,
+   "coment": "Terras indígenas (poligonais) da FUNAI, camada Funai:tis_poligonais do servidor de mapas da FUNAI. Espelho versionado: vigente = vigente_ate IS NULL. Ver funai/terras_indigenas/LEIAME_terras_indigenas.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "terrai_codigo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": "Código da terra indígena na FUNAI. Chave estável; uma versão vigente por terra."
+    },
+    {
+     "n": "terrai_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da terra indígena."
+    },
+    {
+     "n": "etnia_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Etnia(s) da terra indígena, como a FUNAI escreve."
+    },
+    {
+     "n": "municipio_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Município(s) da terra, como a FUNAI escreve (pode listar mais de um)."
+    },
+    {
+     "n": "uf_sigla",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "UF(s) da terra, como a FUNAI escreve (pode listar mais de uma: AM,PA)."
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF, só quando a terra está numa UF única; NULL se a fonte lista mais de uma."
+    },
+    {
+     "n": "superficie_perimetro_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Superfície do perímetro em hectares, informada pela FUNAI."
+    },
+    {
+     "n": "fase_ti",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Fase do processo de regularização: Em Estudo, Delimitada, Declarada, Homologada, Regularizada, Encaminhada RI."
+    },
+    {
+     "n": "modalidade_ti",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Modalidade da terra: tradicionalmente ocupada, reserva indígena, dominial..."
+    },
+    {
+     "n": "reestudo_ti",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Indica reestudo da terra, quando houver."
+    },
+    {
+     "n": "cr",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Coordenação Regional da FUNAI responsável."
+    },
+    {
+     "n": "faixa_fronteira",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sim/Não: terra dentro da faixa de fronteira."
+    },
+    {
+     "n": "undadm_codigo",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Código da unidade administrativa da FUNAI."
+    },
+    {
+     "n": "undadm_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da unidade administrativa da FUNAI."
+    },
+    {
+     "n": "undadm_sigla",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sigla da unidade administrativa da FUNAI."
+    },
+    {
+     "n": "dominio_uniao",
+     "t": "boolean",
+     "nn": false,
+     "pk": false,
+     "c": "true = domínio da União."
+    },
+    {
+     "n": "data_atualizacao",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data da última atualização do registro na FUNAI."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "true = a fonte entregou a geometria fora do Brasil ou vazia; o original está em geom_origem_texto."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria original da fonte em texto, guardada só quando geom_anomala é true."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.ibge_dominios_naturais",
    "sch": "vetorial",
    "nome": "ibge_dominios_naturais",
@@ -2952,6 +3152,18 @@
   }
  ],
  "fks": [
+  {
+   "de": "vetorial.funai_terras_indigenas",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "vetorial.funai_terras_indigenas",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
   {
    "de": "vetorial.ibge_dominios_naturais",
    "col": "id_fonte",

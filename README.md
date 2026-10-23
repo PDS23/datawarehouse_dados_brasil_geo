@@ -13,12 +13,13 @@ Um data warehouse geoespacial em **PostgreSQL 18 + PostGIS 3.6**, alimentado por
 | SICAR (Cadastro Ambiental Rural) | `vetorial.sicar_imoveis` | 8,5 milhões de imóveis, 27 UFs | espelho versionado, atualizado do WFS público do CAR |
 | PRODES (INPE) | `vetorial.prodes_desmatamento` | 6,9 milhões de polígonos, 6 biomas | espelho versionado, por edição publicada no TerraBrasilis |
 | MapBiomas Alerta | `vetorial.mapbiomas_alerta` | 543 mil alertas de desmatamento (2018 a 2026) | espelho versionado, WFS aberto do MapBiomas |
+| FUNAI (terras indígenas) | `vetorial.funai_terras_indigenas` | 665 terras, 117 milhões de ha | espelho versionado, WFS aberto da FUNAI |
 | IBGE (malhas, domínios naturais) | `dim.municipios`, `dim.estados`, `dim.biomas`, `vetorial.ibge_*` | 5.573 municípios, 27 UFs | carga por script |
 | IBGE/SIDRA (Censo Agropecuário, PAM) | `tabular.sidra_valor` (camada genérica), `tabular.ibge_pam` | por demanda | **sob demanda**, por tabela e recorte |
 | INCRA (assentamentos) | `vetorial.incra_assentamentos` | 7,5 mil polígonos | pipeline (servidor do INCRA fora do ar no momento) |
 | Rasters (MapBiomas uso do solo, TOPODATA) | servidos pelo GeoServer (COG) | fora do banco | scripts de conversão |
 
-O banco tem 17 GB, 31 tabelas e 15 datasets catalogados. O esquema completo, gerado do catálogo do PostgreSQL, está em
+O banco tem 17 GB, 32 tabelas e 16 datasets catalogados. O esquema completo, gerado do catálogo do PostgreSQL, está em
 [`infra/diagrama/modelo_banco.svg`](infra/diagrama/modelo_banco.svg) (e numa página interativa com explicação de cada coluna em
 `infra/diagrama/modelo_banco_pagina.html`).
 

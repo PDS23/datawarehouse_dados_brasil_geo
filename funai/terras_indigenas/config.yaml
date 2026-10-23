@@ -1,0 +1,17 @@
+# Pipeline das terras indigenas da FUNAI. Configuracao versionada.
+# Fonte: camada `Funai:tis_poligonais` do servidor de mapas da FUNAI (WFS aberto, sem login). A FUNAI diz atualizar os dados mensalmente.
+fonte: FUNAI                       # nome exato em dim.fontes
+url_wfs: "https://geoserver.funai.gov.br/geoserver/Funai/ows"
+camada: "Funai:tis_poligonais"
+destino_padrao: vetorial.funai_terras_indigenas
+srid_gravado: 4674                 # o servidor entrega SIRGAS 2000 (EPSG:4674) com srsName=EPSG:4674
+
+# O servidor tem um filtro (nginx) que devolve 403 para GetFeature SEM `count`: o pedido precisa levar count (a camada tem 665 feicoes).
+count: 10000
+# O servidor nao envia o certificado intermediario (Sectigo OV R36); dwlib/certs/ traz essa intermediaria publica e a verificacao continua ligada.
+ca_extra: sectigo_ov_r36.pem
+
+max_queda: 0.10                    # mais que isso de terras vigentes ausentes numa coleta: nao grava (--aceitar-queda libera)
+# Conferencia: caixa do Brasil (lon/lat). Poligono com a caixa fora dela (ou sem geometria) entra com geom NULL e o texto original.
+caixa_brasil: {lon_min: -75.0, lon_max: -28.0, lat_min: -35.0, lat_max: 6.0}
+licenca: "Dados abertos da FUNAI; confirmar os termos de uso e a citacao exigida antes de redistribuir"
