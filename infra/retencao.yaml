@@ -1,0 +1,34 @@
+# Retencao de versoes fechadas (rotina infra/scripts/limpar_versoes_fechadas.py). Configuracao versionada.
+#
+# Os espelhos (SICAR, PRODES) nunca apagam na coleta: quando a fonte retira ou altera um registro, a versao e FECHADA
+# (vigente_ate). Para o banco nao acumular arquivo morto, esta rotina apaga, depois de um prazo, o que ja nao tem uso:
+#   - dias_removidas:   registro que a fonte retirou e NAO voltou (nenhuma versao vigente). Depois de N dias da retirada
+#                       (data do ultimo fechamento) apaga TODAS as versoes dele e os resultados que dependem delas. null = nunca apaga.
+#   - dias_substituidas: versao fechada de um registro que AINDA existe (foi substituida por outra). Depois de N dias do
+#                       fechamento apaga essa versao antiga. null = guarda o historico das mudancas.
+# O prazo tambem e a janela em que uma retirada pode ser desfeita: registro que volta identico antes de ser apagado e REABERTO.
+# Sem --apagar a rotina so RELATA (nada e apagado). Nao ha agendamento: o usuario decide quando.
+
+# >>> PRAZO UNICO: para mudar o prazo de todas as fontes, altere so este numero (2026-10-21: 1 ano; reduzido em 2026-10-23 para 30 dias,
+#     o dobro do intervalo de atualizacao de 15 dias, para a janela cobrir pelo menos dois ciclos). <<<
+dias_removidas_padrao: 30
+# Prazo das versoes substituidas (null = guarda o historico de mudancas). Vale para todas as tabelas que nao declararem o proprio.
+# 2026-10-23: 30 dias (antes null = guardava o historico para sempre; o usuario prefere espelhar a fonte com uma folga curta).
+dias_substituidas_padrao: 30
+
+max_fracao_apagada: 0.20          # se os candidatos passam de 20% da tabela, a rotina nao apaga (--aceitar-volume libera)
+
+# Cada tabela herda os dois prazos acima. Para dar a uma tabela um prazo proprio, acrescente nela dias_removidas e/ou
+# dias_substituidas (ex.: dias_removidas: 730).
+tabelas:
+  - tabela: vetorial.prodes_desmatamento
+    chave: [bioma, uuid]
+    dependentes:
+      - {tabela: resultados.prodes_municipio, coluna: id_prodes}
+  - tabela: vetorial.mapbiomas_alerta
+    chave: [alert_code]
+  - tabela: vetorial.sicar_imoveis
+    chave: [cod_imovel]
+    dependentes:
+      - {tabela: resultados.desmatamento_imovel, coluna: id_imovel_sicar}
+      - {tabela: resultados.desmatamento_imovel_controle, coluna: id_imovel_sicar}   # por ultimo: referencia a mesma versao

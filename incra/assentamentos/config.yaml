@@ -1,0 +1,30 @@
+# Pipeline de assentamentos do INCRA (WFS publico do Acervo Fundiario, i3Geo/MapServer). Configuracao versionada.
+fonte: INCRA                 # nome exato em dim.fontes
+url_wfs: "https://acervofundiario.incra.gov.br/i3geo/ogc.php"
+tema_por_uf: "assentamentos_{uf}"     # uma camada por UF (27); nao existe camada nacional
+# Alternativa quando o WFS de uma UF falha: shapefile do Acervo Fundiario. EXIGE login gov.br (o POST sem sessao devolve a
+# pagina de login), entao nao e automatizavel; baixa-se a mao (formulario: selectshp=assent, selectuf=<UF>) e usa-se --zip.
+url_export_shp: "https://certificacao.incra.gov.br/csv_shp/export_shp.py"
+srid_gravado: 4674          # a fonte rotula WGS84 (4326); gravamos como SIRGAS 2000 sem transformar (diferenca < 1 m)
+
+ufs: [AC, AL, AM, AP, BA, CE, DF, ES, GO, MA, MG, MS, MT, PA, PB, PE, PI, PR, RJ, RN, RO, RR, RS, SC, SE, SP, TO]
+
+# Campo do servidor -> coluna de vetorial.incra_assentamentos. 'sr' e 'descricao_fase' vem vazios em todas as
+# feicoes (2026-10) e nao sao gravados.
+campos:
+  gid: gid_incra
+  cd_sipra: cd_sipra
+  nome_projeto: nome_projeto
+  municipio: municipio
+  area_hectare_declarada: area_declarada_ha
+  area_calc_ha: area_calc_ha
+  capacidade: capacidade_familias
+  num_familias: num_familias
+  fase: fase
+  data_de_criacao: data_criacao
+  forma_obtencao: forma_obtencao
+  data_obtencao: data_obtencao
+
+# Conferencia: caixa do Brasil (lon/lat); poligono fora dela e rejeitado e listado, nao gravado.
+caixa_brasil: {lon_min: -75.0, lon_max: -33.0, lat_min: -34.5, lat_max: 6.0}
+licenca: "Uso comercial vedado (AccessConstraints do WFS do INCRA); confirmar termos antes de redistribuir"

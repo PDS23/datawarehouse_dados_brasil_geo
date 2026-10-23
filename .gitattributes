@@ -1,0 +1,4 @@
+# Fim de linha padronizado em LF no repositorio (evita o aviso de conversao LF/CRLF no Windows)
+* text=auto eol=lf
+*.ps1 text eol=lf
+*.svg text eol=lf

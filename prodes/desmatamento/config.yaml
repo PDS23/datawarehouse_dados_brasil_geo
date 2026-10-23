@@ -1,0 +1,54 @@
+# Pipeline do PRODES (desmatamento por bioma, INPE/TerraBrasilis). Configuracao versionada.
+fonte: INPE/TerraBrasilis          # nome exato em dim.fontes
+url_base: "https://terrabrasilis.dpi.inpe.br"
+destino_padrao: vetorial.prodes_desmatamento
+
+# Catalogo de downloads do TerraBrasilis (JSON com todos os links publicados; a pagina de downloads e montada a partir dele).
+# O nome do arquivo carrega a data de PUBLICACAO (vAAAAMMDD) e muda a cada edicao: o script consulta o catalogo, acha o
+# arquivo de cada bioma pelo `padrao` (regex, 1 grupo = a versao) e usa a versao mais recente; --versao fixa uma (reproducao).
+url_catalogo: "/business/api/v1/download/all"
+
+# Um GeoPackage por bioma (nao existe vetor Brasil-inteiro consolidado; "Amazonia Legal" fica de fora de proposito,
+# ver LEIAME). `camadas`: camadas do GeoPackage que viram linhas, na ordem de prioridade (uuid repetido entre camadas:
+# vale a primeira). As demais camadas do arquivo (accumulated_deforestation_2000, hydrography, residual, cloud) NAO sao carregadas.
+biomas:
+  amazonia:
+    id_bioma: 1
+    dataset: amz-prodes
+    padrao: 'prodes_biome_amazonia_v(\d{8})\.gpkg\.zip'
+    camadas: [yearly_deforestation_biome, yearly_deforestation_nf_biome]
+  caatinga:
+    id_bioma: 2
+    dataset: caatinga-prodes
+    padrao: 'prodes_biome_caatinga_v(\d{8})\.gpkg\.zip'
+    camadas: [yearly_deforestation]
+  cerrado:
+    id_bioma: 3
+    dataset: cerrado-prodes
+    padrao: 'prodes_biome_cerrado_v(\d{8})\.gpkg\.zip'
+    camadas: [yearly_deforestation]
+  mata_atlantica:
+    id_bioma: 4
+    dataset: mata-atlantica-prodes
+    padrao: 'prodes_biome_mata_atlantica_v(\d{8})\.gpkg\.zip'
+    camadas: [yearly_deforestation]
+  pampa:
+    id_bioma: 5
+    dataset: pampa-prodes
+    padrao: 'prodes_biome_pampa_v(\d{8})\.gpkg\.zip'
+    camadas: [yearly_deforestation]
+  pantanal:
+    id_bioma: 6
+    dataset: pantanal-prodes
+    padrao: 'prodes_biome_pantanal_v(\d{8})\.gpkg\.zip'
+    camadas: [yearly_deforestation]
+
+paralelo_padrao: 3            # biomas baixados/carregados ao mesmo tempo (o papel etl tem limite de 5 conexoes: 1 do pai + ate 4)
+paralelo_maximo: 4
+max_queda: 0.10               # mais que isso de feicoes vigentes ausentes numa edicao aborta o bioma (--aceitar-queda libera)
+srid_gravado: 4674            # SIRGAS 2000 (a fonte ja entrega assim)
+por_lote: 20000               # feicoes lidas e gravadas por vez
+# Conferencia: caixa do Brasil (lon/lat). Feicao com a caixa envolvente fora dela (ex.: eixos X/Y trocados na Amazonia)
+# e rejeitada e listada, nao gravada.
+caixa_brasil: {lon_min: -75.0, lon_max: -28.0, lat_min: -35.0, lat_max: 6.0}
+licenca: "Dados abertos do INPE/TerraBrasilis; confirmar os termos antes de redistribuir"

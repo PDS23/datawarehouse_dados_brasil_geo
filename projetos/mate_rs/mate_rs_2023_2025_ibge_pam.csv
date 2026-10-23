@@ -1,0 +1,495 @@
+Codigo;Nome;UF;area_destinada_colheita_ha_2023;area_destinada_colheita_ha_2024;area_destinada_colheita_ha_2025;quantidade_produzida_t_2023;quantidade_produzida_t_2024;quantidade_produzida_t_2025
+4300034;Aceguá;RS;0;0;0;0;0;0
+4300059;Água Santa;RS;8;8;8;60;60;60
+4300109;Agudo;RS;0;0;0;0;0;0
+4300208;Ajuricaba;RS;70;50;50;700;500;500
+4300307;Alecrim;RS;0;0;0;0;0;0
+4300406;Alegrete;RS;0;0;0;0;0;0
+4300455;Alegria;RS;2;1;1;30;15;15
+4300471;Almirante Tamandaré do Sul;RS;3;3;3;18;18;18
+4300505;Alpestre;RS;1;1;1;11;11;11
+4300554;Alto Alegre;RS;0;0;0;0;0;0
+4300570;Alto Feliz;RS;0;0;0;0;0;0
+4300604;Alvorada;RS;;;;;;
+4300638;Amaral Ferrador;RS;0;0;0;0;0;0
+4300646;Ametista do Sul;RS;3;3;3;33;33;33
+4300661;André da Rocha;RS;0;0;0;0;0;0
+4300703;Anta Gorda;RS;2650;2800;2800;22525;28000;26600
+4300802;Antônio Prado;RS;0;0;0;0;0;0
+4300851;Arambaré;RS;0;0;0;0;0;0
+4300877;Araricá;RS;0;0;0;0;0;0
+4300901;Aratiba;RS;75;80;75;675;720;675
+4301008;Arroio do Meio;RS;0;0;0;0;0;0
+4301057;Arroio do Sal;RS;0;;;0;;
+4301073;Arroio do Padre;RS;0;0;0;0;0;0
+4301107;Arroio dos Ratos;RS;0;0;0;0;0;0
+4301206;Arroio do Tigre;RS;0;0;0;0;0;0
+4301305;Arroio Grande;RS;;0;0;;0;0
+4301404;Arvorezinha;RS;4600;5000;4700;51750;45000;45825
+4301503;Augusto Pestana;RS;6;6;6;84;72;72
+4301552;Áurea;RS;750;770;870;7875;8085;9135
+4301602;Bagé;RS;0;0;0;0;0;0
+4301636;Balneário Pinhal;RS;;;;;;
+4301651;Barão;RS;0;0;0;0;0;0
+4301701;Barão de Cotegipe;RS;626;626;650;5634;5634;5850
+4301750;Barão do Triunfo;RS;0;0;0;0;0;0
+4301800;Barracão;RS;20;20;20;140;140;140
+4301859;Barra do Guarita;RS;0;0;0;0;0;0
+4301875;Barra do Quaraí;RS;;;;;;
+4301909;Barra do Ribeiro;RS;0;0;0;0;0;0
+4301925;Barra do Rio Azul;RS;120;120;170;1080;1080;1530
+4301958;Barra Funda;RS;4;4;4;24;24;24
+4302006;Barros Cassal;RS;0;0;0;0;0;0
+4302055;Benjamin Constant do Sul;RS;8;8;8;32;48;48
+4302105;Bento Gonçalves;RS;0;0;0;0;0;0
+4302154;Boa Vista das Missões;RS;100;100;100;1000;1000;1000
+4302204;Boa Vista do Buricá;RS;0;0;0;0;0;0
+4302220;Boa Vista do Cadeado;RS;6;6;6;60;60;60
+4302238;Boa Vista do Incra;RS;0;0;0;0;0;0
+4302253;Boa Vista do Sul;RS;0;0;0;0;0;0
+4302303;Bom Jesus;RS;0;0;0;0;0;0
+4302352;Bom Princípio;RS;0;0;0;0;0;0
+4302378;Bom Progresso;RS;10;10;10;110;180;180
+4302402;Bom Retiro do Sul;RS;0;0;0;0;0;0
+4302451;Boqueirão do Leão;RS;25;25;25;182;180;179
+4302501;Bossoroca;RS;0;0;0;0;0;0
+4302584;Bozano;RS;4;4;4;32;32;32
+4302600;Braga;RS;0;0;0;0;0;0
+4302659;Brochier;RS;0;0;0;0;0;0
+4302709;Butiá;RS;0;0;0;0;0;0
+4302808;Caçapava do Sul;RS;0;0;0;0;0;0
+4302907;Cacequi;RS;0;0;0;0;0;0
+4303004;Cachoeira do Sul;RS;0;0;0;0;0;0
+4303103;Cachoeirinha;RS;;;;;;
+4303202;Cacique Doble;RS;3;3;3;30;27;30
+4303301;Caibaté;RS;0;0;0;0;0;0
+4303400;Caiçara;RS;0;0;1;0;0;12
+4303509;Camaquã;RS;3;3;3;17;17;17
+4303558;Camargo;RS;20;20;10;180;180;90
+4303608;Cambará do Sul;RS;0;0;0;0;0;0
+4303673;Campestre da Serra;RS;0;0;0;0;0;0
+4303707;Campina das Missões;RS;0;0;0;0;0;0
+4303806;Campinas do Sul;RS;5;5;5;30;50;50
+4303905;Campo Bom;RS;0;0;0;0;0;0
+4304002;Campo Novo;RS;10;10;10;120;147;156
+4304101;Campos Borges;RS;0;0;0;0;0;0
+4304200;Candelária;RS;0;0;0;0;0;0
+4304309;Cândido Godói;RS;0;0;0;0;0;0
+4304358;Candiota;RS;0;0;0;0;0;0
+4304408;Canela;RS;0;0;0;0;0;0
+4304507;Canguçu;RS;0;0;0;0;0;0
+4304606;Canoas;RS;;;;;;
+4304614;Canudos do Vale;RS;1;1;2;8;10;0
+4304622;Capão Bonito do Sul;RS;185;185;185;463;1573;1573
+4304630;Capão da Canoa;RS;;;;;;
+4304655;Capão do Cipó;RS;0;0;0;0;0;0
+4304663;Capão do Leão;RS;0;0;0;0;0;0
+4304671;Capivari do Sul;RS;;;;;;
+4304689;Capela de Santana;RS;0;0;0;0;0;0
+4304697;Capitão;RS;26;30;30;325;325;325
+4304705;Carazinho;RS;2;2;2;12;12;12
+4304713;Caraá;RS;0;0;0;0;0;0
+4304804;Carlos Barbosa;RS;2;2;0;0;0;0
+4304853;Carlos Gomes;RS;50;50;50;500;500;500
+4304903;Casca;RS;10;10;5;90;90;45
+4304952;Caseiros;RS;2;2;2;12;12;24
+4305009;Catuípe;RS;30;30;30;300;300;300
+4305108;Caxias do Sul;RS;0;0;0;0;0;0
+4305116;Centenário;RS;330;330;330;2640;2640;2640
+4305124;Cerrito;RS;0;0;0;0;0;0
+4305132;Cerro Branco;RS;0;0;0;0;0;0
+4305157;Cerro Grande;RS;0;0;0;0;0;0
+4305173;Cerro Grande do Sul;RS;0;0;0;0;0;0
+4305207;Cerro Largo;RS;0;0;0;0;0;0
+4305306;Chapada;RS;100;100;60;1500;1400;1200
+4305355;Charqueadas;RS;0;0;0;0;0;0
+4305371;Charrua;RS;0;0;0;0;0;0
+4305405;Chiapetta;RS;1;1;1;10;10;10
+4305447;Chuvisca;RS;0;0;0;0;0;0
+4305454;Cidreira;RS;;;;;;
+4305504;Ciríaco;RS;2;2;1;20;20;10
+4305587;Colinas;RS;0;0;0;0;0;0
+4305603;Colorado;RS;0;0;0;0;0;0
+4305702;Condor;RS;5;5;5;55;55;55
+4305801;Constantina;RS;0;5;5;0;30;30
+4305835;Coqueiro Baixo;RS;7;7;7;70;63;70
+4305850;Coqueiros do Sul;RS;6;6;6;42;42;42
+4305871;Coronel Barros;RS;0;0;0;0;0;0
+4305900;Coronel Bicaco;RS;50;50;50;700;700;700
+4305934;Coronel Pilar;RS;0;0;0;0;0;0
+4305959;Cotiporã;RS;10;5;6;100;50;60
+4305975;Coxilha;RS;16;16;16;131;135;134
+4306007;Crissiumal;RS;0;0;0;0;0;0
+4306056;Cristal;RS;0;0;0;0;0;0
+4306072;Cristal do Sul;RS;3;5;5;30;50;50
+4306106;Cruz Alta;RS;2;2;2;20;20;20
+4306130;Cruzaltense;RS;5;5;5;25;25;25
+4306205;Cruzeiro do Sul;RS;1;2;2;6;12;12
+4306304;David Canabarro;RS;0;0;0;0;0;0
+4306320;Derrubadas;RS;0;0;0;0;0;0
+4306353;Dezesseis de Novembro;RS;0;0;0;0;0;0
+4306379;Dilermando de Aguiar;RS;0;0;0;0;0;0
+4306403;Dois Irmãos;RS;0;0;0;0;0;0
+4306429;Dois Irmãos das Missões;RS;20;20;20;300;300;300
+4306452;Dois Lajeados;RS;40;40;10;280;290;72
+4306502;Dom Feliciano;RS;0;0;0;0;0;0
+4306551;Dom Pedro de Alcântara;RS;0;0;0;0;0;0
+4306601;Dom Pedrito;RS;0;0;0;0;0;0
+4306700;Dona Francisca;RS;0;0;0;0;0;0
+4306734;Doutor Maurício Cardoso;RS;4;2;2;40;20;20
+4306759;Doutor Ricardo;RS;95;95;95;855;713;855
+4306767;Eldorado do Sul;RS;0;0;0;0;0;0
+4306809;Encantado;RS;15;15;15;113;85;98
+4306908;Encruzilhada do Sul;RS;0;0;0;0;0;0
+4306924;Engenho Velho;RS;2;2;2;12;12;12
+4306932;Entre-Ijuís;RS;0;0;0;0;0;0
+4306957;Entre Rios do Sul;RS;50;50;18;250;350;126
+4306973;Erebango;RS;250;200;200;1500;1250;1200
+4307005;Erechim;RS;250;250;250;3000;2000;3000
+4307054;Ernestina;RS;0;;;0;;
+4307104;Herval;RS;0;0;0;0;0;0
+4307203;Erval Grande;RS;95;95;95;760;760;760
+4307302;Erval Seco;RS;50;50;45;700;700;600
+4307401;Esmeralda;RS;10;15;10;90;135;90
+4307450;Esperança do Sul;RS;0;0;0;0;0;0
+4307500;Espumoso;RS;0;0;0;0;0;0
+4307559;Estação;RS;5;4;4;35;28;28
+4307609;Estância Velha;RS;0;0;0;0;0;0
+4307708;Esteio;RS;;;;;;
+4307807;Estrela;RS;0;0;0;0;0;0
+4307815;Estrela Velha;RS;0;0;0;0;0;0
+4307831;Eugênio de Castro;RS;0;0;0;0;0;0
+4307864;Fagundes Varela;RS;0;0;0;0;0;0
+4307906;Farroupilha;RS;0;0;0;0;0;0
+4308003;Faxinal do Soturno;RS;0;0;0;0;0;0
+4308052;Faxinalzinho;RS;20;20;20;200;200;200
+4308078;Fazenda Vilanova;RS;0;0;0;0;0;0
+4308102;Feliz;RS;0;0;0;0;0;0
+4308201;Flores da Cunha;RS;0;0;0;0;0;0
+4308250;Floriano Peixoto;RS;60;60;55;360;450;413
+4308300;Fontoura Xavier;RS;1470;2000;650;15309;20778;4388
+4308409;Formigueiro;RS;0;0;0;0;0;0
+4308433;Forquetinha;RS;0;0;0;0;0;0
+4308458;Fortaleza dos Valos;RS;3;3;3;30;30;30
+4308508;Frederico Westphalen;RS;5;2;1;50;20;10
+4308607;Garibaldi;RS;0;0;0;0;0;0
+4308656;Garruchos;RS;0;0;0;0;0;0
+4308706;Gaurama;RS;400;400;400;4000;4000;4000
+4308805;General Câmara;RS;0;0;0;0;0;0
+4308854;Gentil;RS;5;5;5;49;49;49
+4308904;Getúlio Vargas;RS;375;375;375;3750;3750;3750
+4309001;Giruá;RS;0;0;0;0;0;0
+4309050;Glorinha;RS;0;0;0;0;0;0
+4309100;Gramado;RS;0;0;0;0;0;0
+4309126;Gramado dos Loureiros;RS;0;0;0;0;0;0
+4309159;Gramado Xavier;RS;15;11;10;36;66;60
+4309209;Gravataí;RS;0;0;0;0;0;0
+4309258;Guabiju;RS;0;0;0;0;0;0
+4309308;Guaíba;RS;0;0;0;0;0;0
+4309407;Guaporé;RS;140;140;100;1232;1512;1020
+4309506;Guarani das Missões;RS;0;0;0;0;0;0
+4309555;Harmonia;RS;0;0;0;0;0;0
+4309571;Herveiras;RS;0;0;0;0;0;0
+4309605;Horizontina;RS;1;1;0;10;10;0
+4309654;Hulha Negra;RS;0;0;0;0;0;0
+4309704;Humaitá;RS;15;15;15;150;225;225
+4309753;Ibarama;RS;10;0;0;100;0;0
+4309803;Ibiaçá;RS;0;0;0;0;0;0
+4309902;Ibiraiaras;RS;0;0;0;0;0;0
+4309951;Ibirapuitã;RS;50;50;35;450;450;180
+4310009;Ibirubá;RS;0;0;0;0;0;0
+4310108;Igrejinha;RS;0;0;0;0;0;0
+4310207;Ijuí;RS;30;30;30;300;300;300
+4310306;Ilópolis;RS;6000;6000;6600;54000;56953;66000
+4310363;Imigrante;RS;0;0;0;0;0;0
+4310405;Independência;RS;0;0;0;0;0;0
+4310413;Inhacorá;RS;1;0;0;8;0;0
+4310439;Ipê;RS;2;2;2;15;17;17
+4310462;Ipiranga do Sul;RS;15;15;15;113;113;113
+4310504;Iraí;RS;0;0;0;0;0;0
+4310538;Itaara;RS;0;0;0;0;0;0
+4310553;Itacurubi;RS;0;0;0;0;0;0
+4310579;Itapuca;RS;940;940;940;11280;11280;10497
+4310603;Itaqui;RS;0;0;0;0;0;0
+4310652;Itati;RS;0;0;0;0;0;0
+4310702;Itatiba do Sul;RS;220;220;220;1760;1760;1320
+4310751;Ivorá;RS;0;0;0;0;0;0
+4310801;Ivoti;RS;0;0;0;0;0;0
+4310850;Jaboticaba;RS;15;15;50;150;150;60
+4310876;Jacuizinho;RS;0;0;0;0;0;0
+4310900;Jacutinga;RS;0;0;0;0;0;0
+4311007;Jaguarão;RS;0;0;0;0;0;0
+4311106;Jaguari;RS;0;0;0;0;0;0
+4311122;Jaquirana;RS;0;0;0;0;0;0
+4311130;Jari;RS;0;0;0;0;0;0
+4311155;Jóia;RS;0;0;0;0;0;0
+4311205;Júlio de Castilhos;RS;0;0;0;0;0;0
+4311239;Lagoa Bonita do Sul;RS;0;0;0;0;0;0
+4311254;Lagoão;RS;0;0;0;0;0;0
+4311270;Lagoa dos Três Cantos;RS;2;2;2;17;16;16
+4311304;Lagoa Vermelha;RS;3;3;3;24;24;24
+4311403;Lajeado;RS;0;0;0;0;0;0
+4311429;Lajeado do Bugre;RS;10;10;0;140;140;0
+4311502;Lavras do Sul;RS;0;0;0;0;0;0
+4311601;Liberato Salzano;RS;3;3;3;39;36;36
+4311627;Lindolfo Collor;RS;0;0;0;0;0;0
+4311643;Linha Nova;RS;0;0;0;0;0;0
+4311700;Machadinho;RS;258;258;258;2838;2838;2838
+4311718;Maçambará;RS;0;0;0;0;0;0
+4311734;Mampituba;RS;0;0;0;0;0;0
+4311759;Manoel Viana;RS;0;0;0;0;0;0
+4311775;Maquiné;RS;0;0;0;0;0;0
+4311791;Maratá;RS;0;0;0;0;0;0
+4311809;Marau;RS;13;13;13;117;117;117
+4311908;Marcelino Ramos;RS;200;200;200;1400;2100;2100
+4311981;Mariana Pimentel;RS;0;0;0;0;0;0
+4312005;Mariano Moro;RS;10;10;10;60;60;65
+4312054;Marques de Souza;RS;4;4;4;24;24;24
+4312104;Mata;RS;0;0;0;0;0;0
+4312138;Mato Castelhano;RS;20;20;10;200;200;120
+4312153;Mato Leitão;RS;125;125;100;750;750;600
+4312179;Mato Queimado;RS;0;0;0;0;0;0
+4312203;Maximiliano de Almeida;RS;45;45;45;304;315;315
+4312252;Minas do Leão;RS;0;0;0;0;0;0
+4312302;Miraguaí;RS;0;0;0;0;0;0
+4312351;Montauri;RS;5;5;5;50;50;50
+4312377;Monte Alegre dos Campos;RS;0;0;0;0;0;0
+4312385;Monte Belo do Sul;RS;0;0;0;0;0;0
+4312401;Montenegro;RS;0;0;0;0;0;0
+4312427;Mormaço;RS;0;0;0;0;0;0
+4312443;Morrinhos do Sul;RS;0;0;0;0;0;0
+4312450;Morro Redondo;RS;0;0;0;0;0;0
+4312476;Morro Reuter;RS;0;0;0;0;0;0
+4312500;Mostardas;RS;;;;;;
+4312609;Muçum;RS;9;9;9;90;90;54
+4312617;Muitos Capões;RS;4;4;4;64;64;64
+4312625;Muliterno;RS;0;0;0;0;0;0
+4312658;Não-Me-Toque;RS;3;3;3;21;21;21
+4312674;Nicolau Vergueiro;RS;8;8;4;72;72;36
+4312708;Nonoai;RS;56;56;56;448;448;448
+4312757;Nova Alvorada;RS;350;350;450;3500;4200;5085
+4312807;Nova Araçá;RS;0;0;0;0;0;0
+4312906;Nova Bassano;RS;0;0;0;0;0;0
+4312955;Nova Boa Vista;RS;2;2;2;15;14;14
+4313003;Nova Bréscia;RS;8;8;9;63;64;72
+4313011;Nova Candelária;RS;1;0;0;7;0;0
+4313037;Nova Esperança do Sul;RS;0;0;0;0;0;0
+4313060;Nova Hartz;RS;0;0;0;0;0;0
+4313086;Nova Pádua;RS;0;0;0;0;0;0
+4313102;Nova Palma;RS;0;0;0;0;0;0
+4313201;Nova Petrópolis;RS;0;0;0;0;0;0
+4313300;Nova Prata;RS;0;25;25;0;332;329
+4313334;Nova Ramada;RS;0;0;0;0;0;0
+4313359;Nova Roma do Sul;RS;0;0;0;0;0;0
+4313375;Nova Santa Rita;RS;0;0;0;0;0;0
+4313391;Novo Cabrais;RS;0;0;0;0;0;0
+4313409;Novo Hamburgo;RS;0;0;0;0;0;0
+4313425;Novo Machado;RS;0;0;0;0;0;0
+4313441;Novo Tiradentes;RS;1;1;1;10;10;10
+4313466;Novo Xingu;RS;0;3;3;0;18;18
+4313490;Novo Barreiro;RS;170;170;170;2040;2040;2040
+4313508;Osório;RS;0;0;0;0;0;0
+4313607;Paim Filho;RS;10;10;10;60;60;60
+4313656;Palmares do Sul;RS;;;;;;
+4313706;Palmeira das Missões;RS;1200;1200;1200;14400;15600;14400
+4313805;Palmitinho;RS;4;4;0;42;42;0
+4313904;Panambi;RS;22;22;22;220;220;220
+4313953;Pantano Grande;RS;0;0;0;0;0;0
+4314001;Paraí;RS;6;6;6;72;0;72
+4314027;Paraíso do Sul;RS;0;0;0;0;0;0
+4314035;Pareci Novo;RS;0;0;0;0;0;0
+4314050;Parobé;RS;0;0;0;0;0;0
+4314068;Passa Sete;RS;0;0;0;0;0;0
+4314076;Passo do Sobrado;RS;0;0;0;0;0;0
+4314100;Passo Fundo;RS;15;15;15;150;150;150
+4314134;Paulo Bento;RS;20;18;15;200;252;270
+4314159;Paverama;RS;0;0;0;0;0;0
+4314175;Pedras Altas;RS;0;0;0;0;0;0
+4314209;Pedro Osório;RS;;;;;;
+4314308;Pejuçara;RS;0;0;0;0;0;0
+4314407;Pelotas;RS;0;0;0;0;0;0
+4314423;Picada Café;RS;0;0;0;0;0;0
+4314456;Pinhal;RS;0;0;0;0;0;0
+4314464;Pinhal da Serra;RS;0;1;0;0;6;0
+4314472;Pinhal Grande;RS;0;0;0;0;0;0
+4314498;Pinheirinho do Vale;RS;0;0;0;0;0;0
+4314506;Pinheiro Machado;RS;0;0;0;0;0;0
+4314548;Pinto Bandeira;RS;0;0;0;0;0;0
+4314555;Pirapó;RS;0;0;0;0;0;0
+4314605;Piratini;RS;0;0;0;0;0;0
+4314704;Planalto;RS;0;0;0;0;0;0
+4314753;Poço das Antas;RS;0;0;0;0;0;0
+4314779;Pontão;RS;6;6;3;60;60;30
+4314787;Ponte Preta;RS;6;6;6;36;46;46
+4314803;Portão;RS;0;0;0;0;0;0
+4314902;Porto Alegre;RS;0;0;0;0;0;0
+4315008;Porto Lucena;RS;0;0;0;0;0;0
+4315057;Porto Mauá;RS;0;0;0;0;0;0
+4315073;Porto Vera Cruz;RS;0;0;0;0;0;0
+4315107;Porto Xavier;RS;0;0;0;0;0;0
+4315131;Pouso Novo;RS;0;0;0;0;0;0
+4315149;Presidente Lucena;RS;0;0;0;0;0;0
+4315156;Progresso;RS;1;1;2;10;10;0
+4315172;Protásio Alves;RS;0;0;0;0;0;0
+4315206;Putinga;RS;1300;1300;1300;12740;15600;12480
+4315305;Quaraí;RS;0;0;0;0;0;0
+4315313;Quatro Irmãos;RS;45;63;60;405;945;540
+4315321;Quevedos;RS;0;0;0;0;0;0
+4315354;Quinze de Novembro;RS;0;0;0;0;0;0
+4315404;Redentora;RS;15;15;15;180;180;180
+4315453;Relvado;RS;50;50;26;450;350;234
+4315503;Restinga Sêca;RS;0;0;0;0;0;0
+4315552;Rio dos Índios;RS;20;20;20;100;100;100
+4315602;Rio Grande;RS;0;0;0;0;0;0
+4315701;Rio Pardo;RS;0;0;0;0;0;0
+4315750;Riozinho;RS;10;0;0;13;0;0
+4315800;Roca Sales;RS;53;54;53;318;324;318
+4315909;Rodeio Bonito;RS;1;1;1;10;10;10
+4315958;Rolador;RS;0;0;0;0;0;0
+4316006;Rolante;RS;0;0;0;0;0;0
+4316105;Ronda Alta;RS;10;10;10;60;60;60
+4316204;Rondinha;RS;3;3;3;18;18;18
+4316303;Roque Gonzales;RS;0;0;0;0;0;0
+4316402;Rosário do Sul;RS;0;0;0;0;0;0
+4316428;Sagrada Família;RS;5;5;5;63;60;60
+4316436;Saldanha Marinho;RS;5;5;5;50;50;50
+4316451;Salto do Jacuí;RS;0;0;0;0;0;0
+4316477;Salvador das Missões;RS;0;0;0;0;0;0
+4316501;Salvador do Sul;RS;0;0;0;0;0;0
+4316600;Sananduva;RS;0;0;0;0;0;0
+4316709;Santa Bárbara do Sul;RS;0;0;0;0;0;0
+4316733;Santa Cecília do Sul;RS;12;12;11;90;90;72
+4316758;Santa Clara do Sul;RS;1;2;1;10;20;10
+4316808;Santa Cruz do Sul;RS;10;10;10;75;75;75
+4316907;Santa Maria;RS;0;0;0;0;0;0
+4316956;Santa Maria do Herval;RS;6;6;6;52;52;52
+4316972;Santa Margarida do Sul;RS;0;0;0;0;0;0
+4317004;Santana da Boa Vista;RS;0;0;0;0;0;0
+4317103;Sant'Ana do Livramento;RS;0;0;0;0;0;0
+4317202;Santa Rosa;RS;10;10;7;100;100;70
+4317251;Santa Tereza;RS;0;0;0;0;0;0
+4317301;Santa Vitória do Palmar;RS;;;;;;
+4317400;Santiago;RS;0;0;0;0;0;0
+4317509;Santo Ângelo;RS;0;0;0;0;0;0
+4317558;Santo Antônio do Palma;RS;0;0;0;0;0;0
+4317608;Santo Antônio da Patrulha;RS;0;0;0;0;0;0
+4317707;Santo Antônio das Missões;RS;0;0;0;0;0;0
+4317756;Santo Antônio do Planalto;RS;0;0;0;0;0;0
+4317806;Santo Augusto;RS;100;50;50;1000;500;500
+4317905;Santo Cristo;RS;0;0;0;0;0;0
+4317954;Santo Expedito do Sul;RS;3;3;3;27;27;27
+4318002;São Borja;RS;0;0;0;0;0;0
+4318051;São Domingos do Sul;RS;0;0;0;0;0;0
+4318101;São Francisco de Assis;RS;0;0;0;0;0;0
+4318200;São Francisco de Paula;RS;0;0;0;0;0;0
+4318309;São Gabriel;RS;0;0;0;0;0;0
+4318408;São Jerônimo;RS;0;0;0;0;0;0
+4318424;São João da Urtiga;RS;15;14;14;105;112;105
+4318432;São João do Polêsine;RS;0;0;0;0;0;0
+4318440;São Jorge;RS;0;0;0;0;0;0
+4318457;São José das Missões;RS;150;150;150;1800;1800;1800
+4318465;São José do Herval;RS;80;80;80;640;640;640
+4318481;São José do Hortêncio;RS;0;0;0;0;0;0
+4318499;São José do Inhacorá;RS;0;0;0;0;0;0
+4318507;São José do Norte;RS;;;;;;
+4318606;São José do Ouro;RS;20;20;20;140;140;140
+4318614;São José do Sul;RS;0;0;0;0;0;0
+4318622;São José dos Ausentes;RS;0;0;0;0;0;0
+4318705;São Leopoldo;RS;0;0;0;0;0;0
+4318804;São Lourenço do Sul;RS;0;0;0;0;0;0
+4318903;São Luiz Gonzaga;RS;0;0;0;0;0;0
+4319000;São Marcos;RS;0;0;0;0;0;0
+4319109;São Martinho;RS;3;3;3;36;42;44
+4319125;São Martinho da Serra;RS;0;0;0;0;0;0
+4319158;São Miguel das Missões;RS;0;0;0;0;0;0
+4319208;São Nicolau;RS;0;0;0;0;0;0
+4319307;São Paulo das Missões;RS;0;0;0;0;0;0
+4319356;São Pedro da Serra;RS;0;0;0;0;0;0
+4319364;São Pedro das Missões;RS;140;140;140;1680;1680;1680
+4319372;São Pedro do Butiá;RS;0;0;0;0;0;0
+4319406;São Pedro do Sul;RS;0;0;0;0;0;0
+4319505;São Sebastião do Caí;RS;0;0;0;0;0;0
+4319604;São Sepé;RS;0;0;0;0;0;0
+4319703;São Valentim;RS;20;20;25;180;180;200
+4319711;São Valentim do Sul;RS;35;35;12;252;245;99
+4319737;São Valério do Sul;RS;0;0;0;0;0;0
+4319752;São Vendelino;RS;0;0;0;0;0;0
+4319802;São Vicente do Sul;RS;0;0;0;0;0;0
+4319901;Sapiranga;RS;0;0;0;0;0;0
+4320008;Sapucaia do Sul;RS;;;;;;
+4320107;Sarandi;RS;2;2;3;12;12;21
+4320206;Seberi;RS;120;140;140;1200;500;500
+4320230;Sede Nova;RS;0;0;0;0;0;0
+4320263;Segredo;RS;0;0;0;0;0;0
+4320305;Selbach;RS;0;0;0;0;0;0
+4320321;Senador Salgado Filho;RS;43;43;43;516;516;516
+4320354;Sentinela do Sul;RS;0;0;0;0;0;0
+4320404;Serafina Corrêa;RS;3;3;0;24;0;0
+4320453;Sério;RS;4;10;7;43;108;84
+4320503;Sertão;RS;50;50;50;500;500;500
+4320552;Sertão Santana;RS;0;0;0;0;0;0
+4320578;Sete de Setembro;RS;0;0;0;0;0;0
+4320602;Severiano de Almeida;RS;90;90;90;900;900;990
+4320651;Silveira Martins;RS;0;0;0;0;0;0
+4320677;Sinimbu;RS;35;30;33;245;210;231
+4320701;Sobradinho;RS;0;0;0;0;0;0
+4320800;Soledade;RS;350;350;350;2175;2025;1975
+4320859;Tabaí;RS;0;0;0;0;0;0
+4320909;Tapejara;RS;3;3;3;21;21;21
+4321006;Tapera;RS;0;0;0;0;0;0
+4321105;Tapes;RS;0;0;0;0;0;0
+4321204;Taquara;RS;0;0;0;0;0;0
+4321303;Taquari;RS;0;0;0;0;0;0
+4321329;Taquaruçu do Sul;RS;2;2;2;19;19;19
+4321352;Tavares;RS;;;;;;
+4321402;Tenente Portela;RS;10;10;10;120;144;144
+4321436;Terra de Areia;RS;0;0;0;0;0;0
+4321451;Teutônia;RS;0;0;0;0;0;0
+4321469;Tio Hugo;RS;3;0;0;27;0;0
+4321477;Tiradentes do Sul;RS;0;0;0;0;0;0
+4321493;Toropi;RS;0;0;0;0;0;0
+4321501;Torres;RS;0;0;0;0;0;0
+4321600;Tramandaí;RS;;;;;;
+4321626;Travesseiro;RS;0;0;0;0;0;0
+4321634;Três Arroios;RS;250;250;205;2000;2250;1394
+4321667;Três Cachoeiras;RS;0;0;0;0;0;0
+4321709;Três Coroas;RS;0;0;0;0;0;0
+4321808;Três de Maio;RS;0;0;0;0;0;0
+4321832;Três Forquilhas;RS;0;0;0;0;0;0
+4321857;Três Palmeiras;RS;5;5;5;30;30;30
+4321907;Três Passos;RS;4;4;4;56;72;72
+4321956;Trindade do Sul;RS;4;3;3;20;15;15
+4322004;Triunfo;RS;0;0;0;0;0;0
+4322103;Tucunduva;RS;0;0;0;0;0;0
+4322152;Tunas;RS;0;0;0;0;0;0
+4322186;Tupanci do Sul;RS;3;3;3;15;15;15
+4322202;Tupanciretã;RS;0;0;0;0;0;0
+4322251;Tupandi;RS;0;0;0;0;0;0
+4322301;Tuparendi;RS;2;1;1;20;10;10
+4322327;Turuçu;RS;0;0;0;0;0;0
+4322343;Ubiretama;RS;0;0;0;0;0;0
+4322350;União da Serra;RS;30;30;18;276;271;156
+4322376;Unistalda;RS;0;0;0;0;0;0
+4322400;Uruguaiana;RS;0;0;0;0;0;0
+4322509;Vacaria;RS;0;0;0;0;0;0
+4322525;Vale Verde;RS;0;0;0;0;0;0
+4322533;Vale do Sol;RS;10;10;7;65;65;46
+4322541;Vale Real;RS;0;0;0;0;0;0
+4322558;Vanini;RS;0;0;0;0;0;0
+4322608;Venâncio Aires;RS;600;600;525;3810;3900;3413
+4322707;Vera Cruz;RS;0;0;0;0;0;0
+4322806;Veranópolis;RS;10;10;0;50;0;0
+4322855;Vespasiano Corrêa;RS;35;35;35;315;350;200
+4322905;Viadutos;RS;730;720;650;5840;8640;6825
+4323002;Viamão;RS;0;0;0;0;0;0
+4323101;Vicente Dutra;RS;3;2;2;30;20;20
+4323200;Victor Graeff;RS;3;3;0;26;26;0
+4323309;Vila Flores;RS;0;0;0;0;0;0
+4323358;Vila Lângaro;RS;0;0;0;0;0;0
+4323408;Vila Maria;RS;100;100;70;900;900;630
+4323457;Vila Nova do Sul;RS;0;0;0;0;0;0
+4323507;Vista Alegre;RS;1;1;1;10;10;10
+4323606;Vista Alegre do Prata;RS;9;9;16;54;81;116
+4323705;Vista Gaúcha;RS;2;2;2;8;10;10
+4323754;Vitória das Missões;RS;0;0;0;0;0;0
+4323770;Westfália;RS;0;0;0;0;0;0

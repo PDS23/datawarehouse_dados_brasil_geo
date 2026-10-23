@@ -1,0 +1,18 @@
+# Pipeline do MapBiomas Alerta (alertas de desmatamento validados). Configuracao versionada.
+# Fonte: camada publica `dashboard-alert-shapefile` do servidor de mapas do MapBiomas Alerta (WFS aberto, sem login).
+fonte: MapBiomas                   # nome exato em dim.fontes
+url_wfs: "https://maps.alerta.mapbiomas.org/geoserver/wfs"
+camada: "mapbiomas-alertas:dashboard-alert-shapefile"
+destino_padrao: vetorial.mapbiomas_alerta
+srid_gravado: 4674                 # o servidor entrega SIRGAS 2000 (EPSG:4674), igual ao do banco
+
+# O servidor leva ~17 s de custo fixo por pedido; paginar por posicao (startIndex) e lento. Fatiamos por FAIXA DE CODIGO do alerta
+# (o filtro por faixa e rapido e estavel): cada fatia traz uns 15 a 20 mil alertas em ~30 s, varias fatias ao mesmo tempo.
+fatia_codigos: 60000
+paralelo_padrao: 4
+paralelo_maximo: 6
+tolerancia_coleta: 0.002           # baixou menos que (1 - isto) do anunciado: nao grava (a camada muda ao vivo)
+max_queda: 0.10                    # mais que isso de alertas vigentes ausentes numa coleta: nao grava (--aceitar-queda libera)
+# Conferencia: caixa do Brasil (lon/lat). Alerta com a caixa fora dela (ou sem geometria) entra com geom NULL e o texto original.
+caixa_brasil: {lon_min: -75.0, lon_max: -28.0, lat_min: -35.0, lat_max: 6.0}
+licenca: "Dados abertos do MapBiomas Alerta; confirmar os termos de uso e a citacao exigida antes de redistribuir"

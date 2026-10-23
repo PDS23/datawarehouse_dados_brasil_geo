@@ -1,0 +1,1257 @@
+<title>Esquema do Banco</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Esquema do data warehouse. Layout: o diagrama em largura total, o painel de detalhe embaixo; tintas por schema (dim, vetorial, tabular, resultados, catalogo). */
+:root{--bg:#f6f8fa;--fg:#1c2733;--suave:#5f6f80;--caixa:#ffffff;--linha:#c5cdd6;--zebra:#f3f6f9;--texto:#1c2733;--lig:#4b6a88;--destaque:#d9480f;
+--dim:#0f766e;--vet:#2f7d32;--tab:#b45309;--res:#6d28d9;--cat:#475569;--pk:#b7791f;--fk:#1d4ed8;--geo:#2f7d32;--painel:#ffffff;
+--mono:Consolas,'Courier New',monospace;--sans:'Segoe UI',system-ui,Arial,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#10161d;--fg:#e6edf3;--suave:#9aa9b8;--caixa:#18212b;--linha:#33414f;--zebra:#1d2832;--texto:#e6edf3;--lig:#7ea1c4;--destaque:#ff8a4c;
+--dim:#14a39a;--vet:#4caf50;--tab:#e08a2e;--res:#9d6bff;--cat:#7d8da0;--pk:#e3b341;--fk:#6ea8ff;--geo:#5fd068;--painel:#18212b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10161d;--fg:#e6edf3;--suave:#9aa9b8;--caixa:#18212b;--linha:#33414f;--zebra:#1d2832;--texto:#e6edf3;--lig:#7ea1c4;--destaque:#ff8a4c;
+--dim:#14a39a;--vet:#4caf50;--tab:#e08a2e;--res:#9d6bff;--cat:#7d8da0;--pk:#e3b341;--fk:#6ea8ff;--geo:#5fd068;--painel:#18212b;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);margin:0;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));line-height:1.5}
+main{max-width:1900px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{font-size:28px;line-height:1.15;margin:0;text-wrap:balance} .sub{color:var(--suave);margin:4px 0 0;max-width:80ch}
+.fig{overflow-x:auto;background:var(--bg);border:1px solid var(--linha);border-radius:8px;padding:8px}
+.fig svg{display:block;height:auto}
+
+.tab .hit{fill:transparent}
+.tab .corpo{fill:var(--caixa);stroke:var(--linha);stroke-width:1.2}
+.tab .cab{fill:var(--c)} .tab.vw .corpo{stroke-dasharray:5 3}
+.tab.dim{--c:var(--dim)} .tab.vetorial{--c:var(--vet)} .tab.tabular{--c:var(--tab)} .tab.resultados{--c:var(--res)} .tab.catalogo{--c:var(--cat)}
+.tab .nome{font:600 13px var(--mono);fill:#fff} .tab .sub{font:11px var(--sans);fill:#fff;opacity:.85}
+.tab .selo{font:600 10px var(--sans);fill:#fff;opacity:.95}
+.tab .zebra{fill:var(--zebra)} .tab .col{font:12px var(--mono);fill:var(--texto)} .tab .col.pk{font-weight:700}
+.tab .tp{font:10.5px var(--mono);fill:var(--suave)} .tab .mais{font:italic 11px var(--sans);fill:var(--suave)}
+.tab .m{font:700 9px var(--sans);letter-spacing:.04em} .tab .m.PK{fill:var(--pk)} .tab .m.FK{fill:var(--fk)} .tab .m.fonte{fill:var(--suave)} .tab .m.geo{fill:var(--geo)}
+.tab{cursor:pointer} .tab:hover .corpo,.tab:focus .corpo,.tab.sel .corpo{stroke:var(--c);stroke-width:2.4}
+.lig path{fill:none;stroke:var(--lig);stroke-width:1.4;opacity:.55} .lig circle{fill:var(--lig);opacity:.8} .lig.vw path{stroke-dasharray:4 3}
+.lig.on path{stroke:var(--destaque);stroke-width:2.4;opacity:1} .lig.on circle{fill:var(--destaque);opacity:1}
+.lig.off{opacity:.12}
+.faixa{font:700 12px var(--sans);letter-spacing:.06em;fill:var(--suave)} .faixa-l{stroke:var(--linha);stroke-width:1}
+.nota{font:12px var(--sans);fill:var(--suave)}
+
+.legenda{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--suave);align-items:center}
+.legenda span.chip{display:inline-flex;align-items:center;gap:6px} .legenda i{width:12px;height:12px;border-radius:3px;display:inline-block;background:var(--c)}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px} .grade>*{min-width:0}
+.painel{background:var(--painel);border:1px solid var(--linha);border-radius:8px;padding:14px 16px}
+.painel h2{font-size:15px;margin:0 0 8px;letter-spacing:.02em} .painel p,.painel li{font-size:14px} .painel ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+#detalhe table{border-collapse:collapse;font:12.5px var(--mono);width:100%} #detalhe td,#detalhe th{padding:3px 8px;border-bottom:1px solid var(--linha);text-align:left;vertical-align:top}
+#detalhe th{font:600 11px var(--sans);color:var(--suave);letter-spacing:.05em;text-transform:uppercase} .tw{overflow-x:auto}
+.tag{font:700 10px var(--sans);letter-spacing:.04em;padding:1px 5px;border-radius:3px;background:var(--zebra);color:var(--suave)}
+code{font-family:var(--mono);font-size:.92em}
+#tip{position:fixed;z-index:10;max-width:340px;background:var(--painel);color:var(--fg);border:1px solid var(--linha);border-left:3px solid var(--destaque);border-radius:6px;padding:8px 10px;
+box-shadow:0 4px 14px rgba(0,0,0,.22);font:13px/1.4 var(--sans);pointer-events:none}
+#tip b{font:600 12.5px var(--mono)} #tip .t{font:11px var(--mono);color:var(--suave);margin-left:6px} #tip p{margin:4px 0 0} #tip .fk{margin-top:4px;font:11.5px var(--mono);color:var(--fk)} #tip .sem{color:var(--suave);font-style:italic}
+</style>
+<main>
+<header><h1>Esquema do banco data_warehouse</h1>
+<p class="sub">Tabelas, colunas principais e chaves estrangeiras, lidos direto do catálogo do PostgreSQL. Passe o mouse numa coluna para ver o que ela é e de onde vem; clique numa tabela para ver todas as colunas e as ligações dela.</p></header>
+<div class="legenda" aria-label="Legenda">
+<span class="chip"><i style="--c:var(--dim)"></i>dim · dimensões</span><span class="chip"><i style="--c:var(--vet)"></i>vetorial · geometrias</span>
+<span class="chip"><i style="--c:var(--tab)"></i>tabular</span><span class="chip"><i style="--c:var(--res)"></i>resultados · derivados</span><span class="chip"><i style="--c:var(--cat)"></i>catálogo</span>
+<span class="chip"><b style="color:var(--pk)">PK</b> chave primária</span><span class="chip"><b style="color:var(--fk)">FK</b> chave estrangeira (linha)</span>
+<span class="chip"><b style="color:var(--suave)">fonte</b> id_fonte → dim.fontes (em quase toda tabela, sem linha)</span><span class="chip"><b style="color:var(--geo)">geo</b> geometria</span>
+<span class="chip">tracejado = view</span></div>
+<figure class="fig" style="margin:0"><div class="rolar" id="figura"><svg viewBox="0 0 2530 1478" width="2530" role="img" aria-label="Esquema do banco data_warehouse: dimensões, geometrias, tabelas, resultados e catálogo, com as chaves estrangeiras"><defs><marker id="seta" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="seta"/></marker></defs><text class="faixa" x="40" y="32">DIMENSÕES (vocabulário comum, tracejado = view) · TABULARES · GEOMETRIAS · RESULTADOS</text><text class="faixa" x="40" y="1178">CATÁLOGO · proveniência, controle e rastreabilidade (de onde veio cada dado, quando e quanto)</text><line class="faixa-l" x1="40" x2="2490" y1="1162" y2="1162"/><g class="lig" data-de="dim.municipios" data-para="dim.estados"><path d="M1050 603.0 C1110 603.0 1110 303.0 1050 303.0"/><circle cx="1050" cy="603.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>dim.municipios.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="tabular.ibge_pam" data-para="dim.municipios"><path d="M690 141.0 C730 141.0 720 567.0 760 567.0"/><circle cx="690" cy="141.0" r="3.2"/><circle class="alvo" cx="760" cy="567.0" r="3.2"/><title>tabular.ibge_pam.id_municipio → dim.municipios.id_municipio</title></g>
+<g class="lig" data-de="tabular.ibge_pam" data-para="dim.cultura"><path d="M400 159.0 C360 159.0 370 123.0 330 123.0"/><circle cx="400" cy="159.0" r="3.2"/><circle class="alvo" cx="330" cy="123.0" r="3.2"/><title>tabular.ibge_pam.id_cultura → dim.cultura.id_cultura</title></g>
+<g class="lig" data-de="dim.cultura_equivalencia" data-para="dim.sidra_categoria"><path d="M330 321.0 C1085.0 321.0 1085.0 735.0 1840 735.0"/><circle cx="330" cy="321.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>dim.cultura_equivalencia.id_categoria → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="dim.cultura_equivalencia" data-para="dim.cultura"><path d="M330 339.0 C390 339.0 390 123.0 330 123.0"/><circle cx="330" cy="339.0" r="3.2"/><circle class="alvo" cx="330" cy="123.0" r="3.2"/><title>dim.cultura_equivalencia.id_cultura → dim.cultura.id_cultura</title></g>
+<g class="lig" data-de="vetorial.incra_assentamentos" data-para="dim.estados"><path d="M1120 741.0 C1080 741.0 1090 303.0 1050 303.0"/><circle cx="1120" cy="741.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>vetorial.incra_assentamentos.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="vetorial.incra_assentamentos" data-para="dim.estados"><path d="M1120 795.0 C1080 795.0 1090 303.0 1050 303.0"/><circle cx="1120" cy="795.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>vetorial.incra_assentamentos.id_estado_camada → dim.estados.id_estado</title></g>
+<g class="lig" data-de="dim.sidra_tabela" data-para="dim.sidra_pesquisa"><path d="M2130 285.0 C2190 285.0 2190 123.0 2130 123.0"/><circle cx="2130" cy="285.0" r="3.2"/><circle class="alvo" cx="2130" cy="123.0" r="3.2"/><title>dim.sidra_tabela.id_pesquisa → dim.sidra_pesquisa.id_pesquisa</title></g>
+<g class="lig" data-de="vetorial.sicar_imoveis" data-para="dim.estados"><path d="M1120 441.0 C1080 441.0 1090 303.0 1050 303.0"/><circle cx="1120" cy="441.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>vetorial.sicar_imoveis.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="vetorial.sicar_imoveis" data-para="dim.municipios"><path d="M1120 459.0 C1080 459.0 1090 567.0 1050 567.0"/><circle cx="1120" cy="459.0" r="3.2"/><circle class="alvo" cx="1050" cy="567.0" r="3.2"/><title>vetorial.sicar_imoveis.id_municipio → dim.municipios.id_municipio</title></g>
+<g class="lig" data-de="dim.sidra_tabela_eixo" data-para="dim.sidra_tabela"><path d="M2130 465.0 C2190 465.0 2190 267.0 2130 267.0"/><circle cx="2130" cy="465.0" r="3.2"/><circle class="alvo" cx="2130" cy="267.0" r="3.2"/><title>dim.sidra_tabela_eixo.id_tabela → dim.sidra_tabela.id_tabela</title></g>
+<g class="lig" data-de="dim.sidra_tabela_eixo" data-para="dim.sidra_classificacao"><path d="M2130 501.0 C2190 501.0 2190 609.0 2130 609.0"/><circle cx="2130" cy="501.0" r="3.2"/><circle class="alvo" cx="2130" cy="609.0" r="3.2"/><title>dim.sidra_tabela_eixo.id_classificacao → dim.sidra_classificacao.id_classificacao</title></g>
+<g class="lig" data-de="dim.sidra_categoria" data-para="dim.sidra_classificacao"><path d="M2130 753.0 C2190 753.0 2190 609.0 2130 609.0"/><circle cx="2130" cy="753.0" r="3.2"/><circle class="alvo" cx="2130" cy="609.0" r="3.2"/><title>dim.sidra_categoria.id_classificacao → dim.sidra_classificacao.id_classificacao</title></g>
+<g class="lig" data-de="dim.sidra_categoria" data-para="dim.unidade"><path d="M2130 807.0 C2170 807.0 2160 267.0 2200 267.0"/><circle cx="2130" cy="807.0" r="3.2"/><circle class="alvo" cx="2200" cy="267.0" r="3.2"/><title>dim.sidra_categoria.id_unidade → dim.unidade.id_unidade</title></g>
+<g class="lig" data-de="dim.sidra_variavel" data-para="dim.unidade"><path d="M2490 159.0 C2550 159.0 2550 267.0 2490 267.0"/><circle cx="2490" cy="159.0" r="3.2"/><circle class="alvo" cx="2490" cy="267.0" r="3.2"/><title>dim.sidra_variavel.id_unidade → dim.unidade.id_unidade</title></g>
+<g class="lig" data-de="resultados.prodes_municipio" data-para="vetorial.prodes_desmatamento"><path d="M1480 141.0 C1440 141.0 1450 123.0 1410 123.0"/><circle cx="1480" cy="141.0" r="3.2"/><circle class="alvo" cx="1410" cy="123.0" r="3.2"/><title>resultados.prodes_municipio.id_prodes → vetorial.prodes_desmatamento.id</title></g>
+<g class="lig" data-de="resultados.prodes_municipio" data-para="dim.municipios"><path d="M1480 159.0 C1265.0 159.0 1265.0 567.0 1050 567.0"/><circle cx="1480" cy="159.0" r="3.2"/><circle class="alvo" cx="1050" cy="567.0" r="3.2"/><title>resultados.prodes_municipio.id_municipio → dim.municipios.id_municipio</title></g>
+<g class="lig" data-de="vetorial.prodes_desmatamento" data-para="dim.biomas"><path d="M1120 177.0 C1080 177.0 1090 819.0 1050 819.0"/><circle cx="1120" cy="177.0" r="3.2"/><circle class="alvo" cx="1050" cy="819.0" r="3.2"/><title>vetorial.prodes_desmatamento.id_bioma → dim.biomas.id_bioma</title></g>
+<g class="lig" data-de="vetorial.prodes_desmatamento" data-para="dim.estados"><path d="M1120 195.0 C1080 195.0 1090 303.0 1050 303.0"/><circle cx="1120" cy="195.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>vetorial.prodes_desmatamento.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_tabela"><path d="M690 651.0 C1265.0 651.0 1265.0 267.0 1840 267.0"/><circle cx="690" cy="651.0" r="3.2"/><circle class="alvo" cx="1840" cy="267.0" r="3.2"/><title>tabular.sidra_valor.id_tabela → dim.sidra_tabela.id_tabela</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.municipios"><path d="M690 687.0 C730 687.0 720 567.0 760 567.0"/><circle cx="690" cy="687.0" r="3.2"/><circle class="alvo" cx="760" cy="567.0" r="3.2"/><title>tabular.sidra_valor.id_municipio → dim.municipios.id_municipio</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.estados"><path d="M690 705.0 C730 705.0 720 303.0 760 303.0"/><circle cx="690" cy="705.0" r="3.2"/><circle class="alvo" cx="760" cy="303.0" r="3.2"/><title>tabular.sidra_valor.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_variavel"><path d="M690 723.0 C1445.0 723.0 1445.0 123.0 2200 123.0"/><circle cx="690" cy="723.0" r="3.2"/><circle class="alvo" cx="2200" cy="123.0" r="3.2"/><title>tabular.sidra_valor.id_variavel → dim.sidra_variavel.id_variavel</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 741.0 C1265.0 741.0 1265.0 735.0 1840 735.0"/><circle cx="690" cy="741.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat1 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 759.0 C1265.0 759.0 1265.0 735.0 1840 735.0"/><circle cx="690" cy="759.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat2 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 777.0 C1265.0 777.0 1265.0 735.0 1840 735.0"/><circle cx="690" cy="777.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat3 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 795.0 C1265.0 795.0 1265.0 735.0 1840 735.0"/><circle cx="690" cy="795.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat4 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 628 C1265.0 628 1265.0 735.0 1840 735.0"/><circle cx="690" cy="628" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat5 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 628 C1265.0 628 1265.0 735.0 1840 735.0"/><circle cx="690" cy="628" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat6 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_situacao"><path d="M690 628 C1445.0 628 1445.0 411.0 2200 411.0"/><circle cx="690" cy="628" r="3.2"/><circle class="alvo" cx="2200" cy="411.0" r="3.2"/><title>tabular.sidra_valor.id_situacao → dim.sidra_situacao.id_situacao</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.unidade"><path d="M690 628 C1445.0 628 1445.0 267.0 2200 267.0"/><circle cx="690" cy="628" r="3.2"/><circle class="alvo" cx="2200" cy="267.0" r="3.2"/><title>tabular.sidra_valor.id_unidade → dim.unidade.id_unidade</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="catalogo.cargas"><path d="M400 628 C528.0 628 528.0 1245.0 656 1245.0"/><circle cx="400" cy="628" r="3.2"/><circle class="alvo" cx="656" cy="1245.0" r="3.2"/><title>tabular.sidra_valor.id_carga → catalogo.cargas.id</title></g>
+<g class="lig" data-de="catalogo.sidra_recorte" data-para="dim.sidra_tabela"><path d="M2200 591.0 C2160 591.0 2170 267.0 2130 267.0"/><circle cx="2200" cy="591.0" r="3.2"/><circle class="alvo" cx="2130" cy="267.0" r="3.2"/><title>catalogo.sidra_recorte.id_tabela → dim.sidra_tabela.id_tabela</title></g>
+<g class="lig" data-de="catalogo.sidra_recorte" data-para="catalogo.cargas"><path d="M2200 717.0 C1428.0 717.0 1428.0 1245.0 656 1245.0"/><circle cx="2200" cy="717.0" r="3.2"/><circle class="alvo" cx="656" cy="1245.0" r="3.2"/><title>catalogo.sidra_recorte.id_carga → catalogo.cargas.id</title></g>
+<g class="lig vw" data-de="vetorial.v_prodes_municipio" data-para="resultados.prodes_municipio"><path d="M1770 256 C1820 256 1820 94 1770 94"/><title>view vetorial.v_prodes_municipio le resultados.prodes_municipio</title></g>
+<g class="lig vw" data-de="vetorial.v_prodes_municipio" data-para="vetorial.prodes_desmatamento"><path d="M1480 256 C1440 256 1450 94 1410 94"/><title>view vetorial.v_prodes_municipio le vetorial.prodes_desmatamento</title></g>
+<g class="lig vw" data-de="tabular.ibge_censoagro2017_estab_lavoura_perm" data-para="tabular.sidra_valor"><path d="M690 358 C740 358 740 622 690 622"/><title>view tabular.ibge_censoagro2017_estab_lavoura_perm le tabular.sidra_valor</title></g>
+<g class="lig vw" data-de="catalogo.v_ultima_coleta" data-para="catalogo.coletas"><path d="M1670 1216 C1326.0 1216 1326.0 1216 982 1216"/><title>view catalogo.v_ultima_coleta le catalogo.coletas</title></g>
+<g class="tab dim" data-t="dim.cultura" transform="translate(40,70)" tabindex="0" role="button" aria-label="dim.cultura">
+<rect class="corpo" width="290" height="160" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">cultura</text>
+<text class="sub" x="12" y="35">dim · 107 linhas · 64 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_cultura</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cultura" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">slug</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="slug" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">nota_ibge</text>
+<text class="tp" x="280" y="111" text-anchor="end">boolean</text>
+<rect class="hit" data-c="nota_ibge" y="98" width="290" height="18"/>
+<text class="m fonte" x="10" y="129">fonte</text>
+<text class="col" x="44" y="129">id_fonte</text>
+<text class="tp" x="280" y="129" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">importado_em</text>
+<text class="tp" x="280" y="147" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="134" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.cultura_equivalencia" transform="translate(40,268)" tabindex="0" role="button" aria-label="dim.cultura_equivalencia">
+<rect class="corpo" width="290" height="88" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">cultura_equivalencia</text>
+<text class="sub" x="12" y="35">dim · 146 linhas · 40 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_categoria</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_categoria" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_cultura</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cultura" y="62" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.malha_anterior" transform="translate(40,394)" tabindex="0" role="button" aria-label="dim.malha_anterior">
+<rect class="corpo" width="290" height="196" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">malha_anterior</text>
+<text class="sub" x="12" y="35">dim · 2.429 linhas · 103 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">tipo</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="tipo" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">id_territorio</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_territorio" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">ano_malha</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="ano_malha" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">area_km2</text>
+<text class="tp" x="280" y="129" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_km2" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">arquivado_em</text>
+<text class="tp" x="280" y="165" text-anchor="end">date</text>
+<rect class="hit" data-c="arquivado_em" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">motivo</text>
+<text class="tp" x="280" y="183" text-anchor="end">text</text>
+<rect class="hit" data-c="motivo" y="170" width="290" height="18"/>
+</g>
+<g class="tab tabular" data-t="tabular.ibge_pam" transform="translate(400,70)" tabindex="0" role="button" aria-label="tabular.ibge_pam">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">ibge_pam</text>
+<text class="sub" x="12" y="35">tabular · 238.780 linhas · 115 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_municipio</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_cultura</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cultura" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">ano</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="ano" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">area_plantada_ha</text>
+<text class="tp" x="280" y="129" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_plantada_ha" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">area_colhida_ha</text>
+<text class="tp" x="280" y="147" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_colhida_ha" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">quantidade_produzida</text>
+<text class="tp" x="280" y="165" text-anchor="end">numeric</text>
+<rect class="hit" data-c="quantidade_produzida" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">unidade_quantidade</text>
+<text class="tp" x="280" y="183" text-anchor="end">text</text>
+<rect class="hit" data-c="unidade_quantidade" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="201">fonte</text>
+<text class="col" x="44" y="201">id_fonte</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 5 colunas (clique para ver todas)</text>
+</g>
+<g class="tab tabular vw" data-t="tabular.ibge_censoagro2017_estab_lavoura_perm" transform="translate(400,334)" tabindex="0" role="button" aria-label="tabular.ibge_censoagro2017_estab_lavoura_perm">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">ibge_censoagro2017_estab_lavoura_perm</text>
+<text class="sub" x="12" y="35">tabular · view · </text>
+<text class="col" x="44" y="57">id_municipio</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">id_produto</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_produto" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">id_grupo_area</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_grupo_area" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">estab_50_pes_mais</text>
+<text class="tp" x="280" y="111" text-anchor="end">integer</text>
+<rect class="hit" data-c="estab_50_pes_mais" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">estab_50_pes_mais_sigilo</text>
+<text class="tp" x="280" y="129" text-anchor="end">boolean</text>
+<rect class="hit" data-c="estab_50_pes_mais_sigilo" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">estab_menos_50_pes</text>
+<text class="tp" x="280" y="147" text-anchor="end">integer</text>
+<rect class="hit" data-c="estab_menos_50_pes" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">estab_menos_50_pes_sigilo</text>
+<text class="tp" x="280" y="165" text-anchor="end">boolean</text>
+<rect class="hit" data-c="estab_menos_50_pes_sigilo" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="183">fonte</text>
+<text class="col" x="44" y="183">id_fonte</text>
+<text class="tp" x="280" y="183" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">importado_em</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 1 colunas (clique para ver todas)</text>
+</g>
+<g class="tab tabular esp" data-t="tabular.sidra_valor" transform="translate(400,598)" tabindex="0" role="button" aria-label="tabular.sidra_valor">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_valor</text>
+<text class="sub" x="12" y="35">tabular · 111.440 linhas</text>
+<text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_tabela</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_tabela" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m PK" x="10" y="75">PK</text>
+<text class="col pk" x="44" y="75">id</text>
+<text class="tp" x="280" y="75" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_municipio</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="111">FK</text>
+<text class="col" x="44" y="111">id_estado</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="129">FK</text>
+<text class="col" x="44" y="129">id_variavel</text>
+<text class="tp" x="280" y="129" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_variavel" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m FK" x="10" y="147">FK</text>
+<text class="col" x="44" y="147">id_cat1</text>
+<text class="tp" x="280" y="147" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cat1" y="134" width="290" height="18"/>
+<text class="m FK" x="10" y="165">FK</text>
+<text class="col" x="44" y="165">id_cat2</text>
+<text class="tp" x="280" y="165" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cat2" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m FK" x="10" y="183">FK</text>
+<text class="col" x="44" y="183">id_cat3</text>
+<text class="tp" x="280" y="183" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cat3" y="170" width="290" height="18"/>
+<text class="m FK" x="10" y="201">FK</text>
+<text class="col" x="44" y="201">id_cat4</text>
+<text class="tp" x="280" y="201" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cat4" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 11 colunas (clique para ver todas)</text>
+</g>
+<g class="tab dim" data-t="dim.fontes" transform="translate(760,70)" tabindex="0" role="button" aria-label="dim.fontes">
+<rect class="corpo" width="290" height="142" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">fontes</text>
+<text class="sub" x="12" y="35">dim · 5 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_fonte</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">sigla</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="sigla" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">url</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="url" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">descricao</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="descricao" y="116" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.estados" transform="translate(760,250)" tabindex="0" role="button" aria-label="dim.estados">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">estados</text>
+<text class="sub" x="12" y="35">dim · 27 linhas · 20 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_estado</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">cd_uf</text>
+<text class="tp" x="280" y="75" text-anchor="end">character(2)</text>
+<rect class="hit" data-c="cd_uf" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome_uf</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_uf" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">sigla_uf</text>
+<text class="tp" x="280" y="111" text-anchor="end">character(2)</text>
+<rect class="hit" data-c="sigla_uf" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">cd_regiao</text>
+<text class="tp" x="280" y="129" text-anchor="end">character(1)</text>
+<rect class="hit" data-c="cd_regiao" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">nome_regiao</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_regiao" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">sigla_regiao</text>
+<text class="tp" x="280" y="165" text-anchor="end">character(2)</text>
+<rect class="hit" data-c="sigla_regiao" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m geo" x="10" y="183">geo</text>
+<text class="col" x="44" y="183">geom</text>
+<text class="tp" x="280" y="183" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="201">fonte</text>
+<text class="col" x="44" y="201">id_fonte</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 3 colunas (clique para ver todas)</text>
+</g>
+<g class="tab dim" data-t="dim.municipios" transform="translate(760,514)" tabindex="0" role="button" aria-label="dim.municipios">
+<rect class="corpo" width="290" height="214" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">municipios</text>
+<text class="sub" x="12" y="35">dim · 5.573 linhas · 430 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_municipio</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome_municipio</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_municipio" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_estado</text>
+<text class="tp" x="280" y="93" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">sigla_uf</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="sigla_uf" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">area_km2</text>
+<text class="tp" x="280" y="129" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_km2" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="m fonte" x="10" y="165">fonte</text>
+<text class="col" x="44" y="165">id_fonte</text>
+<text class="tp" x="280" y="165" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">importado_em</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">ano_malha</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="ano_malha" y="188" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.biomas" transform="translate(760,766)" tabindex="0" role="button" aria-label="dim.biomas">
+<rect class="corpo" width="290" height="160" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">biomas</text>
+<text class="sub" x="12" y="35">dim · 7 linhas · 18 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_bioma</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_bioma" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">codigo_bioma</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo_bioma" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome_bioma</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_bioma" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m geo" x="10" y="111">geo</text>
+<text class="col" x="44" y="111">geom</text>
+<text class="tp" x="280" y="111" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="98" width="290" height="18"/>
+<text class="m fonte" x="10" y="129">fonte</text>
+<text class="col" x="44" y="129">id_fonte</text>
+<text class="tp" x="280" y="129" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">importado_em</text>
+<text class="tp" x="280" y="147" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="134" width="290" height="18"/>
+</g>
+<g class="tab vetorial esp" data-t="vetorial.prodes_desmatamento" transform="translate(1120,70)" tabindex="0" role="button" aria-label="vetorial.prodes_desmatamento">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">prodes_desmatamento</text>
+<text class="sub" x="12" y="35">vetorial · 6.936.963 linhas · 7,0 GB</text>
+<text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">uuid</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="uuid" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">bioma</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="bioma" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="111">FK</text>
+<text class="col" x="44" y="111">id_bioma</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_bioma" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="129">FK</text>
+<text class="col" x="44" y="129">id_estado</text>
+<text class="tp" x="280" y="129" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="m fonte" x="10" y="165">fonte</text>
+<text class="col" x="44" y="165">id_fonte</text>
+<text class="tp" x="280" y="165" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">vigente_desde</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_desde" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">vigente_ate</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_ate" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 20 colunas (clique para ver todas)</text>
+</g>
+<g class="tab vetorial esp" data-t="vetorial.sicar_imoveis" transform="translate(1120,334)" tabindex="0" role="button" aria-label="vetorial.sicar_imoveis">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sicar_imoveis</text>
+<text class="sub" x="12" y="35">vetorial · 8.547.089 linhas · 7,8 GB</text>
+<text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">fid_wfs</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="fid_wfs" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">cod_imovel</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="cod_imovel" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="111">FK</text>
+<text class="col" x="44" y="111">id_estado</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="129">FK</text>
+<text class="col" x="44" y="129">id_municipio</text>
+<text class="tp" x="280" y="129" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="m fonte" x="10" y="165">fonte</text>
+<text class="col" x="44" y="165">id_fonte</text>
+<text class="tp" x="280" y="165" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">vigente_desde</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_desde" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">vigente_ate</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_ate" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 14 colunas (clique para ver todas)</text>
+</g>
+<g class="tab vetorial" data-t="vetorial.incra_assentamentos" transform="translate(1120,598)" tabindex="0" role="button" aria-label="vetorial.incra_assentamentos">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">incra_assentamentos</text>
+<text class="sub" x="12" y="35">vetorial · 7.525 linhas · 69 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">gid_incra</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="gid_incra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">cd_sipra</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="cd_sipra" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">nome_projeto</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_projeto" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">municipio</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="municipio" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m FK" x="10" y="147">FK</text>
+<text class="col" x="44" y="147">id_estado</text>
+<text class="tp" x="280" y="147" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="165">geo</text>
+<text class="col" x="44" y="165">geom</text>
+<text class="tp" x="280" y="165" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="183">fonte</text>
+<text class="col" x="44" y="183">id_fonte</text>
+<text class="tp" x="280" y="183" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="170" width="290" height="18"/>
+<text class="m FK" x="10" y="201">FK</text>
+<text class="col" x="44" y="201">id_estado_camada</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado_camada" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 10 colunas (clique para ver todas)</text>
+</g>
+<g class="tab vetorial esp" data-t="vetorial.mapbiomas_alerta" transform="translate(1120,862)" tabindex="0" role="button" aria-label="vetorial.mapbiomas_alerta">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">mapbiomas_alerta</text>
+<text class="sub" x="12" y="35">vetorial · 543.378 linhas · 865 MB</text>
+<text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">alert_code</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="alert_code" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">area_ha</text>
+<text class="tp" x="280" y="93" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_ha" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">sources</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="sources" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">biomes</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="biomes" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="m fonte" x="10" y="165">fonte</text>
+<text class="col" x="44" y="165">id_fonte</text>
+<text class="tp" x="280" y="165" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">vigente_desde</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_desde" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">vigente_ate</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_ate" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 18 colunas (clique para ver todas)</text>
+</g>
+<g class="tab resultados" data-t="resultados.prodes_municipio" transform="translate(1480,70)" tabindex="0" role="button" aria-label="resultados.prodes_municipio">
+<rect class="corpo" width="290" height="124" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">prodes_municipio</text>
+<text class="sub" x="12" y="35">resultados · 7.084.906 linhas · 883 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_prodes</text>
+<text class="tp" x="280" y="75" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_prodes" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_municipio</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">calculado_em</text>
+<text class="tp" x="280" y="111" text-anchor="end">date</text>
+<rect class="hit" data-c="calculado_em" y="98" width="290" height="18"/>
+</g>
+<g class="tab vetorial vw" data-t="vetorial.v_prodes_municipio" transform="translate(1480,232)" tabindex="0" role="button" aria-label="vetorial.v_prodes_municipio">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">v_prodes_municipio</text>
+<text class="sub" x="12" y="35">vetorial · view · </text>
+<text class="col" x="44" y="57">id_ponte</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_ponte" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">id_municipio</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">id_prodes</text>
+<text class="tp" x="280" y="93" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_prodes" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">year</text>
+<text class="tp" x="280" y="111" text-anchor="end">integer</text>
+<rect class="hit" data-c="year" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">main_class</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="main_class" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">class_name</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="class_name" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">area_km</text>
+<text class="tp" x="280" y="165" text-anchor="end">float8</text>
+<rect class="hit" data-c="area_km" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">image_date</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="image_date" y="170" width="290" height="18"/>
+<text class="m geo" x="10" y="201">geo</text>
+<text class="col" x="44" y="201">geom</text>
+<text class="tp" x="280" y="201" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 2 colunas (clique para ver todas)</text>
+</g>
+<g class="tab vetorial" data-t="vetorial.ibge_dominios_naturais" transform="translate(1480,496)" tabindex="0" role="button" aria-label="vetorial.ibge_dominios_naturais">
+<rect class="corpo" width="290" height="214" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">ibge_dominios_naturais</text>
+<text class="sub" x="12" y="35">vetorial · 52 linhas · 30 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">codigo_bioma</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo_bioma" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome_bioma</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_bioma" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">codigo_dominio</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo_dominio" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">nome_dominio</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_dominio" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">tipo_dominio</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="tipo_dominio" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="165">geo</text>
+<text class="col" x="44" y="165">geom</text>
+<text class="tp" x="280" y="165" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="183">fonte</text>
+<text class="col" x="44" y="183">id_fonte</text>
+<text class="tp" x="280" y="183" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">importado_em</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="188" width="290" height="18"/>
+</g>
+<g class="tab vetorial" data-t="vetorial.ibge_regioes_naturais" transform="translate(1480,748)" tabindex="0" role="button" aria-label="vetorial.ibge_regioes_naturais">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">ibge_regioes_naturais</text>
+<text class="sub" x="12" y="35">vetorial · 271 linhas · 42 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">codigo_bioma</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo_bioma" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome_bioma</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_bioma" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">geologia_dominante</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="geologia_dominante" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">geomorfologia_dominante</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="geomorfologia_dominante" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">vegetacao_dominante</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="vegetacao_dominante" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">pedologia_dominante</text>
+<text class="tp" x="280" y="165" text-anchor="end">text</text>
+<rect class="hit" data-c="pedologia_dominante" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m geo" x="10" y="183">geo</text>
+<text class="col" x="44" y="183">geom</text>
+<text class="tp" x="280" y="183" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="201">fonte</text>
+<text class="col" x="44" y="201">id_fonte</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 7 colunas (clique para ver todas)</text>
+</g>
+<g class="tab dim" data-t="dim.sidra_pesquisa" transform="translate(1840,70)" tabindex="0" role="button" aria-label="dim.sidra_pesquisa">
+<rect class="corpo" width="290" height="106" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_pesquisa</text>
+<text class="sub" x="12" y="35">dim · 1 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_pesquisa</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_pesquisa" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">codigo</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="80" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_tabela" transform="translate(1840,214)" tabindex="0" role="button" aria-label="dim.sidra_tabela">
+<rect class="corpo" width="290" height="160" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_tabela</text>
+<text class="sub" x="12" y="35">dim · 1 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_tabela</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_tabela" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_pesquisa</text>
+<text class="tp" x="280" y="75" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_pesquisa" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">periodicidade</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="periodicidade" y="98" width="290" height="18"/>
+<text class="m fonte" x="10" y="129">fonte</text>
+<text class="col" x="44" y="129">id_fonte</text>
+<text class="tp" x="280" y="129" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">importado_em</text>
+<text class="tp" x="280" y="147" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="134" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_tabela_eixo" transform="translate(1840,412)" tabindex="0" role="button" aria-label="dim.sidra_tabela_eixo">
+<rect class="corpo" width="290" height="106" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_tabela_eixo</text>
+<text class="sub" x="12" y="35">dim · 3 linhas · 24 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_tabela</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_tabela" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m PK" x="10" y="75">PK</text>
+<text class="col pk" x="44" y="75">posicao</text>
+<text class="tp" x="280" y="75" text-anchor="end">smallint</text>
+<rect class="hit" data-c="posicao" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_classificacao</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_classificacao" y="80" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_classificacao" transform="translate(1840,556)" tabindex="0" role="button" aria-label="dim.sidra_classificacao">
+<rect class="corpo" width="290" height="88" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_classificacao</text>
+<text class="sub" x="12" y="35">dim · 4 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_classificacao</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_classificacao" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_categoria" transform="translate(1840,682)" tabindex="0" role="button" aria-label="dim.sidra_categoria">
+<rect class="corpo" width="290" height="214" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_categoria</text>
+<text class="sub" x="12" y="35">dim · 175 linhas · 80 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_categoria</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_categoria" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_classificacao</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_classificacao" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">codigo_sidra</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="codigo_sidra" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">nome</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="129">FK</text>
+<text class="col" x="44" y="129">id_unidade</text>
+<text class="tp" x="280" y="129" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_unidade" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">limite_inferior</text>
+<text class="tp" x="280" y="147" text-anchor="end">numeric</text>
+<rect class="hit" data-c="limite_inferior" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">limite_superior</text>
+<text class="tp" x="280" y="165" text-anchor="end">numeric</text>
+<rect class="hit" data-c="limite_superior" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">ordem</text>
+<text class="tp" x="280" y="183" text-anchor="end">smallint</text>
+<rect class="hit" data-c="ordem" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">importado_em</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="188" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_variavel" transform="translate(2200,70)" tabindex="0" role="button" aria-label="dim.sidra_variavel">
+<rect class="corpo" width="290" height="106" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_variavel</text>
+<text class="sub" x="12" y="35">dim · 2 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_variavel</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_variavel" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_unidade</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_unidade" y="80" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.unidade" transform="translate(2200,214)" tabindex="0" role="button" aria-label="dim.unidade">
+<rect class="corpo" width="290" height="106" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">unidade</text>
+<text class="sub" x="12" y="35">dim · 1 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_unidade</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_unidade" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">simbolo</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="simbolo" y="80" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_situacao" transform="translate(2200,358)" tabindex="0" role="button" aria-label="dim.sidra_situacao">
+<rect class="corpo" width="290" height="124" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_situacao</text>
+<text class="sub" x="12" y="35">dim · 4 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_situacao</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_situacao" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">simbolo_sidra</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="simbolo_sidra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">descricao</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="descricao" y="98" width="290" height="18"/>
+</g>
+<g class="tab catalogo" data-t="catalogo.sidra_recorte" transform="translate(2200,520)" tabindex="0" role="button" aria-label="catalogo.sidra_recorte">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_recorte</text>
+<text class="sub" x="12" y="35">catalogo · 2 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_recorte</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_recorte" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_tabela</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_tabela" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nivel</text>
+<text class="tp" x="280" y="93" text-anchor="end">smallint</text>
+<rect class="hit" data-c="nivel" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">periodo_inicio</text>
+<text class="tp" x="280" y="111" text-anchor="end">integer</text>
+<rect class="hit" data-c="periodo_inicio" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">periodo_fim</text>
+<text class="tp" x="280" y="129" text-anchor="end">integer</text>
+<rect class="hit" data-c="periodo_fim" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">filtros</text>
+<text class="tp" x="280" y="147" text-anchor="end">jsonb</text>
+<rect class="hit" data-c="filtros" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">linhas_lidas</text>
+<text class="tp" x="280" y="165" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_lidas" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">linhas_gravadas</text>
+<text class="tp" x="280" y="183" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_gravadas" y="170" width="290" height="18"/>
+<text class="m FK" x="10" y="201">FK</text>
+<text class="col" x="44" y="201">id_carga</text>
+<text class="tp" x="280" y="201" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_carga" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 1 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.datasets" transform="translate(40,1192)" tabindex="0" role="button" aria-label="catalogo.datasets">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">datasets</text>
+<text class="sub" x="12" y="35">catalogo · 15 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">tipo</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="tipo" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m fonte" x="10" y="111">fonte</text>
+<text class="col" x="44" y="111">id_fonte</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">schema_tabela</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="schema_tabela" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">caminho_arquivo</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="caminho_arquivo" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="165">geo</text>
+<text class="col" x="44" y="165">cobertura</text>
+<text class="tp" x="280" y="165" text-anchor="end">Geometry 4674</text>
+<rect class="hit" data-c="cobertura" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">ano_referencia</text>
+<text class="tp" x="280" y="183" text-anchor="end">integer</text>
+<rect class="hit" data-c="ano_referencia" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">data_importacao</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="data_importacao" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 2 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.cargas" transform="translate(366,1192)" tabindex="0" role="button" aria-label="catalogo.cargas">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">cargas</text>
+<text class="sub" x="12" y="35">catalogo · 76 linhas · 88 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">pipeline</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="pipeline" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">dataset</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="dataset" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">iniciada_em</text>
+<text class="tp" x="280" y="111" text-anchor="end">timestamptz</text>
+<rect class="hit" data-c="iniciada_em" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">finalizada_em</text>
+<text class="tp" x="280" y="129" text-anchor="end">timestamptz</text>
+<rect class="hit" data-c="finalizada_em" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">status</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="status" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">parametros</text>
+<text class="tp" x="280" y="165" text-anchor="end">jsonb</text>
+<rect class="hit" data-c="parametros" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">linhas_lidas</text>
+<text class="tp" x="280" y="183" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_lidas" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">linhas_inseridas</text>
+<text class="tp" x="280" y="201" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_inseridas" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 3 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.coletas" transform="translate(692,1192)" tabindex="0" role="button" aria-label="catalogo.coletas">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">coletas</text>
+<text class="sub" x="12" y="35">catalogo · 44 linhas · 88 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">dataset</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="dataset" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">recorte</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="recorte" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">fonte</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="fonte" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">url</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="url" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">metodo</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="metodo" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">coletado_em</text>
+<text class="tp" x="280" y="165" text-anchor="end">timestamptz</text>
+<rect class="hit" data-c="coletado_em" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">total_anunciado</text>
+<text class="tp" x="280" y="183" text-anchor="end">bigint</text>
+<rect class="hit" data-c="total_anunciado" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">linhas_lidas</text>
+<text class="tp" x="280" y="201" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_lidas" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 8 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.coletas_duplicados" transform="translate(1018,1192)" tabindex="0" role="button" aria-label="catalogo.coletas_duplicados">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">coletas_duplicados</text>
+<text class="sub" x="12" y="35">catalogo · 10 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">dataset</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="dataset" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">recorte</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="recorte" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">cod_imovel</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="cod_imovel" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">fid_mantido</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="fid_mantido" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">fid_descartado</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="fid_descartado" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">status_mantido</text>
+<text class="tp" x="280" y="165" text-anchor="end">text</text>
+<rect class="hit" data-c="status_mantido" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">status_descartado</text>
+<text class="tp" x="280" y="183" text-anchor="end">text</text>
+<rect class="hit" data-c="status_descartado" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">condicao_mantida</text>
+<text class="tp" x="280" y="201" text-anchor="end">text</text>
+<rect class="hit" data-c="condicao_mantida" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 8 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.mapa_colunas" transform="translate(1344,1192)" tabindex="0" role="button" aria-label="catalogo.mapa_colunas">
+<rect class="corpo" width="290" height="142" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">mapa_colunas</text>
+<text class="sub" x="12" y="35">catalogo · 71 linhas · 64 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">tabela</text>
+<text class="tp" x="280" y="57" text-anchor="end">text</text>
+<rect class="hit" data-c="tabela" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m PK" x="10" y="75">PK</text>
+<text class="col pk" x="44" y="75">coluna</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="coluna" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">origem</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="origem" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">fonte</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="fonte" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">observacao</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="observacao" y="116" width="290" height="18"/>
+</g>
+<g class="tab catalogo vw" data-t="catalogo.v_ultima_coleta" transform="translate(1670,1192)" tabindex="0" role="button" aria-label="catalogo.v_ultima_coleta">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">v_ultima_coleta</text>
+<text class="sub" x="12" y="35">catalogo · view · </text>
+<text class="col" x="44" y="57">dataset</text>
+<text class="tp" x="280" y="57" text-anchor="end">text</text>
+<rect class="hit" data-c="dataset" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">recorte</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="recorte" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">fonte</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="fonte" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">metodo</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="metodo" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">coletado_em</text>
+<text class="tp" x="280" y="129" text-anchor="end">timestamptz</text>
+<rect class="hit" data-c="coletado_em" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">total_anunciado</text>
+<text class="tp" x="280" y="147" text-anchor="end">bigint</text>
+<rect class="hit" data-c="total_anunciado" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">linhas_lidas</text>
+<text class="tp" x="280" y="165" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_lidas" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">novos</text>
+<text class="tp" x="280" y="183" text-anchor="end">bigint</text>
+<rect class="hit" data-c="novos" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">versoes_novas</text>
+<text class="tp" x="280" y="201" text-anchor="end">bigint</text>
+<rect class="hit" data-c="versoes_novas" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 4 colunas (clique para ver todas)</text>
+</g><g transform="translate(2000,1208)"><text class="nota" x="0" y="0">Fora do banco: 6 rasters (MapBiomas, TOPODATA)</text><text class="nota" x="0" y="16">ficam em arquivo COG e são servidos pelo GeoServer;</text><text class="nota" x="0" y="32">só o catálogo.datasets os registra.</text></g></svg></div></figure>
+<div class="grade">
+<section class="painel" id="detalhe" aria-live="polite"><h2>Detalhe da tabela</h2><p style="color:var(--suave)">Clique numa tabela do diagrama.</p></section>
+<section class="painel"><h2>Como ler o esquema</h2><ul>
+<li><b>Espelhos versionados</b> (<code>sicar_imoveis</code>, <code>prodes_desmatamento</code>, <code>mapbiomas_alerta</code>, <code>sidra_valor</code>): cada registro tem versões (<code>vigente_desde</code>, <code>vigente_ate</code>); vigente = <code>vigente_ate IS NULL</code>.</li>
+<li><b>Camada genérica do SIDRA</b>: <code>sidra_valor</code> guarda todos os valores (uma partição por tabela do SIDRA) só com ids; <code>sidra_tabela_eixo</code> diz que classificação cada <code>id_cat1..6</code> representa em cada tabela, e <code>sidra_categoria</code> traz o nome (e, nas faixas de área, os limites em ha). O Censo (<code>ibge_censoagro2017_estab_lavoura_perm</code>) é uma view tipada sobre ela.</li>
+<li><b>Dimensões</b> dão o vocabulário comum (estados, municípios, biomas, culturas, fontes); as tabelas de dado apontam para elas por chave.</li>
+<li><b>Resultados</b> (<code>prodes_municipio</code>) são derivados e guardam o <code>id</code> da versão usada; as views mostram só o vigente.</li>
+<li><b>Catálogo</b> registra cada carga (<code>cargas</code>), coleta (<code>coletas</code>, com a edição da fonte), dataset e o mapa de colunas (<code>mapa_colunas</code>: nome na fonte × nome no banco).</li>
+</ul></section></div>
+</main>
+<div id="tip" role="tooltip" hidden></div>
+<script>
+const D = {"tabelas": [{"id": "catalogo.cargas", "sch": "catalogo", "nome": "cargas", "view": false, "linhas": 76, "bytes": 90112, "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "pipeline", "t": "text", "nn": true, "pk": false, "c": "Nome do pipeline que rodou (sicar_wfs, mapbiomas_alerta, sidra_6956...)."}, {"n": "dataset", "t": "text", "nn": false, "pk": false, "c": "Tabela alimentada, no formato schema.tabela."}, {"n": "iniciada_em", "t": "timestamp with time zone", "nn": true, "pk": false, "c": "Início da execução."}, {"n": "finalizada_em", "t": "timestamp with time zone", "nn": false, "pk": false, "c": "Fim da execução. NULL = ainda rodando (ou interrompida)."}, {"n": "status", "t": "text", "nn": true, "pk": false, "c": "rodando, ok ou falhou."}, {"n": "parametros", "t": "jsonb", "nn": false, "pk": false, "c": "Opções de linha de comando usadas (JSON)."}, {"n": "linhas_lidas", "t": "bigint", "nn": false, "pk": false, "c": "Registros lidos da fonte."}, {"n": "linhas_inseridas", "t": "bigint", "nn": false, "pk": false, "c": "Linhas ou versões novas gravadas."}, {"n": "linhas_atualizadas", "t": "bigint", "nn": false, "pk": false, "c": "Linhas atualizadas ou versões fechadas."}, {"n": "linhas_rejeitadas", "t": "bigint", "nn": false, "pk": false, "c": "Registros descartados (ex.: município fora das dimensões)."}, {"n": "mensagem", "t": "text", "nn": false, "pk": false, "c": "Avisos da execução ou o erro, se falhou."}]}, {"id": "catalogo.coletas", "sch": "catalogo", "nome": "coletas", "view": false, "linhas": 44, "bytes": 90112, "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "dataset", "t": "text", "nn": true, "pk": false, "c": "Dataset (schema.tabela) a que o registro se refere."}, {"n": "recorte", "t": "text", "nn": true, "pk": false, "c": "Pedaço coletado do dataset (UF, bioma, produto...)."}, {"n": "fonte", "t": "text", "nn": true, "pk": false, "c": "Servidor ou arquivo de onde veio a coleta."}, {"n": "url", "t": "text", "nn": false, "pk": false, "c": "Endereço consultado ou baixado."}, {"n": "metodo", "t": "text", "nn": false, "pk": false, "c": "Como foi coletado (WFS, GeoPackage, API...)."}, {"n": "coletado_em", "t": "timestamp with time zone", "nn": true, "pk": false, "c": "Momento (UTC) em que a coleta foi feita."}, {"n": "total_anunciado", "t": "bigint", "nn": false, "pk": false, "c": "Total de registros que a fonte anunciou, para conferir com o que chegou."}, {"n": "linhas_lidas", "t": "bigint", "nn": false, "pk": false, "c": "Registros que chegaram."}, {"n": "novos", "t": "bigint", "nn": false, "pk": false, "c": "Registros que não existiam no banco."}, {"n": "versoes_novas", "t": "bigint", "nn": false, "pk": false, "c": "Registros que mudaram e ganharam versão nova."}, {"n": "fechados", "t": "bigint", "nn": false, "pk": false, "c": "Registros que a fonte retirou: versão fechada."}, {"n": "inalterados", "t": "bigint", "nn": false, "pk": false, "c": "Registros iguais aos já vigentes (nada gravado)."}, {"n": "id_carga", "t": "bigint", "nn": false, "pk": false, "c": "Execução do pipeline que gravou a linha: aponta para catalogo.cargas."}, {"n": "observacao", "t": "text", "nn": false, "pk": false, "c": "Notas da coleta (cancelados, geometrias anômalas...)."}, {"n": "edicao", "t": "text", "nn": false, "pk": false, "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."}, {"n": "reabertos", "t": "bigint", "nn": false, "pk": false, "c": "Versões reabertas na coleta (registro retirado e republicado idêntico)."}]}, {"id": "catalogo.coletas_duplicados", "sch": "catalogo", "nome": "coletas_duplicados", "view": false, "linhas": 10, "bytes": 49152, "coment": "cod_imovel repetido no WFS do CAR: a feicao mantida e a descartada de cada coleta, com a regra aplicada.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "dataset", "t": "text", "nn": true, "pk": false, "c": "Dataset (schema.tabela) a que o registro se refere."}, {"n": "recorte", "t": "text", "nn": true, "pk": false, "c": "Pedaço coletado do dataset (UF, bioma, produto...)."}, {"n": "cod_imovel", "t": "text", "nn": true, "pk": false, "c": "Código do imóvel que veio repetido no WFS do CAR."}, {"n": "fid_mantido", "t": "text", "nn": true, "pk": false, "c": "Identificador da feição que ficou."}, {"n": "fid_descartado", "t": "text", "nn": true, "pk": false, "c": "Identificador da feição descartada."}, {"n": "status_mantido", "t": "text", "nn": false, "pk": false, "c": "Status do imóvel mantido."}, {"n": "status_descartado", "t": "text", "nn": false, "pk": false, "c": "Status do imóvel descartado."}, {"n": "condicao_mantida", "t": "text", "nn": false, "pk": false, "c": "Condição de análise do imóvel mantido."}, {"n": "condicao_descartada", "t": "text", "nn": false, "pk": false, "c": "Condição de análise do imóvel descartado."}, {"n": "dat_criacao_mantida", "t": "timestamp with time zone", "nn": false, "pk": false, "c": "Data de criação da feição mantida."}, {"n": "dat_criacao_descartada", "t": "timestamp with time zone", "nn": false, "pk": false, "c": "Data de criação da feição descartada."}, {"n": "dat_atualizacao_mantida", "t": "timestamp with time zone", "nn": false, "pk": false, "c": "Data de atualização da feição mantida."}, {"n": "dat_atualizacao_descartada", "t": "timestamp with time zone", "nn": false, "pk": false, "c": "Data de atualização da feição descartada."}, {"n": "regra", "t": "text", "nn": true, "pk": false, "c": "Regra aplicada para escolher qual manter (maior data de atualização)."}, {"n": "id_carga", "t": "bigint", "nn": false, "pk": false, "c": "Execução do pipeline que gravou a linha: aponta para catalogo.cargas."}, {"n": "coletado_em", "t": "timestamp with time zone", "nn": true, "pk": false, "c": "Momento (UTC) da coleta em que a repetição apareceu."}]}, {"id": "catalogo.datasets", "sch": "catalogo", "nome": "datasets", "view": false, "linhas": 15, "bytes": 32768, "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.", "cols": [{"n": "id", "t": "integer", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "Nome legível do conjunto de dados."}, {"n": "tipo", "t": "text", "nn": true, "pk": false, "c": "tabular, vetor ou raster."}, {"n": "id_fonte", "t": "smallint", "nn": false, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "schema_tabela", "t": "text", "nn": false, "pk": false, "c": "Tabela no banco (schema.tabela), quando existe."}, {"n": "caminho_arquivo", "t": "text", "nn": false, "pk": false, "c": "Arquivo no disco, para rasters e outros dados fora do banco."}, {"n": "cobertura", "t": "geometry(Geometry,4674)", "nn": false, "pk": false, "c": "Área geográfica coberta, quando informada."}, {"n": "ano_referencia", "t": "integer", "nn": false, "pk": false, "c": "Ano a que os dados se referem."}, {"n": "data_importacao", "t": "date", "nn": false, "pk": false, "c": "Última vez em que o dataset foi carregado."}, {"n": "licenca", "t": "text", "nn": false, "pk": false, "c": "Licença ou condição de uso da fonte."}, {"n": "observacoes", "t": "text", "nn": false, "pk": false, "c": "Notas sobre o dataset."}]}, {"id": "catalogo.mapa_colunas", "sch": "catalogo", "nome": "mapa_colunas", "view": false, "linhas": 71, "bytes": 65536, "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.", "cols": [{"n": "tabela", "t": "text", "nn": true, "pk": true, "c": "Tabela do banco."}, {"n": "coluna", "t": "text", "nn": true, "pk": true, "c": "Coluna do banco."}, {"n": "origem", "t": "text", "nn": true, "pk": false, "c": "Nome do campo na fonte."}, {"n": "fonte", "t": "text", "nn": true, "pk": false, "c": "Fonte de onde o campo vem."}, {"n": "observacao", "t": "text", "nn": false, "pk": false, "c": "Como o valor foi convertido, se foi."}]}, {"id": "catalogo.sidra_recorte", "sch": "catalogo", "nome": "sidra_recorte", "view": false, "linhas": 2, "bytes": 49152, "coment": "O que exatamente foi carregado de cada tabela do SIDRA (a coleta e sempre sob demanda, por recorte).", "cols": [{"n": "id_recorte", "t": "bigint", "nn": true, "pk": true, "c": "Identificador do recorte coletado."}, {"n": "id_tabela", "t": "integer", "nn": true, "pk": false, "c": "Tabela do SIDRA: aponta para dim.sidra_tabela."}, {"n": "nivel", "t": "smallint", "nn": true, "pk": false, "c": "Nível territorial: 1 Brasil, 3 UF, 6 município."}, {"n": "periodo_inicio", "t": "integer", "nn": false, "pk": false, "c": "Primeiro período coletado."}, {"n": "periodo_fim", "t": "integer", "nn": false, "pk": false, "c": "Último período coletado."}, {"n": "filtros", "t": "jsonb", "nn": true, "pk": false, "c": "Classificações, categorias, variáveis e períodos pedidos (JSON)."}, {"n": "linhas_lidas", "t": "bigint", "nn": false, "pk": false, "c": "Valores lidos da API do SIDRA."}, {"n": "linhas_gravadas", "t": "bigint", "nn": false, "pk": false, "c": "Valores guardados (zeros e 'não se aplica' não geram linha)."}, {"n": "coletado_em", "t": "timestamp with time zone", "nn": true, "pk": false, "c": "Momento (UTC) da coleta em que esta versão entrou."}, {"n": "id_carga", "t": "bigint", "nn": false, "pk": false, "c": "Execução do pipeline que gravou a linha: aponta para catalogo.cargas."}]}, {"id": "catalogo.v_ultima_coleta", "sch": "catalogo", "nome": "v_ultima_coleta", "view": true, "linhas": 0, "bytes": null, "coment": "View: a coleta mais recente de cada dataset e recorte (lê catalogo.coletas).", "cols": [{"n": "dataset", "t": "text", "nn": false, "pk": false, "c": "Dataset (schema.tabela) a que o registro se refere."}, {"n": "recorte", "t": "text", "nn": false, "pk": false, "c": "Pedaço coletado do dataset (UF, bioma, produto...)."}, {"n": "fonte", "t": "text", "nn": false, "pk": false, "c": null}, {"n": "metodo", "t": "text", "nn": false, "pk": false, "c": null}, {"n": "coletado_em", "t": "timestamp with time zone", "nn": false, "pk": false, "c": "Momento (UTC) da coleta em que esta versão entrou."}, {"n": "total_anunciado", "t": "bigint", "nn": false, "pk": false, "c": null}, {"n": "linhas_lidas", "t": "bigint", "nn": false, "pk": false, "c": null}, {"n": "novos", "t": "bigint", "nn": false, "pk": false, "c": null}, {"n": "versoes_novas", "t": "bigint", "nn": false, "pk": false, "c": null}, {"n": "fechados", "t": "bigint", "nn": false, "pk": false, "c": null}, {"n": "inalterados", "t": "bigint", "nn": false, "pk": false, "c": null}, {"n": "id_carga", "t": "bigint", "nn": false, "pk": false, "c": "Execução do pipeline que gravou a linha: aponta para catalogo.cargas."}, {"n": "observacao", "t": "text", "nn": false, "pk": false, "c": null}]}, {"id": "dim.biomas", "sch": "dim", "nome": "biomas", "view": false, "linhas": 7, "bytes": 18833408, "coment": null, "cols": [{"n": "id_bioma", "t": "smallint", "nn": true, "pk": true, "c": "Identificador do bioma (id nosso)."}, {"n": "codigo_bioma", "t": "text", "nn": false, "pk": false, "c": "Código do bioma no IBGE."}, {"n": "nome_bioma", "t": "text", "nn": true, "pk": false, "c": "Nome do bioma (Amazônia, Cerrado...)."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Geometria em SIRGAS 2000 (EPSG:4674)."}, {"n": "id_fonte", "t": "smallint", "nn": false, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": false, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}]}, {"id": "dim.cultura", "sch": "dim", "nome": "cultura", "view": false, "linhas": 107, "bytes": 65536, "coment": "Culturas canonicas. Onde a PAM tem a cultura, id_cultura = codigo SIDRA c782 (soja 40124); culturas so do Censo recebem ids a partir de 900001. dim.cultura_equivalencia liga as categorias do SIDRA a ela.", "cols": [{"n": "id_cultura", "t": "integer", "nn": true, "pk": true, "c": "Cultura canônica. Onde a PAM tem a cultura, é o código SIDRA c782 (soja 40124, laranja 40151); culturas só do Censo têm ids a partir de 900001."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "Nome da cultura como o IBGE escreve."}, {"n": "slug", "t": "text", "nn": true, "pk": false, "c": "Nome sem acento e com sublinhados, para usar em comandos e filtros."}, {"n": "nota_ibge", "t": "boolean", "nn": true, "pk": false, "c": "true = o IBGE marca a cultura com nota explicativa na PAM."}, {"n": "id_fonte", "t": "smallint", "nn": true, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}]}, {"id": "dim.cultura_equivalencia", "sch": "dim", "nome": "cultura_equivalencia", "view": false, "linhas": 146, "bytes": 40960, "coment": "Liga cada categoria de produto do SIDRA (PAM c782, Censo c227...) a uma cultura canonica de dim.cultura. Varias categorias podem apontar para a mesma cultura (ex.: uva de mesa e de vinho).", "cols": [{"n": "id_categoria", "t": "integer", "nn": true, "pk": true, "c": "Categoria de produto do SIDRA (PAM c782, Censo c227...): aponta para dim.sidra_categoria."}, {"n": "id_cultura", "t": "integer", "nn": true, "pk": false, "c": "Cultura canônica a que a categoria corresponde: aponta para dim.cultura. Várias categorias podem apontar para a mesma cultura."}]}, {"id": "dim.estados", "sch": "dim", "nome": "estados", "view": false, "linhas": 27, "bytes": 20627456, "coment": null, "cols": [{"n": "id_estado", "t": "smallint", "nn": true, "pk": true, "c": "Código IBGE da UF (2 dígitos)."}, {"n": "cd_uf", "t": "character(2)", "nn": false, "pk": false, "c": "Código IBGE da UF em texto."}, {"n": "nome_uf", "t": "text", "nn": true, "pk": false, "c": "Nome da UF."}, {"n": "sigla_uf", "t": "character(2)", "nn": true, "pk": false, "c": "Sigla da UF (SP, MT...), vinda do IBGE."}, {"n": "cd_regiao", "t": "character(1)", "nn": false, "pk": false, "c": "Código da grande região."}, {"n": "nome_regiao", "t": "text", "nn": false, "pk": false, "c": "Nome da grande região (Sul, Nordeste...)."}, {"n": "sigla_regiao", "t": "character(2)", "nn": false, "pk": false, "c": "Sigla da grande região."}, {"n": "area_km2", "t": "numeric", "nn": false, "pk": false, "c": "Área em km² calculada pelo IBGE ou por nós a partir da geometria."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Limite da UF na malha do IBGE, SIRGAS 2000."}, {"n": "id_fonte", "t": "smallint", "nn": false, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": false, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}, {"n": "ano_malha", "t": "smallint", "nn": false, "pk": false, "c": "Ano da malha de UFs do IBGE da geometria atual. NULL = malha antiga sem ano registrado."}]}, {"id": "dim.fontes", "sch": "dim", "nome": "fontes", "view": false, "linhas": 5, "bytes": 49152, "coment": "Órgãos e sistemas de onde vêm os dados. Quase toda tabela aponta para cá por id_fonte.", "cols": [{"n": "id_fonte", "t": "smallint", "nn": true, "pk": true, "c": "Identificador da fonte (id nosso)."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "Nome da fonte (IBGE, INPE, MapBiomas...)."}, {"n": "sigla", "t": "text", "nn": false, "pk": false, "c": "Sigla da fonte."}, {"n": "url", "t": "text", "nn": false, "pk": false, "c": "Site da fonte."}, {"n": "descricao", "t": "text", "nn": false, "pk": false, "c": "O que a fonte fornece."}]}, {"id": "dim.malha_anterior", "sch": "dim", "nome": "malha_anterior", "view": false, "linhas": 2429, "bytes": 107724800, "coment": "Geometrias de dim.municipios/dim.estados substituidas por uma malha nova do IBGE. Para voltar: copiar geom de volta pelo id_territorio.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "tipo", "t": "text", "nn": true, "pk": false, "c": "municipio ou estado."}, {"n": "id_territorio", "t": "integer", "nn": true, "pk": false, "c": "Município ou UF cuja geometria foi substituída (código IBGE)."}, {"n": "ano_malha", "t": "smallint", "nn": false, "pk": false, "c": "Ano da malha territorial do IBGE da geometria atual."}, {"n": "area_km2", "t": "numeric", "nn": false, "pk": false, "c": "Área em km² calculada pelo IBGE ou por nós a partir da geometria."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Geometria em SIRGAS 2000 (EPSG:4674)."}, {"n": "arquivado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a geometria antiga foi guardada aqui."}, {"n": "motivo", "t": "text", "nn": false, "pk": false, "c": "Por que a geometria foi trocada (nova malha do IBGE)."}]}, {"id": "dim.municipios", "sch": "dim", "nome": "municipios", "view": false, "linhas": 5573, "bytes": 450920448, "coment": null, "cols": [{"n": "id_municipio", "t": "integer", "nn": true, "pk": true, "c": "Código IBGE do município (7 dígitos)."}, {"n": "nome_municipio", "t": "text", "nn": true, "pk": false, "c": "Nome do município como o IBGE escreve."}, {"n": "id_estado", "t": "smallint", "nn": false, "pk": false, "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."}, {"n": "sigla_uf", "t": "text", "nn": false, "pk": false, "c": "Sigla da UF (SP, MT...), vinda do IBGE."}, {"n": "area_km2", "t": "numeric", "nn": false, "pk": false, "c": "Área em km² calculada pelo IBGE ou por nós a partir da geometria."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Limite municipal da malha do IBGE, SIRGAS 2000."}, {"n": "id_fonte", "t": "smallint", "nn": false, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": false, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}, {"n": "ano_malha", "t": "smallint", "nn": false, "pk": false, "c": "Ano da malha municipal do IBGE da geometria atual. NULL = malha antiga sem ano registrado (a malha 2025 entrou em 5101837 em 14/10/2026)."}]}, {"id": "dim.sidra_categoria", "sch": "dim", "nome": "sidra_categoria", "view": false, "linhas": 175, "bytes": 81920, "coment": "Categorias de cada classificacao (produtos, faixas de area...). id nosso; codigo_sidra e o codigo oficial.", "cols": [{"n": "id_categoria", "t": "integer", "nn": true, "pk": true, "c": "Identificador da categoria (id nosso). É o que tabular.sidra_valor guarda em id_cat1..6."}, {"n": "id_classificacao", "t": "integer", "nn": true, "pk": false, "c": "Classificação a que a categoria pertence (produto, grupo de área...)."}, {"n": "codigo_sidra", "t": "integer", "nn": true, "pk": false, "c": "Código oficial da categoria dentro da classificação do SIDRA."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "Nome como a fonte escreve."}, {"n": "id_unidade", "t": "integer", "nn": false, "pk": false, "c": "Unidade da categoria, quando a unidade depende dela."}, {"n": "limite_inferior", "t": "numeric", "nn": false, "pk": false, "c": "Faixas de área: limite inferior em hectares. NULL fora de faixas."}, {"n": "limite_superior", "t": "numeric", "nn": false, "pk": false, "c": "Faixas de área: limite superior em hectares (exclusivo). NULL = sem limite."}, {"n": "ordem", "t": "smallint", "nn": false, "pk": false, "c": "Posição da categoria na classificação, da menor para a maior faixa."}, {"n": "importado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}]}, {"id": "dim.sidra_classificacao", "sch": "dim", "nome": "sidra_classificacao", "view": false, "linhas": 4, "bytes": 32768, "coment": "Classificacoes do SIDRA (eixos de cruzamento: produto, grupo de area, tipologia...).", "cols": [{"n": "id_classificacao", "t": "integer", "nn": true, "pk": true, "c": "Código oficial da classificação no SIDRA (c227, c220...)."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "Nome da classificação (Produtos da lavoura permanente, Grupos de área total...)."}]}, {"id": "dim.sidra_pesquisa", "sch": "dim", "nome": "sidra_pesquisa", "view": false, "linhas": 1, "bytes": 49152, "coment": "Pesquisas do IBGE que alimentam o SIDRA (Censo Agropecuario, PAM, LSPA...).", "cols": [{"n": "id_pesquisa", "t": "smallint", "nn": true, "pk": true, "c": "Identificador da pesquisa (id nosso)."}, {"n": "codigo", "t": "text", "nn": true, "pk": false, "c": "Apelido da pesquisa: censo_agropecuario, pam, lspa."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "Nome da pesquisa do IBGE."}]}, {"id": "dim.sidra_situacao", "sch": "dim", "nome": "sidra_situacao", "view": false, "linhas": 4, "bytes": 49152, "coment": "Simbolos que o SIDRA usa no lugar de um numero. valor NULL com id_situacao: o dado nao e um numero.", "cols": [{"n": "id_situacao", "t": "smallint", "nn": true, "pk": true, "c": "Identificador da situação (id nosso)."}, {"n": "simbolo_sidra", "t": "text", "nn": true, "pk": false, "c": "Símbolo que o SIDRA mostra no lugar do número: -, X, ... ou .."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "zero, sigilo, não se aplica ou não disponível."}, {"n": "descricao", "t": "text", "nn": true, "pk": false, "c": "O que o símbolo significa."}]}, {"id": "dim.sidra_tabela", "sch": "dim", "nome": "sidra_tabela", "view": false, "linhas": 1, "bytes": 32768, "coment": "Tabelas do SIDRA ja coletadas (id = numero oficial da tabela). So entram as pedidas.", "cols": [{"n": "id_tabela", "t": "integer", "nn": true, "pk": true, "c": "Número oficial da tabela no SIDRA (6956, 5457...)."}, {"n": "id_pesquisa", "t": "smallint", "nn": true, "pk": false, "c": "Pesquisa a que a tabela pertence."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "Nome como a fonte escreve."}, {"n": "periodicidade", "t": "text", "nn": false, "pk": false, "c": "Frequência da tabela (anual, mensal, decenal)."}, {"n": "id_fonte", "t": "smallint", "nn": true, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}]}, {"id": "dim.sidra_tabela_eixo", "sch": "dim", "nome": "sidra_tabela_eixo", "view": false, "linhas": 3, "bytes": 24576, "coment": "Diz que classificacao cada id_catN de tabular.sidra_valor representa em cada tabela.", "cols": [{"n": "id_tabela", "t": "integer", "nn": true, "pk": true, "c": "Tabela do SIDRA."}, {"n": "posicao", "t": "smallint", "nn": true, "pk": true, "c": "1 a 6: qual coluna id_catN de tabular.sidra_valor este eixo ocupa."}, {"n": "id_classificacao", "t": "integer", "nn": true, "pk": false, "c": "Classificação que a posição representa nesta tabela."}]}, {"id": "dim.sidra_variavel", "sch": "dim", "nome": "sidra_variavel", "view": false, "linhas": 2, "bytes": 32768, "coment": "Variaveis do SIDRA (id = codigo oficial).", "cols": [{"n": "id_variavel", "t": "integer", "nn": true, "pk": true, "c": "Código oficial da variável no SIDRA."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "O que a variável mede (Número de estabelecimentos com 50 pés e mais...)."}, {"n": "id_unidade", "t": "integer", "nn": false, "pk": false, "c": "Unidade de medida da variável."}]}, {"id": "dim.unidade", "sch": "dim", "nome": "unidade", "view": false, "linhas": 1, "bytes": 32768, "coment": "Unidades de medida do SIDRA (id = codigo MC do SIDRA).", "cols": [{"n": "id_unidade", "t": "integer", "nn": true, "pk": true, "c": "Código da unidade no SIDRA (campo MC)."}, {"n": "nome", "t": "text", "nn": true, "pk": false, "c": "Unidade como o IBGE escreve (Unidades, Hectares, Mil Reais)."}, {"n": "simbolo", "t": "text", "nn": false, "pk": false, "c": "Símbolo curto da unidade, quando existe."}]}, {"id": "resultados.prodes_municipio", "sch": "resultados", "nome": "prodes_municipio", "view": false, "linhas": 7084906, "bytes": 926228480, "coment": "Resultado derivado: quais polígonos do PRODES cruzam cada município. Guarda o id da versão do PRODES usada.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "id_prodes", "t": "bigint", "nn": true, "pk": false, "c": "Versão do polígono do PRODES usada no cruzamento: aponta para vetorial.prodes_desmatamento."}, {"n": "id_municipio", "t": "integer", "nn": true, "pk": false, "c": "Município: aponta para dim.municipios (código IBGE de 7 dígitos)."}, {"n": "calculado_em", "t": "date", "nn": true, "pk": false, "c": "Data do cálculo do cruzamento."}]}, {"id": "tabular.ibge_censoagro2017_estab_lavoura_perm", "sch": "tabular", "nome": "ibge_censoagro2017_estab_lavoura_perm", "view": true, "linhas": 0, "bytes": null, "coment": "Censo Agropecuario 2017 (SIDRA 6956) sobre tabular.sidra_valor: estabelecimentos com lavoura permanente por municipio, produto (codigo SIDRA c227) e grupo de area (c220). Tipologia Total.", "cols": [{"n": "id_municipio", "t": "integer", "nn": false, "pk": false, "c": "Município: aponta para dim.municipios (código IBGE de 7 dígitos)."}, {"n": "id_produto", "t": "integer", "nn": false, "pk": false, "c": "Código SIDRA do produto da lavoura permanente (classificação 227). Laranja 4961."}, {"n": "id_grupo_area", "t": "integer", "nn": false, "pk": false, "c": "Código SIDRA do grupo de área total do estabelecimento (classificação 220)."}, {"n": "estab_50_pes_mais", "t": "integer", "nn": false, "pk": false, "c": "Estabelecimentos com 50 pés ou mais do produto (variável 9504). NULL = sigilo."}, {"n": "estab_50_pes_mais_sigilo", "t": "boolean", "nn": false, "pk": false, "c": "true = o IBGE inibiu o valor (X) para não identificar o informante."}, {"n": "estab_menos_50_pes", "t": "integer", "nn": false, "pk": false, "c": "Estabelecimentos com menos de 50 pés do produto (variável 10081). NULL = sigilo."}, {"n": "estab_menos_50_pes_sigilo", "t": "boolean", "nn": false, "pk": false, "c": "true = o IBGE inibiu o valor (X)."}, {"n": "id_fonte", "t": "smallint", "nn": false, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": false, "pk": false, "c": "Data da primeira versão do valor na camada genérica."}, {"n": "id_cultura", "t": "integer", "nn": false, "pk": false, "c": "Cultura canônica (dim.cultura) do produto, para juntar com a PAM. NULL em mudas e 'outros produtos'."}]}, {"id": "tabular.ibge_pam", "sch": "tabular", "nome": "ibge_pam", "view": false, "linhas": 238780, "bytes": 120586240, "coment": "PAM/IBGE (SIDRA 5457), 1974 em diante. Valores como o IBGE devolve; a API rotula tudo como toneladas, por isso unidade_* registra a unidade real quando ela e conhecida.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "id_municipio", "t": "integer", "nn": true, "pk": false, "c": "Município: aponta para dim.municipios (código IBGE de 7 dígitos)."}, {"n": "id_cultura", "t": "integer", "nn": true, "pk": false, "c": "Cultura: aponta para dim.cultura (código SIDRA c782)."}, {"n": "ano", "t": "smallint", "nn": true, "pk": false, "c": "Ano da safra."}, {"n": "area_plantada_ha", "t": "numeric", "nn": false, "pk": false, "c": "Área plantada em hectares (PAM, SIDRA 5457)."}, {"n": "area_colhida_ha", "t": "numeric", "nn": false, "pk": false, "c": "Área colhida em hectares."}, {"n": "quantidade_produzida", "t": "numeric", "nn": false, "pk": false, "c": "Quantidade produzida; a unidade está em unidade_quantidade."}, {"n": "unidade_quantidade", "t": "text", "nn": true, "pk": false, "c": "Unidade real da quantidade (toneladas, mil frutos...); a API rotula tudo como toneladas."}, {"n": "rendimento_medio", "t": "numeric", "nn": false, "pk": false, "c": "Rendimento médio (quantidade por hectare colhido)."}, {"n": "unidade_rendimento", "t": "text", "nn": true, "pk": false, "c": "Unidade do rendimento."}, {"n": "valor_producao_mil_reais", "t": "numeric", "nn": false, "pk": false, "c": "Valor da produção (variável 215)."}, {"n": "id_fonte", "t": "smallint", "nn": true, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}, {"n": "unidade_valor", "t": "text", "nn": true, "pk": false, "c": "Moeda do valor: mil reais a partir de 1994; antes, moeda nominal da época."}]}, {"id": "tabular.sidra_valor", "sch": "tabular", "nome": "sidra_valor", "view": false, "linhas": 111440, "bytes": 0, "coment": "Valores de tabelas do SIDRA (IBGE), uma particao por tabela. Ids em vez de texto: ver dim.sidra_*. id_catN = categoria da classificacao que dim.sidra_tabela_eixo indica na posicao N. Sem linha = zero ou nao se aplica.", "cols": [{"n": "id_tabela", "t": "integer", "nn": true, "pk": true, "c": "Tabela do SIDRA de onde vem o valor: aponta para dim.sidra_tabela. Cada tabela é uma partição."}, {"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "periodo", "t": "integer", "nn": true, "pk": false, "c": "Ano (2017) ou ano e mês (202501), como o SIDRA."}, {"n": "nivel", "t": "smallint", "nn": true, "pk": false, "c": "Nível territorial: 1 Brasil, 3 UF, 6 município."}, {"n": "id_municipio", "t": "integer", "nn": false, "pk": false, "c": "Município (nível 6). NULL nos outros níveis."}, {"n": "id_estado", "t": "smallint", "nn": false, "pk": false, "c": "UF (nível 3). NULL nos outros níveis."}, {"n": "id_variavel", "t": "integer", "nn": true, "pk": false, "c": "O que o valor mede: aponta para dim.sidra_variavel."}, {"n": "id_cat1", "t": "integer", "nn": false, "pk": false, "c": "Categoria da 1ª classificação da tabela (dim.sidra_tabela_eixo diz qual)."}, {"n": "id_cat2", "t": "integer", "nn": false, "pk": false, "c": "Categoria da 2ª classificação da tabela."}, {"n": "id_cat3", "t": "integer", "nn": false, "pk": false, "c": "Categoria da 3ª classificação da tabela."}, {"n": "id_cat4", "t": "integer", "nn": false, "pk": false, "c": "Categoria da 4ª classificação da tabela."}, {"n": "id_cat5", "t": "integer", "nn": false, "pk": false, "c": "Categoria da 5ª classificação da tabela."}, {"n": "id_cat6", "t": "integer", "nn": false, "pk": false, "c": "Categoria da 6ª classificação da tabela."}, {"n": "valor", "t": "numeric", "nn": false, "pk": false, "c": "Número informado pelo IBGE. NULL com id_situacao = o IBGE não informou número (ex.: sigilo)."}, {"n": "id_situacao", "t": "smallint", "nn": false, "pk": false, "c": "Quando o SIDRA mostrou símbolo em vez de número: aponta para dim.sidra_situacao."}, {"n": "id_unidade", "t": "integer", "nn": false, "pk": false, "c": "Unidade do valor nesta linha: aponta para dim.unidade."}, {"n": "id_carga", "t": "bigint", "nn": true, "pk": false, "c": "Execução do pipeline que gravou a linha: aponta para catalogo.cargas."}, {"n": "vigente_desde", "t": "date", "nn": true, "pk": false, "c": "Data em que esta versão da linha passou a valer (espelho versionado)."}, {"n": "vigente_ate", "t": "date", "nn": false, "pk": false, "c": "Data em que esta versão deixou de valer. NULL = versão vigente."}, {"n": "reaberto_em", "t": "date", "nn": false, "pk": false, "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."}]}, {"id": "tabular.sidra_valor_t6956", "sch": "tabular", "nome": "sidra_valor_t6956", "view": false, "linhas": 111440, "bytes": 28139520, "coment": null, "cols": [{"n": "id_tabela", "t": "integer", "nn": true, "pk": true, "c": null}, {"n": "id", "t": "bigint", "nn": true, "pk": true, "c": null}, {"n": "periodo", "t": "integer", "nn": true, "pk": false, "c": null}, {"n": "nivel", "t": "smallint", "nn": true, "pk": false, "c": null}, {"n": "id_municipio", "t": "integer", "nn": false, "pk": false, "c": null}, {"n": "id_estado", "t": "smallint", "nn": false, "pk": false, "c": null}, {"n": "id_variavel", "t": "integer", "nn": true, "pk": false, "c": null}, {"n": "id_cat1", "t": "integer", "nn": false, "pk": false, "c": null}, {"n": "id_cat2", "t": "integer", "nn": false, "pk": false, "c": null}, {"n": "id_cat3", "t": "integer", "nn": false, "pk": false, "c": null}, {"n": "id_cat4", "t": "integer", "nn": false, "pk": false, "c": null}, {"n": "id_cat5", "t": "integer", "nn": false, "pk": false, "c": null}, {"n": "id_cat6", "t": "integer", "nn": false, "pk": false, "c": null}, {"n": "valor", "t": "numeric", "nn": false, "pk": false, "c": null}, {"n": "id_situacao", "t": "smallint", "nn": false, "pk": false, "c": null}, {"n": "id_unidade", "t": "integer", "nn": false, "pk": false, "c": null}, {"n": "id_carga", "t": "bigint", "nn": true, "pk": false, "c": null}, {"n": "vigente_desde", "t": "date", "nn": true, "pk": false, "c": null}, {"n": "vigente_ate", "t": "date", "nn": false, "pk": false, "c": null}, {"n": "reaberto_em", "t": "date", "nn": false, "pk": false, "c": null}]}, {"id": "vetorial.ibge_dominios_naturais", "sch": "vetorial", "nome": "ibge_dominios_naturais", "view": false, "linhas": 52, "bytes": 31604736, "coment": "Domínios naturais do IBGE (Biomas e Sistema Costeiro-Marinho 1:250 mil), polígonos.", "cols": [{"n": "id", "t": "integer", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "codigo_bioma", "t": "text", "nn": false, "pk": false, "c": "Código do bioma."}, {"n": "nome_bioma", "t": "text", "nn": false, "pk": false, "c": "Nome do bioma."}, {"n": "codigo_dominio", "t": "text", "nn": false, "pk": false, "c": "Código do domínio natural."}, {"n": "nome_dominio", "t": "text", "nn": false, "pk": false, "c": "Nome do domínio natural."}, {"n": "tipo_dominio", "t": "text", "nn": false, "pk": false, "c": "Tipo do domínio (bioma, costeiro-marinho...)."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Geometria em SIRGAS 2000 (EPSG:4674)."}, {"n": "id_fonte", "t": "smallint", "nn": false, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": false, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}]}, {"id": "vetorial.ibge_regioes_naturais", "sch": "vetorial", "nome": "ibge_regioes_naturais", "view": false, "linhas": 271, "bytes": 43646976, "coment": "Regiões naturais do IBGE com geologia, geomorfologia, vegetação e pedologia dominantes.", "cols": [{"n": "id", "t": "integer", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "codigo_bioma", "t": "text", "nn": false, "pk": false, "c": "Código do bioma."}, {"n": "nome_bioma", "t": "text", "nn": false, "pk": false, "c": "Nome do bioma."}, {"n": "geologia_dominante", "t": "text", "nn": false, "pk": false, "c": "Unidade geológica dominante."}, {"n": "geomorfologia_dominante", "t": "text", "nn": false, "pk": false, "c": "Unidade geomorfológica dominante."}, {"n": "vegetacao_dominante", "t": "text", "nn": false, "pk": false, "c": "Vegetação dominante."}, {"n": "pedologia_dominante", "t": "text", "nn": false, "pk": false, "c": "Solo dominante."}, {"n": "codigo_dominio_fito", "t": "text", "nn": false, "pk": false, "c": "Código do domínio fitogeográfico."}, {"n": "nome_dominio_fito", "t": "text", "nn": false, "pk": false, "c": "Nome do domínio fitogeográfico."}, {"n": "tipo_dominio_fito", "t": "text", "nn": false, "pk": false, "c": "Tipo do domínio fitogeográfico."}, {"n": "codigo_regiao_natural", "t": "text", "nn": false, "pk": false, "c": "Código da região natural."}, {"n": "nome_regiao_natural", "t": "text", "nn": false, "pk": false, "c": "Nome da região natural."}, {"n": "tipo_regiao_natural", "t": "text", "nn": false, "pk": false, "c": "Tipo da região natural."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Geometria em SIRGAS 2000 (EPSG:4674)."}, {"n": "id_fonte", "t": "smallint", "nn": false, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": false, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}]}, {"id": "vetorial.incra_assentamentos", "sch": "vetorial", "nome": "incra_assentamentos", "view": false, "linhas": 7525, "bytes": 72171520, "coment": "Poligonos de projetos de assentamento do INCRA (WFS publico do Acervo Fundiario, uma camada por UF). Coordenadas rotuladas WGS84 pela fonte e gravadas como SIRGAS 2000 (4674) sem transformar (diferenca abaixo de 1 m). Uso comercial vedado pela fonte. Ver incra/assentamentos/LEIAME_assentamentos.md.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "gid_incra", "t": "integer", "nn": true, "pk": false, "c": "Identificador da feição na camada do INCRA."}, {"n": "cd_sipra", "t": "text", "nn": true, "pk": false, "c": "Código do projeto de assentamento no SIPRA (INCRA)."}, {"n": "nome_projeto", "t": "text", "nn": false, "pk": false, "c": "Nome do projeto de assentamento."}, {"n": "municipio", "t": "text", "nn": false, "pk": false, "c": "Município como o INCRA escreve (texto)."}, {"n": "id_estado", "t": "smallint", "nn": false, "pk": false, "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."}, {"n": "area_declarada_ha", "t": "numeric", "nn": false, "pk": false, "c": "Area do projeto, repetida em cada poligono do mesmo cd_sipra: nao somar por linha."}, {"n": "area_calc_ha", "t": "numeric", "nn": false, "pk": false, "c": "Área calculada do polígono em hectares."}, {"n": "capacidade_familias", "t": "integer", "nn": false, "pk": false, "c": "Capacidade de famílias do projeto."}, {"n": "num_familias", "t": "integer", "nn": false, "pk": false, "c": "Famílias assentadas."}, {"n": "fase", "t": "smallint", "nn": false, "pk": false, "c": "Fase do projeto no INCRA (código)."}, {"n": "data_criacao", "t": "date", "nn": false, "pk": false, "c": "Data de criação do projeto."}, {"n": "forma_obtencao", "t": "text", "nn": false, "pk": false, "c": "Como a terra foi obtida (desapropriação, compra...)."}, {"n": "data_obtencao", "t": "date", "nn": false, "pk": false, "c": "Data de obtenção da terra."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": true, "pk": false, "c": "Geometria em SIRGAS 2000 (EPSG:4674)."}, {"n": "id_fonte", "t": "smallint", "nn": true, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}, {"n": "visto_em", "t": "date", "nn": true, "pk": false, "c": "Ultima coleta em que o poligono ainda apareceu no servidor; menor que a data da ultima coleta da UF = sumiu do INCRA (nunca apagamos)."}, {"n": "id_estado_camada", "t": "smallint", "nn": true, "pk": false, "c": "Camada do INCRA de origem. A camada DF e a jurisdicao do DF: 204 de 208 poligonos estao em GO e MG; a de PE traz projetos na BA. Para filtrar por estado use id_estado."}]}, {"id": "vetorial.mapbiomas_alerta", "sch": "vetorial", "nome": "mapbiomas_alerta", "view": false, "linhas": 543378, "bytes": 907304960, "coment": "MapBiomas Alerta: poligonos de alertas de desmatamento (camada dashboard-alert-shapefile do servidor de mapas do MapBiomas Alerta), espelho versionado: vigente = vigente_ate IS NULL. Inclui alertas cancelados (status_name). Ver mapbiomas/alerta/LEIAME_mapbiomas_alerta.md.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "alert_code", "t": "integer", "nn": true, "pk": false, "c": "Código do alerta no MapBiomas Alerta. Chave estável; uma versão vigente por alerta."}, {"n": "area_ha", "t": "numeric", "nn": false, "pk": false, "c": "Área do alerta em hectares."}, {"n": "sources", "t": "text", "nn": false, "pk": false, "c": "Fontes de detecção do alerta (SAD, GLAD, DETER...)."}, {"n": "biomes", "t": "text", "nn": false, "pk": false, "c": "Bioma(s) do alerta (texto da fonte)."}, {"n": "states", "t": "text", "nn": false, "pk": false, "c": "UF(s) do alerta (texto da fonte)."}, {"n": "cities", "t": "text", "nn": false, "pk": false, "c": "Município(s) do alerta (texto da fonte)."}, {"n": "detected_at", "t": "date", "nn": false, "pk": false, "c": "Data da detecção do desmatamento."}, {"n": "year_detected_at", "t": "smallint", "nn": false, "pk": false, "c": "Ano da detecção."}, {"n": "published_at", "t": "date", "nn": false, "pk": false, "c": "Data de publicação do alerta."}, {"n": "image_after_at", "t": "date", "nn": false, "pk": false, "c": "Data da imagem de satélite posterior ao desmatamento."}, {"n": "image_before_at", "t": "date", "nn": false, "pk": false, "c": "Data da imagem de satélite anterior ao desmatamento."}, {"n": "deforestation_driver", "t": "text", "nn": false, "pk": false, "c": "Vetor de desmatamento atribuído pela fonte."}, {"n": "status_name", "t": "text", "nn": false, "pk": false, "c": "Origem: status_name. published = valido; cancelled = cancelado depois (filtre na analise)."}, {"n": "lat", "t": "double precision", "nn": false, "pk": false, "c": "Latitude do ponto de referência do alerta."}, {"n": "lng", "t": "double precision", "nn": false, "pk": false, "c": "Longitude do ponto de referência do alerta."}, {"n": "crossed_special_territories", "t": "text", "nn": false, "pk": false, "c": "Territórios especiais que o alerta cruza (terras indígenas, UCs...)."}, {"n": "crossed_rural_properties_total", "t": "integer", "nn": false, "pk": false, "c": "Quantidade de imóveis rurais que o alerta cruza."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Geometria em SIRGAS 2000 (EPSG:4674)."}, {"n": "geom_anomala", "t": "boolean", "nn": true, "pk": false, "c": "true = a fonte entregou o alerta sem geometria ou com a caixa fora do Brasil; o original esta em geom_origem_texto."}, {"n": "geom_origem_texto", "t": "text", "nn": false, "pk": false, "c": "Geometria original da fonte em texto, guardada só quando geom_anomala é true."}, {"n": "id_fonte", "t": "smallint", "nn": true, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}, {"n": "vigente_desde", "t": "date", "nn": true, "pk": false, "c": "Data em que esta versão da linha passou a valer (espelho versionado)."}, {"n": "vigente_ate", "t": "date", "nn": false, "pk": false, "c": "Data em que esta versão deixou de valer. NULL = versão vigente."}, {"n": "coletado_em", "t": "timestamp with time zone", "nn": true, "pk": false, "c": "Momento (UTC) da coleta em que esta versão entrou."}, {"n": "reaberto_em", "t": "date", "nn": false, "pk": false, "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."}]}, {"id": "vetorial.prodes_desmatamento", "sch": "vetorial", "nome": "prodes_desmatamento", "view": false, "linhas": 6936963, "bytes": 7532797952, "coment": "PRODES: poligonos de desmatamento anual por bioma (yearly_deforestation; Amazonia tambem a nao-floresta), espelho do INPE/TerraBrasilis. Historico por versao: vigente = vigente_ate IS NULL. Ver prodes/desmatamento/LEIAME_prodes_desmatamento.md.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "uuid", "t": "text", "nn": true, "pk": false, "c": "Origem: INPE uuid. Estavel entre edicoes; uma versao vigente por (bioma, uuid). O mesmo uuid pode aparecer em dois biomas (poligonos de divisa publicados nos dois arquivos)."}, {"n": "bioma", "t": "text", "nn": true, "pk": false, "c": "Bioma em texto, como o INPE publica."}, {"n": "camada_origem", "t": "text", "nn": true, "pk": false, "c": "Camada do GeoPackage do INPE de onde veio a feição."}, {"n": "id_bioma", "t": "smallint", "nn": true, "pk": false, "c": "Bioma: aponta para dim.biomas."}, {"n": "state", "t": "text", "nn": false, "pk": false, "c": "UF em texto, como o INPE publica."}, {"n": "id_estado", "t": "smallint", "nn": false, "pk": false, "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."}, {"n": "path_row", "t": "text", "nn": false, "pk": false, "c": "Cena de satélite (órbita e ponto)."}, {"n": "main_class", "t": "text", "nn": false, "pk": false, "c": "Origem: INPE main_class. A edicao de 2026-10 da Amazonia traz minusculas (desmatamento); use lower()."}, {"n": "class_name", "t": "text", "nn": false, "pk": false, "c": "Classe do polígono (desmatamento do ano, resíduo...)."}, {"n": "def_cloud", "t": "double precision", "nn": false, "pk": false, "c": "Percentual de nuvem na cena."}, {"n": "julian_day", "t": "integer", "nn": false, "pk": false, "c": "Dia juliano da imagem."}, {"n": "image_date", "t": "date", "nn": false, "pk": false, "c": "Data da imagem de satélite."}, {"n": "year", "t": "integer", "nn": false, "pk": false, "c": "Ano PRODES do desmatamento."}, {"n": "area_km", "t": "double precision", "nn": false, "pk": false, "c": "Área do polígono em km² (do INPE)."}, {"n": "scene_id", "t": "integer", "nn": false, "pk": false, "c": "Identificador da cena."}, {"n": "source", "t": "text", "nn": false, "pk": false, "c": "Fonte da imagem."}, {"n": "satellite", "t": "text", "nn": false, "pk": false, "c": "Satélite."}, {"n": "sensor", "t": "text", "nn": false, "pk": false, "c": "Sensor."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Geometria em SIRGAS 2000 (EPSG:4674)."}, {"n": "geom_anomala", "t": "boolean", "nn": true, "pk": false, "c": "true = o INPE entregou a feicao com a caixa fora do Brasil (lon -75..-28, lat -35..6) ou sem geometria; o original esta em geom_origem_texto."}, {"n": "geom_origem_texto", "t": "text", "nn": false, "pk": false, "c": "Geometria original da fonte em texto, guardada só quando geom_anomala é true."}, {"n": "id_fonte", "t": "smallint", "nn": true, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}, {"n": "vigente_desde", "t": "date", "nn": true, "pk": false, "c": "Data em que esta versão da linha passou a valer (espelho versionado)."}, {"n": "vigente_ate", "t": "date", "nn": false, "pk": false, "c": "Data em que esta versão deixou de valer. NULL = versão vigente."}, {"n": "coletado_em", "t": "timestamp with time zone", "nn": true, "pk": false, "c": "Momento (UTC) da coleta em que esta versão entrou."}, {"n": "edicao", "t": "text", "nn": true, "pk": false, "c": "Versao (vAAAAMMDD) do GeoPackage do INPE em que esta versao da feicao entrou."}, {"n": "reaberto_em", "t": "date", "nn": false, "pk": false, "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."}]}, {"id": "vetorial.sicar_imoveis", "sch": "vetorial", "nome": "sicar_imoveis", "view": false, "linhas": 8547089, "bytes": 8371363840, "coment": "Imóveis do SICAR (CAR), coletados do WFS público do CAR, cancelados inclusive. Espelho versionado: vigente = vigente_ate IS NULL. Ver sicar/imoveis/LEIAME_sicar_imoveis.md.", "cols": [{"n": "id", "t": "bigint", "nn": true, "pk": true, "c": "Identificador interno da linha (gerado pelo banco)."}, {"n": "fid_wfs", "t": "text", "nn": true, "pk": false, "c": "Origem: id da feicao no WFS (sicar_imoveis_<uf>.<numero>)."}, {"n": "cod_imovel", "t": "text", "nn": true, "pk": false, "c": "Origem: WFS cod_imovel. Chave estavel entre versoes; use para juntar."}, {"n": "cod_estado", "t": "text", "nn": true, "pk": false, "c": "Origem: WFS uf."}, {"n": "id_estado", "t": "smallint", "nn": true, "pk": false, "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."}, {"n": "municipio", "t": "text", "nn": false, "pk": false, "c": "Município em texto, como o CAR escreve."}, {"n": "id_municipio", "t": "integer", "nn": false, "pk": false, "c": "Origem: WFS cod_municipio_ibge (codigo IBGE de 7 digitos); NULL se o codigo nao existir em dim.municipios."}, {"n": "des_condic", "t": "text", "nn": false, "pk": false, "c": "Origem: WFS condicao (situacao de analise do cadastro)."}, {"n": "ind_status", "t": "text", "nn": false, "pk": false, "c": "Origem: WFS status_imovel. AT ativo, PE pendente, SU suspenso, CA cancelado."}, {"n": "num_area", "t": "numeric", "nn": false, "pk": false, "c": "Origem: WFS area (hectares, declarada no cadastro)."}, {"n": "dat_criacao", "t": "timestamp with time zone", "nn": false, "pk": false, "c": "Origem: WFS dat_criacao (com hora)."}, {"n": "dat_atualizacao", "t": "timestamp with time zone", "nn": false, "pk": false, "c": "Origem: WFS data_atualizacao (com hora). Nem toda mudanca de status atualiza esta data."}, {"n": "mod_fiscal", "t": "numeric", "nn": false, "pk": false, "c": "Origem: WFS m_fiscal (modulos fiscais)."}, {"n": "ind_tipo", "t": "text", "nn": false, "pk": false, "c": "Origem: WFS tipo_imovel. IRU rural, AST assentamento, PCT povos e comunidades tradicionais."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Origem: geometria do WFS (geo_area_imovel). NULL quando geom_anomala (o original esta em geom_origem_texto)."}, {"n": "geom_anomala", "t": "boolean", "nn": true, "pk": false, "c": "true = o WFS entregou coordenadas fora do Brasil (x -75..-28, y -35..6) ou nenhuma geometria; mantido o texto original em geom_origem_texto."}, {"n": "geom_origem_texto", "t": "text", "nn": false, "pk": false, "c": "Geometria original da fonte em texto, guardada só quando geom_anomala é true."}, {"n": "id_fonte", "t": "smallint", "nn": true, "pk": false, "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."}, {"n": "importado_em", "t": "date", "nn": true, "pk": false, "c": "Data em que a linha foi gravada pelo pipeline."}, {"n": "vigente_desde", "t": "date", "nn": true, "pk": false, "c": "Data em que esta versão da linha passou a valer (espelho versionado)."}, {"n": "vigente_ate", "t": "date", "nn": false, "pk": false, "c": "Data em que esta versão deixou de valer. NULL = versão vigente."}, {"n": "coletado_em", "t": "timestamp with time zone", "nn": true, "pk": false, "c": "Momento (UTC) da coleta no WFS em que esta versao entrou."}, {"n": "reaberto_em", "t": "date", "nn": false, "pk": false, "c": "Data em que o imovel voltou ao WFS identico a esta versao e ela foi reaberta (vigente_ate voltou a NULL). NULL = nunca reaberta."}]}, {"id": "vetorial.v_prodes_municipio", "sch": "vetorial", "nome": "v_prodes_municipio", "view": true, "linhas": 0, "bytes": null, "coment": "View: polígonos do PRODES vigentes com o município que cada um cruza (lê resultados.prodes_municipio).", "cols": [{"n": "id_ponte", "t": "bigint", "nn": false, "pk": false, "c": "Identificador da linha do cruzamento polígono x município."}, {"n": "id_municipio", "t": "integer", "nn": false, "pk": false, "c": "Município: aponta para dim.municipios (código IBGE de 7 dígitos)."}, {"n": "id_prodes", "t": "bigint", "nn": false, "pk": false, "c": "Polígono do PRODES (versão vigente)."}, {"n": "year", "t": "integer", "nn": false, "pk": false, "c": "Ano PRODES do desmatamento."}, {"n": "main_class", "t": "text", "nn": false, "pk": false, "c": "Classe principal do PRODES."}, {"n": "class_name", "t": "text", "nn": false, "pk": false, "c": "Classe do polígono."}, {"n": "area_km", "t": "double precision", "nn": false, "pk": false, "c": "Área do polígono em km²."}, {"n": "image_date", "t": "date", "nn": false, "pk": false, "c": "Data da imagem de satélite."}, {"n": "id_bioma", "t": "smallint", "nn": false, "pk": false, "c": "Bioma: aponta para dim.biomas."}, {"n": "id_estado", "t": "smallint", "nn": false, "pk": false, "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."}, {"n": "geom", "t": "geometry(MultiPolygon,4674)", "nn": false, "pk": false, "c": "Geometria do polígono do PRODES."}]}], "fks": [{"de": "vetorial.ibge_dominios_naturais", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "dim.biomas", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "catalogo.datasets", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "dim.estados", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "vetorial.ibge_regioes_naturais", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "dim.municipios", "col": "id_estado", "para": "dim.estados", "colpara": "id_estado"}, {"de": "dim.municipios", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "dim.cultura", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "tabular.ibge_pam", "col": "id_municipio", "para": "dim.municipios", "colpara": "id_municipio"}, {"de": "tabular.ibge_pam", "col": "id_cultura", "para": "dim.cultura", "colpara": "id_cultura"}, {"de": "tabular.ibge_pam", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "dim.cultura_equivalencia", "col": "id_categoria", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "dim.cultura_equivalencia", "col": "id_cultura", "para": "dim.cultura", "colpara": "id_cultura"}, {"de": "vetorial.incra_assentamentos", "col": "id_estado", "para": "dim.estados", "colpara": "id_estado"}, {"de": "vetorial.incra_assentamentos", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "vetorial.incra_assentamentos", "col": "id_estado_camada", "para": "dim.estados", "colpara": "id_estado"}, {"de": "vetorial.mapbiomas_alerta", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "dim.sidra_tabela", "col": "id_pesquisa", "para": "dim.sidra_pesquisa", "colpara": "id_pesquisa"}, {"de": "dim.sidra_tabela", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "vetorial.sicar_imoveis", "col": "id_estado", "para": "dim.estados", "colpara": "id_estado"}, {"de": "vetorial.sicar_imoveis", "col": "id_municipio", "para": "dim.municipios", "colpara": "id_municipio"}, {"de": "vetorial.sicar_imoveis", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "dim.sidra_tabela_eixo", "col": "id_tabela", "para": "dim.sidra_tabela", "colpara": "id_tabela"}, {"de": "dim.sidra_tabela_eixo", "col": "id_classificacao", "para": "dim.sidra_classificacao", "colpara": "id_classificacao"}, {"de": "dim.sidra_categoria", "col": "id_classificacao", "para": "dim.sidra_classificacao", "colpara": "id_classificacao"}, {"de": "dim.sidra_categoria", "col": "id_unidade", "para": "dim.unidade", "colpara": "id_unidade"}, {"de": "dim.sidra_variavel", "col": "id_unidade", "para": "dim.unidade", "colpara": "id_unidade"}, {"de": "resultados.prodes_municipio", "col": "id_prodes", "para": "vetorial.prodes_desmatamento", "colpara": "id"}, {"de": "resultados.prodes_municipio", "col": "id_municipio", "para": "dim.municipios", "colpara": "id_municipio"}, {"de": "vetorial.prodes_desmatamento", "col": "id_fonte", "para": "dim.fontes", "colpara": "id_fonte"}, {"de": "vetorial.prodes_desmatamento", "col": "id_bioma", "para": "dim.biomas", "colpara": "id_bioma"}, {"de": "vetorial.prodes_desmatamento", "col": "id_estado", "para": "dim.estados", "colpara": "id_estado"}, {"de": "tabular.sidra_valor", "col": "id_tabela", "para": "dim.sidra_tabela", "colpara": "id_tabela"}, {"de": "tabular.sidra_valor", "col": "id_municipio", "para": "dim.municipios", "colpara": "id_municipio"}, {"de": "tabular.sidra_valor", "col": "id_estado", "para": "dim.estados", "colpara": "id_estado"}, {"de": "tabular.sidra_valor", "col": "id_variavel", "para": "dim.sidra_variavel", "colpara": "id_variavel"}, {"de": "tabular.sidra_valor", "col": "id_cat1", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor", "col": "id_cat2", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor", "col": "id_cat3", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor", "col": "id_cat4", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor", "col": "id_cat5", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor", "col": "id_cat6", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor", "col": "id_situacao", "para": "dim.sidra_situacao", "colpara": "id_situacao"}, {"de": "tabular.sidra_valor", "col": "id_unidade", "para": "dim.unidade", "colpara": "id_unidade"}, {"de": "tabular.sidra_valor", "col": "id_carga", "para": "catalogo.cargas", "colpara": "id"}, {"de": "catalogo.sidra_recorte", "col": "id_tabela", "para": "dim.sidra_tabela", "colpara": "id_tabela"}, {"de": "catalogo.sidra_recorte", "col": "id_carga", "para": "catalogo.cargas", "colpara": "id"}, {"de": "tabular.sidra_valor_t6956", "col": "id_carga", "para": "catalogo.cargas", "colpara": "id"}, {"de": "tabular.sidra_valor_t6956", "col": "id_cat1", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor_t6956", "col": "id_cat2", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor_t6956", "col": "id_cat3", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor_t6956", "col": "id_cat4", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor_t6956", "col": "id_cat5", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor_t6956", "col": "id_cat6", "para": "dim.sidra_categoria", "colpara": "id_categoria"}, {"de": "tabular.sidra_valor_t6956", "col": "id_estado", "para": "dim.estados", "colpara": "id_estado"}, {"de": "tabular.sidra_valor_t6956", "col": "id_municipio", "para": "dim.municipios", "colpara": "id_municipio"}, {"de": "tabular.sidra_valor_t6956", "col": "id_situacao", "para": "dim.sidra_situacao", "colpara": "id_situacao"}, {"de": "tabular.sidra_valor_t6956", "col": "id_tabela", "para": "dim.sidra_tabela", "colpara": "id_tabela"}, {"de": "tabular.sidra_valor_t6956", "col": "id_unidade", "para": "dim.unidade", "colpara": "id_unidade"}, {"de": "tabular.sidra_valor_t6956", "col": "id_variavel", "para": "dim.sidra_variavel", "colpara": "id_variavel"}], "rasters": 6};
+const T = Object.fromEntries(D.tabelas.map(t => [t.id, t]));
+const fig = document.getElementById('figura'), det = document.getElementById('detalhe');
+const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const fmt = n => n.toLocaleString('pt-BR');
+function destacar(id) {
+  fig.querySelectorAll('.lig').forEach(l => {
+    const liga = id && (l.dataset.de === id || l.dataset.para === id);
+    l.classList.toggle('on', !!liga); l.classList.toggle('off', !!id && !liga);
+  });
+  fig.querySelectorAll('.tab').forEach(g => g.classList.toggle('sel', g.dataset.t === id));
+}
+function mostrar(id) {
+  const t = T[id]; if (!t) return;
+  const fks = D.fks.filter(f => f.de === id), entra = D.fks.filter(f => f.para === id && f.col !== 'id_fonte');
+  const fkc = Object.fromEntries(fks.map(f => [f.col, f.para + '.' + f.colpara]));
+  let h = `<h2>${esc(t.id)} ${t.view ? '<span class="tag">view</span>' : ''}</h2>`;
+  h += `<p style="margin:0 0 8px;color:var(--suave)">${t.view ? 'View' : fmt(t.linhas) + ' linhas'}${t.bytes ? ' · ' + (t.bytes / 1073741824 >= 1 ? (t.bytes / 1073741824).toFixed(1) + ' GB' : Math.round(t.bytes / 1048576) + ' MB') : ''}</p>`;
+  if (t.coment) h += `<p style="margin:0 0 8px">${esc(t.coment)}</p>`;
+  h += '<div class="tw"><table><tr><th>coluna</th><th>tipo</th><th></th><th>o que é · de onde vem</th></tr>';
+  for (const c of t.cols) {
+    const m = c.pk ? '<span class="tag">PK</span>' : (fkc[c.n] ? `<span class="tag">FK → ${esc(fkc[c.n])}</span>` : '');
+    h += `<tr><td>${esc(c.n)}</td><td>${esc(c.t)}</td><td>${m}</td><td style="font-family:var(--sans)">${esc(c.c)}</td></tr>`;
+  }
+  h += '</table></div>';
+  if (entra.length) h += `<p style="margin:10px 0 0;color:var(--suave)">Referenciada por: ${entra.map(f => esc(f.de) + '.' + esc(f.col)).join(', ')}</p>`;
+  det.innerHTML = h; det.dataset.sel = id; destacar(id);
+}
+const tip = document.getElementById('tip');
+function dica(e) {
+  const h = e.target.closest && e.target.closest('.hit');
+  const g = h && h.parentNode, t = g && T[g.dataset.t], c = t && t.cols.find(x => x.n === h.dataset.c);
+  if (!c) { tip.hidden = true; return; }
+  const fk = D.fks.find(f => f.de === t.id && f.col.split(',').includes(c.n) && f.col !== 'id_fonte');
+  tip.innerHTML = `<b>${esc(c.n)}</b><span class="t">${esc(c.t)}${c.pk ? ' · PK' : ''}</span>` +
+    (c.c ? `<p>${esc(c.c)}</p>` : '<p class="sem">sem descrição ainda</p>') +
+    (fk ? `<div class="fk">→ ${esc(fk.para)}.${esc(fk.colpara)}</div>` : '');
+  tip.hidden = false;
+  const w = tip.offsetWidth, hh = tip.offsetHeight;
+  let x = e.clientX + 16, y = e.clientY + 18;
+  if (x + w > window.innerWidth - 8) x = Math.max(8, e.clientX - w - 16);
+  if (y + hh > window.innerHeight - 8) y = Math.max(8, e.clientY - hh - 14);
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+fig.addEventListener('mousemove', dica);
+fig.addEventListener('mouseleave', () => { tip.hidden = true; });
+fig.querySelectorAll('.tab').forEach(g => {
+  g.addEventListener('click', () => mostrar(g.dataset.t));
+  g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mostrar(g.dataset.t); } });
+  g.addEventListener('mouseenter', () => destacar(g.dataset.t));
+  g.addEventListener('mouseleave', () => destacar(det.dataset.sel || null));
+});
+</script>

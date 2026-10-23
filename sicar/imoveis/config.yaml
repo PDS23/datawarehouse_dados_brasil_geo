@@ -1,0 +1,25 @@
+# SICAR (imoveis) pelo WFS PUBLICO do CAR. Fonte unica da tabela vetorial.sicar_imoveis. Sem CAPTCHA.
+fonte: "Sistema Nacional de Cadastro Ambiental Rural"   # nome exato em dim.fontes
+fonte_descricao: "WFS do CAR (geoserver.car.gov.br)"
+url_wfs: "https://geoserver.car.gov.br/geoserver/sicar/wfs"
+camada_por_uf: "sicar:sicar_imoveis_{uf}"                # uma camada por UF (27)
+tls_legado: true          # o servidor so aceita TLS 1.2 com cifras antigas; certificado segue verificado (dwlib/http.py)
+srid_gravado: 4674        # o WFS entrega EPSG:4326; gravado como SIRGAS 2000 sem transformar (diferenca < 1 m)
+
+por_pagina: 1000
+paralelo_padrao: 4        # agentes (requisicoes simultaneas); o CAR nao documenta limite
+paralelo_maximo: 6
+# Paginar a UF inteira e inviavel (BA: 12 a 55 s por pagina). Fatiando por municipio, 0,4 a 0,8 s por pagina.
+# A maior fatia do pais tinha 25.642 imoveis (2026-10-20). Acima de limite_fatia o script avisa.
+limite_fatia: 60000
+# Se uma UF chegar com menos imoveis do que a anunciada (alem desta fracao), aborta a UF (coleta incompleta).
+tolerancia_coleta: 0.002
+
+# Imoveis fechados (sumiram do WFS) numa rodada: se passar desta fracao da UF, aborta e pede conferencia
+# (protege contra uma resposta incompleta do servidor), a menos que se passe --aceitar-queda.
+max_queda: 0.10
+
+# Caixa do Brasil (lon/lat): poligono com algum vertice fora dela, ou sem geometria, e guardado como ANOMALO:
+# geom NULL + o texto original em geom_origem_texto (nao quebra ST_Area::geography e nao perde o que a fonte entregou).
+caixa_brasil: {lon_min: -75.0, lon_max: -28.0, lat_min: -35.0, lat_max: 6.0}
+licenca: "Dados abertos do CAR; confirmar termos de uso antes de redistribuir"

@@ -1,0 +1,31 @@
+# Coleta automatizada (ETL): coleta direto na fonte e grava no PostGIS, pela rede do compose.
+#
+# Uso, a partir de infra/ (o servico so existe sob o perfil "etl" e nao sobe com o "up"):
+#   docker compose -f docker-compose.stack.yml -f docker-compose.etl.yml run --rm etl <script.py> [argumentos]
+# Exemplos:
+#   ... run --rm etl ibge/municipios/scripts/localidades.py --simular
+#   ... run --rm etl ibge/PAM/scripts/pam.py --desde 2023
+# A primeira vez constroi a imagem (infra/etl/Dockerfile).
+#
+# Banco: conecta como o papel de servico "etl" (so DML nas tabelas que alimenta), com a senha
+# ETL_PASSWORD do .env (gerada por infra/scripts/criar_papel_etl.ps1), por "postgis":5432.
+services:
+  etl:
+    build:
+      context: ./etl
+    image: dw-etl:local
+    profiles: ["etl"]
+    depends_on:
+      postgis:
+        condition: service_healthy
+    environment:
+      PGHOST: postgis
+      PGPORT: "5432"
+      PGDATABASE: data_warehouse
+      PGUSER: etl
+      PGPASSWORD: ${ETL_PASSWORD:?defina ETL_PASSWORD no .env (rode infra/scripts/criar_papel_etl.ps1)}
+      PYTHONPATH: /app/scripts_comuns
+      TZ: America/Sao_Paulo
+    volumes:
+      - ..:/app
+    working_dir: /app

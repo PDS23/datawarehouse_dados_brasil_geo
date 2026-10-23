@@ -1,0 +1,22 @@
+# Pipeline do SIDRA (IBGE): camada genérica. Uma entrada por tabela do SIDRA; nada é carregado sem pedido (por tabela e por recorte).
+# Cada tabela declara as classificações NA ORDEM em que viram id_cat1, id_cat2... em tabular.sidra_valor.
+#   filtro: pedido  -> o analista escolhe as categorias na linha de comando (--cat <classificação>=<códigos ou slugs>)
+#   filtro: todas   -> todas as categorias da classificação, menos as listadas em excluir (os "Total" são soma dos demais)
+#   filtro: fixa    -> só as categorias listadas em categorias (decisão de projeto; ex.: tipologia = Total)
+#   faixas: true    -> o nome da categoria é uma faixa de área em ha ("De 10 a menos de 20 ha"): grava limite_inferior/limite_superior
+fonte: IBGE                      # nome exato em dim.fontes
+max_queda: 0.10                  # não grava se mais de 10% dos valores vigentes do recorte sumirem (--aceitar-queda libera)
+
+tabelas:
+  "6956":
+    pesquisa: {codigo: censo_agropecuario, nome: "Censo Agropecuário"}
+    nome: "Lavoura permanente nos estabelecimentos agropecuários, por tipologia, produtos da lavoura permanente e grupos de área total"
+    periodicidade: decenal
+    nivel_padrao: n6             # município
+    periodos: ["2017"]
+    variaveis: ["9504", "10081"]   # estabelecimentos com 50 pés e mais / com menos de 50 pés (só contagens; produção fica de fora)
+    guardar_simbolos: false      # '-' (zero) e '...' (não se aplica) não geram linha; 'X' (sigilo) gera linha com valor NULL
+    classificacoes:
+      - {codigo: "227", filtro: pedido, excluir: ["113864"]}            # produtos da lavoura permanente (Total fora)
+      - {codigo: "220", filtro: todas, excluir: ["110085"], faixas: true}  # grupos de área total (Total fora)
+      - {codigo: "829", filtro: fixa, categorias: ["46302"]}            # tipologia: sempre Total (sem separar agricultura familiar/Pronaf/Pronamp)

@@ -1,0 +1,67 @@
+# Pipeline PAM (Produção Agrícola Municipal, IBGE/SIDRA). Configuração versionada.
+fonte: IBGE                  # nome exato em dim.fontes
+tabela: "5457"               # PAM: lavouras temporárias e permanentes juntas, 1974 em diante
+classificacao: "782"         # c782 = produto das lavouras temporárias e permanentes (86 categorias; 0 = Total, não entra)
+ano_inicial: 1974
+
+# Variável SIDRA -> coluna de tabular.ibge_pam. Os três percentuais do SIDRA (1008331, 1000216,
+# 1000215) são derivados do total e não são guardados.
+variaveis:
+  "8331": area_plantada_ha           # área plantada ou destinada à colheita
+  "216": area_colhida_ha             # área colhida
+  "214": quantidade_produzida        # a API diz "Toneladas" para TODOS os produtos e anos (ver quebras_unidade)
+  "112": rendimento_medio            # a API diz "Quilogramas por Hectare" para todos
+  "215": valor_producao_mil_reais    # mil reais
+
+# Variáveis percentuais do SIDRA: NUNCA são coletadas nem guardadas (derivam do total geral e se recalculam
+# a partir das colunas acima). O pipeline recusa rodar se alguma delas aparecer em `variaveis`.
+variaveis_ignoradas:
+  "1008331": "área plantada ou destinada à colheita - percentual do total geral"
+  "1000216": "área colhida - percentual do total geral"
+  "1000215": "valor da produção - percentual do total geral"
+
+unidade_padrao:
+  quantidade: toneladas
+  rendimento: kg/ha
+
+# A API rotula tudo como toneladas e kg/ha, mas até 2000 a quantidade e o rendimento de várias frutas
+# estão em outra unidade (o valor nacional muda de ordem de grandeza entre 2000 e 2001 sem mudança
+# correspondente na área colhida). EVIDÊNCIA: varredura dos totais nacionais da tabela 5457 em
+# 2026-10-14 (salto > 5x entre anos vizinhos em quantidade ou rendimento, com a área colhida variando
+# menos de 2x). O NOME da unidade antiga (mil frutos / mil cachos) é INFERIDO da convenção do IBGE; o
+# dado só prova que a unidade mudou. Os valores são guardados como o IBGE devolve; só unidade_* muda.
+# Pode haver outras culturas com quebra pequena demais para a varredura detectar.
+quebras_unidade:
+  "40120": {nome: Melancia,            ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40136": {nome: Banana (cacho),      ate: 2000, quantidade: mil cachos,  rendimento: cachos/ha}
+  "40142": {nome: Caqui,               ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40148": {nome: Figo,                ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40149": {nome: Goiaba,              ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40151": {nome: Laranja,             ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40152": {nome: Limão,               ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40260": {nome: Maçã,                ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40263": {nome: Maracujá,            ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40267": {nome: Pera,                ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40268": {nome: Pêssego,             ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+  "40271": {nome: Tangerina,           ate: 2000, quantidade: mil frutos,  rendimento: frutos/ha}
+# Valor da produção (v215): a API diz "Mil Reais" em todos os anos, mas a série nacional quebra a cada reforma
+# monetária (razões entre anos vizinhos da laranja: 0,00 em 1985, 4,03 em 1987, 16,50 em 1988, 0,02 em 1989,
+# 11,22 em 1992, 0,03 em 1993, 0,01 em 1994). EVIDÊNCIA: os próprios dados. Só de 1994 em diante é mil reais
+# (nominais, sem deflacionar); até 1993 fica na moeda nominal da época, marcada em unidade_valor.
+unidade_valor:
+  atual: mil reais
+  ate: 1993
+  antiga: "moeda nominal da epoca (pre-Real; nao comparavel)"
+
+# Não incluído de propósito: 40130 Algodão arbóreo (salto 1999->2000 de 5,9x, mas a área também
+# variou 1,8x: não é unidade).
+
+# Produtos com asterisco no nome (nota de rodapé do IBGE, que não conseguimos ler pela API): a unidade
+# da quantidade é registrada como "a confirmar" em TODOS os anos, em vez de assumir toneladas.
+unidade_a_confirmar: ["40092", "40145"]   # Abacaxi*, Coco-da-baía*
+texto_a_confirmar: "a confirmar (nota * do IBGE)"
+
+# Conferência automática: a soma dos municípios deve bater com o total nacional (variáveis aditivas).
+validacao:
+  variaveis_aditivas: ["8331", "216", "214", "215"]
+  tolerancia_relativa: 0.001

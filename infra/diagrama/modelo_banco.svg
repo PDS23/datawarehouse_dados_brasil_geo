@@ -1,0 +1,1153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2530 1478" width="2530" role="img" aria-label="Esquema do banco data_warehouse: dimensões, geometrias, tabelas, resultados e catálogo, com as chaves estrangeiras"><style>svg{--caixa:#ffffff;--linha:#b9c2cc;--zebra:#f3f6f9;--texto:#1c2733;--suave:#5f6f80;--lig:#4b6a88;--destaque:#d9480f;--dim:#0f766e;--vet:#2f7d32;--tab:#b45309;--res:#6d28d9;--cat:#475569;--pk:#b7791f;--fk:#1d4ed8;--geo:#2f7d32;--mono:Consolas,'Courier New',monospace;--sans:'Segoe UI',Arial,sans-serif;background:#f6f8fa}
+.tab .hit{fill:transparent}
+.tab .corpo{fill:var(--caixa);stroke:var(--linha);stroke-width:1.2}
+.tab .cab{fill:var(--c)} .tab.vw .corpo{stroke-dasharray:5 3}
+.tab.dim{--c:var(--dim)} .tab.vetorial{--c:var(--vet)} .tab.tabular{--c:var(--tab)} .tab.resultados{--c:var(--res)} .tab.catalogo{--c:var(--cat)}
+.tab .nome{font:600 13px var(--mono);fill:#fff} .tab .sub{font:11px var(--sans);fill:#fff;opacity:.85}
+.tab .selo{font:600 10px var(--sans);fill:#fff;opacity:.95}
+.tab .zebra{fill:var(--zebra)} .tab .col{font:12px var(--mono);fill:var(--texto)} .tab .col.pk{font-weight:700}
+.tab .tp{font:10.5px var(--mono);fill:var(--suave)} .tab .mais{font:italic 11px var(--sans);fill:var(--suave)}
+.tab .m{font:700 9px var(--sans);letter-spacing:.04em} .tab .m.PK{fill:var(--pk)} .tab .m.FK{fill:var(--fk)} .tab .m.fonte{fill:var(--suave)} .tab .m.geo{fill:var(--geo)}
+.tab{cursor:pointer} .tab:hover .corpo,.tab:focus .corpo,.tab.sel .corpo{stroke:var(--c);stroke-width:2.4}
+.lig path{fill:none;stroke:var(--lig);stroke-width:1.4;opacity:.55} .lig circle{fill:var(--lig);opacity:.8} .lig.vw path{stroke-dasharray:4 3}
+.lig.on path{stroke:var(--destaque);stroke-width:2.4;opacity:1} .lig.on circle{fill:var(--destaque);opacity:1}
+.lig.off{opacity:.12}
+.faixa{font:700 12px var(--sans);letter-spacing:.06em;fill:var(--suave)} .faixa-l{stroke:var(--linha);stroke-width:1}
+.nota{font:12px var(--sans);fill:var(--suave)}
+</style><defs><marker id="seta" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="seta"/></marker></defs><text class="faixa" x="40" y="32">DIMENSÕES (vocabulário comum, tracejado = view) · TABULARES · GEOMETRIAS · RESULTADOS</text><text class="faixa" x="40" y="1178">CATÁLOGO · proveniência, controle e rastreabilidade (de onde veio cada dado, quando e quanto)</text><line class="faixa-l" x1="40" x2="2490" y1="1162" y2="1162"/><g class="lig" data-de="dim.municipios" data-para="dim.estados"><path d="M1050 603.0 C1110 603.0 1110 303.0 1050 303.0"/><circle cx="1050" cy="603.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>dim.municipios.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="tabular.ibge_pam" data-para="dim.municipios"><path d="M690 141.0 C730 141.0 720 567.0 760 567.0"/><circle cx="690" cy="141.0" r="3.2"/><circle class="alvo" cx="760" cy="567.0" r="3.2"/><title>tabular.ibge_pam.id_municipio → dim.municipios.id_municipio</title></g>
+<g class="lig" data-de="tabular.ibge_pam" data-para="dim.cultura"><path d="M400 159.0 C360 159.0 370 123.0 330 123.0"/><circle cx="400" cy="159.0" r="3.2"/><circle class="alvo" cx="330" cy="123.0" r="3.2"/><title>tabular.ibge_pam.id_cultura → dim.cultura.id_cultura</title></g>
+<g class="lig" data-de="dim.cultura_equivalencia" data-para="dim.sidra_categoria"><path d="M330 321.0 C1085.0 321.0 1085.0 735.0 1840 735.0"/><circle cx="330" cy="321.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>dim.cultura_equivalencia.id_categoria → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="dim.cultura_equivalencia" data-para="dim.cultura"><path d="M330 339.0 C390 339.0 390 123.0 330 123.0"/><circle cx="330" cy="339.0" r="3.2"/><circle class="alvo" cx="330" cy="123.0" r="3.2"/><title>dim.cultura_equivalencia.id_cultura → dim.cultura.id_cultura</title></g>
+<g class="lig" data-de="vetorial.incra_assentamentos" data-para="dim.estados"><path d="M1120 741.0 C1080 741.0 1090 303.0 1050 303.0"/><circle cx="1120" cy="741.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>vetorial.incra_assentamentos.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="vetorial.incra_assentamentos" data-para="dim.estados"><path d="M1120 795.0 C1080 795.0 1090 303.0 1050 303.0"/><circle cx="1120" cy="795.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>vetorial.incra_assentamentos.id_estado_camada → dim.estados.id_estado</title></g>
+<g class="lig" data-de="dim.sidra_tabela" data-para="dim.sidra_pesquisa"><path d="M2130 285.0 C2190 285.0 2190 123.0 2130 123.0"/><circle cx="2130" cy="285.0" r="3.2"/><circle class="alvo" cx="2130" cy="123.0" r="3.2"/><title>dim.sidra_tabela.id_pesquisa → dim.sidra_pesquisa.id_pesquisa</title></g>
+<g class="lig" data-de="vetorial.sicar_imoveis" data-para="dim.estados"><path d="M1120 441.0 C1080 441.0 1090 303.0 1050 303.0"/><circle cx="1120" cy="441.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>vetorial.sicar_imoveis.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="vetorial.sicar_imoveis" data-para="dim.municipios"><path d="M1120 459.0 C1080 459.0 1090 567.0 1050 567.0"/><circle cx="1120" cy="459.0" r="3.2"/><circle class="alvo" cx="1050" cy="567.0" r="3.2"/><title>vetorial.sicar_imoveis.id_municipio → dim.municipios.id_municipio</title></g>
+<g class="lig" data-de="dim.sidra_tabela_eixo" data-para="dim.sidra_tabela"><path d="M2130 465.0 C2190 465.0 2190 267.0 2130 267.0"/><circle cx="2130" cy="465.0" r="3.2"/><circle class="alvo" cx="2130" cy="267.0" r="3.2"/><title>dim.sidra_tabela_eixo.id_tabela → dim.sidra_tabela.id_tabela</title></g>
+<g class="lig" data-de="dim.sidra_tabela_eixo" data-para="dim.sidra_classificacao"><path d="M2130 501.0 C2190 501.0 2190 609.0 2130 609.0"/><circle cx="2130" cy="501.0" r="3.2"/><circle class="alvo" cx="2130" cy="609.0" r="3.2"/><title>dim.sidra_tabela_eixo.id_classificacao → dim.sidra_classificacao.id_classificacao</title></g>
+<g class="lig" data-de="dim.sidra_categoria" data-para="dim.sidra_classificacao"><path d="M2130 753.0 C2190 753.0 2190 609.0 2130 609.0"/><circle cx="2130" cy="753.0" r="3.2"/><circle class="alvo" cx="2130" cy="609.0" r="3.2"/><title>dim.sidra_categoria.id_classificacao → dim.sidra_classificacao.id_classificacao</title></g>
+<g class="lig" data-de="dim.sidra_categoria" data-para="dim.unidade"><path d="M2130 807.0 C2170 807.0 2160 267.0 2200 267.0"/><circle cx="2130" cy="807.0" r="3.2"/><circle class="alvo" cx="2200" cy="267.0" r="3.2"/><title>dim.sidra_categoria.id_unidade → dim.unidade.id_unidade</title></g>
+<g class="lig" data-de="dim.sidra_variavel" data-para="dim.unidade"><path d="M2490 159.0 C2550 159.0 2550 267.0 2490 267.0"/><circle cx="2490" cy="159.0" r="3.2"/><circle class="alvo" cx="2490" cy="267.0" r="3.2"/><title>dim.sidra_variavel.id_unidade → dim.unidade.id_unidade</title></g>
+<g class="lig" data-de="resultados.prodes_municipio" data-para="vetorial.prodes_desmatamento"><path d="M1480 141.0 C1440 141.0 1450 123.0 1410 123.0"/><circle cx="1480" cy="141.0" r="3.2"/><circle class="alvo" cx="1410" cy="123.0" r="3.2"/><title>resultados.prodes_municipio.id_prodes → vetorial.prodes_desmatamento.id</title></g>
+<g class="lig" data-de="resultados.prodes_municipio" data-para="dim.municipios"><path d="M1480 159.0 C1265.0 159.0 1265.0 567.0 1050 567.0"/><circle cx="1480" cy="159.0" r="3.2"/><circle class="alvo" cx="1050" cy="567.0" r="3.2"/><title>resultados.prodes_municipio.id_municipio → dim.municipios.id_municipio</title></g>
+<g class="lig" data-de="vetorial.prodes_desmatamento" data-para="dim.biomas"><path d="M1120 177.0 C1080 177.0 1090 819.0 1050 819.0"/><circle cx="1120" cy="177.0" r="3.2"/><circle class="alvo" cx="1050" cy="819.0" r="3.2"/><title>vetorial.prodes_desmatamento.id_bioma → dim.biomas.id_bioma</title></g>
+<g class="lig" data-de="vetorial.prodes_desmatamento" data-para="dim.estados"><path d="M1120 195.0 C1080 195.0 1090 303.0 1050 303.0"/><circle cx="1120" cy="195.0" r="3.2"/><circle class="alvo" cx="1050" cy="303.0" r="3.2"/><title>vetorial.prodes_desmatamento.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_tabela"><path d="M690 651.0 C1265.0 651.0 1265.0 267.0 1840 267.0"/><circle cx="690" cy="651.0" r="3.2"/><circle class="alvo" cx="1840" cy="267.0" r="3.2"/><title>tabular.sidra_valor.id_tabela → dim.sidra_tabela.id_tabela</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.municipios"><path d="M690 687.0 C730 687.0 720 567.0 760 567.0"/><circle cx="690" cy="687.0" r="3.2"/><circle class="alvo" cx="760" cy="567.0" r="3.2"/><title>tabular.sidra_valor.id_municipio → dim.municipios.id_municipio</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.estados"><path d="M690 705.0 C730 705.0 720 303.0 760 303.0"/><circle cx="690" cy="705.0" r="3.2"/><circle class="alvo" cx="760" cy="303.0" r="3.2"/><title>tabular.sidra_valor.id_estado → dim.estados.id_estado</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_variavel"><path d="M690 723.0 C1445.0 723.0 1445.0 123.0 2200 123.0"/><circle cx="690" cy="723.0" r="3.2"/><circle class="alvo" cx="2200" cy="123.0" r="3.2"/><title>tabular.sidra_valor.id_variavel → dim.sidra_variavel.id_variavel</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 741.0 C1265.0 741.0 1265.0 735.0 1840 735.0"/><circle cx="690" cy="741.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat1 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 759.0 C1265.0 759.0 1265.0 735.0 1840 735.0"/><circle cx="690" cy="759.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat2 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 777.0 C1265.0 777.0 1265.0 735.0 1840 735.0"/><circle cx="690" cy="777.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat3 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 795.0 C1265.0 795.0 1265.0 735.0 1840 735.0"/><circle cx="690" cy="795.0" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat4 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 628 C1265.0 628 1265.0 735.0 1840 735.0"/><circle cx="690" cy="628" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat5 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_categoria"><path d="M690 628 C1265.0 628 1265.0 735.0 1840 735.0"/><circle cx="690" cy="628" r="3.2"/><circle class="alvo" cx="1840" cy="735.0" r="3.2"/><title>tabular.sidra_valor.id_cat6 → dim.sidra_categoria.id_categoria</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.sidra_situacao"><path d="M690 628 C1445.0 628 1445.0 411.0 2200 411.0"/><circle cx="690" cy="628" r="3.2"/><circle class="alvo" cx="2200" cy="411.0" r="3.2"/><title>tabular.sidra_valor.id_situacao → dim.sidra_situacao.id_situacao</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="dim.unidade"><path d="M690 628 C1445.0 628 1445.0 267.0 2200 267.0"/><circle cx="690" cy="628" r="3.2"/><circle class="alvo" cx="2200" cy="267.0" r="3.2"/><title>tabular.sidra_valor.id_unidade → dim.unidade.id_unidade</title></g>
+<g class="lig" data-de="tabular.sidra_valor" data-para="catalogo.cargas"><path d="M400 628 C528.0 628 528.0 1245.0 656 1245.0"/><circle cx="400" cy="628" r="3.2"/><circle class="alvo" cx="656" cy="1245.0" r="3.2"/><title>tabular.sidra_valor.id_carga → catalogo.cargas.id</title></g>
+<g class="lig" data-de="catalogo.sidra_recorte" data-para="dim.sidra_tabela"><path d="M2200 591.0 C2160 591.0 2170 267.0 2130 267.0"/><circle cx="2200" cy="591.0" r="3.2"/><circle class="alvo" cx="2130" cy="267.0" r="3.2"/><title>catalogo.sidra_recorte.id_tabela → dim.sidra_tabela.id_tabela</title></g>
+<g class="lig" data-de="catalogo.sidra_recorte" data-para="catalogo.cargas"><path d="M2200 717.0 C1428.0 717.0 1428.0 1245.0 656 1245.0"/><circle cx="2200" cy="717.0" r="3.2"/><circle class="alvo" cx="656" cy="1245.0" r="3.2"/><title>catalogo.sidra_recorte.id_carga → catalogo.cargas.id</title></g>
+<g class="lig vw" data-de="vetorial.v_prodes_municipio" data-para="resultados.prodes_municipio"><path d="M1770 256 C1820 256 1820 94 1770 94"/><title>view vetorial.v_prodes_municipio le resultados.prodes_municipio</title></g>
+<g class="lig vw" data-de="vetorial.v_prodes_municipio" data-para="vetorial.prodes_desmatamento"><path d="M1480 256 C1440 256 1450 94 1410 94"/><title>view vetorial.v_prodes_municipio le vetorial.prodes_desmatamento</title></g>
+<g class="lig vw" data-de="tabular.ibge_censoagro2017_estab_lavoura_perm" data-para="tabular.sidra_valor"><path d="M690 358 C740 358 740 622 690 622"/><title>view tabular.ibge_censoagro2017_estab_lavoura_perm le tabular.sidra_valor</title></g>
+<g class="lig vw" data-de="catalogo.v_ultima_coleta" data-para="catalogo.coletas"><path d="M1670 1216 C1326.0 1216 1326.0 1216 982 1216"/><title>view catalogo.v_ultima_coleta le catalogo.coletas</title></g>
+<g class="tab dim" data-t="dim.cultura" transform="translate(40,70)" tabindex="0" role="button" aria-label="dim.cultura">
+<rect class="corpo" width="290" height="160" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">cultura</text>
+<text class="sub" x="12" y="35">dim · 107 linhas · 64 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_cultura</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cultura" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">slug</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="slug" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">nota_ibge</text>
+<text class="tp" x="280" y="111" text-anchor="end">boolean</text>
+<rect class="hit" data-c="nota_ibge" y="98" width="290" height="18"/>
+<text class="m fonte" x="10" y="129">fonte</text>
+<text class="col" x="44" y="129">id_fonte</text>
+<text class="tp" x="280" y="129" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">importado_em</text>
+<text class="tp" x="280" y="147" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="134" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.cultura_equivalencia" transform="translate(40,268)" tabindex="0" role="button" aria-label="dim.cultura_equivalencia">
+<rect class="corpo" width="290" height="88" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">cultura_equivalencia</text>
+<text class="sub" x="12" y="35">dim · 146 linhas · 40 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_categoria</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_categoria" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_cultura</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cultura" y="62" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.malha_anterior" transform="translate(40,394)" tabindex="0" role="button" aria-label="dim.malha_anterior">
+<rect class="corpo" width="290" height="196" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">malha_anterior</text>
+<text class="sub" x="12" y="35">dim · 2.429 linhas · 103 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">tipo</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="tipo" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">id_territorio</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_territorio" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">ano_malha</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="ano_malha" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">area_km2</text>
+<text class="tp" x="280" y="129" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_km2" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">arquivado_em</text>
+<text class="tp" x="280" y="165" text-anchor="end">date</text>
+<rect class="hit" data-c="arquivado_em" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">motivo</text>
+<text class="tp" x="280" y="183" text-anchor="end">text</text>
+<rect class="hit" data-c="motivo" y="170" width="290" height="18"/>
+</g>
+<g class="tab tabular" data-t="tabular.ibge_pam" transform="translate(400,70)" tabindex="0" role="button" aria-label="tabular.ibge_pam">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">ibge_pam</text>
+<text class="sub" x="12" y="35">tabular · 238.780 linhas · 115 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_municipio</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_cultura</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cultura" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">ano</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="ano" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">area_plantada_ha</text>
+<text class="tp" x="280" y="129" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_plantada_ha" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">area_colhida_ha</text>
+<text class="tp" x="280" y="147" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_colhida_ha" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">quantidade_produzida</text>
+<text class="tp" x="280" y="165" text-anchor="end">numeric</text>
+<rect class="hit" data-c="quantidade_produzida" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">unidade_quantidade</text>
+<text class="tp" x="280" y="183" text-anchor="end">text</text>
+<rect class="hit" data-c="unidade_quantidade" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="201">fonte</text>
+<text class="col" x="44" y="201">id_fonte</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 5 colunas (clique para ver todas)</text>
+</g>
+<g class="tab tabular vw" data-t="tabular.ibge_censoagro2017_estab_lavoura_perm" transform="translate(400,334)" tabindex="0" role="button" aria-label="tabular.ibge_censoagro2017_estab_lavoura_perm">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">ibge_censoagro2017_estab_lavoura_perm</text>
+<text class="sub" x="12" y="35">tabular · view · </text>
+<text class="col" x="44" y="57">id_municipio</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">id_produto</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_produto" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">id_grupo_area</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_grupo_area" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">estab_50_pes_mais</text>
+<text class="tp" x="280" y="111" text-anchor="end">integer</text>
+<rect class="hit" data-c="estab_50_pes_mais" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">estab_50_pes_mais_sigilo</text>
+<text class="tp" x="280" y="129" text-anchor="end">boolean</text>
+<rect class="hit" data-c="estab_50_pes_mais_sigilo" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">estab_menos_50_pes</text>
+<text class="tp" x="280" y="147" text-anchor="end">integer</text>
+<rect class="hit" data-c="estab_menos_50_pes" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">estab_menos_50_pes_sigilo</text>
+<text class="tp" x="280" y="165" text-anchor="end">boolean</text>
+<rect class="hit" data-c="estab_menos_50_pes_sigilo" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="183">fonte</text>
+<text class="col" x="44" y="183">id_fonte</text>
+<text class="tp" x="280" y="183" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">importado_em</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 1 colunas (clique para ver todas)</text>
+</g>
+<g class="tab tabular esp" data-t="tabular.sidra_valor" transform="translate(400,598)" tabindex="0" role="button" aria-label="tabular.sidra_valor">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_valor</text>
+<text class="sub" x="12" y="35">tabular · 111.440 linhas</text>
+<text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_tabela</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_tabela" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m PK" x="10" y="75">PK</text>
+<text class="col pk" x="44" y="75">id</text>
+<text class="tp" x="280" y="75" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_municipio</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="111">FK</text>
+<text class="col" x="44" y="111">id_estado</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="129">FK</text>
+<text class="col" x="44" y="129">id_variavel</text>
+<text class="tp" x="280" y="129" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_variavel" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m FK" x="10" y="147">FK</text>
+<text class="col" x="44" y="147">id_cat1</text>
+<text class="tp" x="280" y="147" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cat1" y="134" width="290" height="18"/>
+<text class="m FK" x="10" y="165">FK</text>
+<text class="col" x="44" y="165">id_cat2</text>
+<text class="tp" x="280" y="165" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cat2" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m FK" x="10" y="183">FK</text>
+<text class="col" x="44" y="183">id_cat3</text>
+<text class="tp" x="280" y="183" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cat3" y="170" width="290" height="18"/>
+<text class="m FK" x="10" y="201">FK</text>
+<text class="col" x="44" y="201">id_cat4</text>
+<text class="tp" x="280" y="201" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_cat4" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 11 colunas (clique para ver todas)</text>
+</g>
+<g class="tab dim" data-t="dim.fontes" transform="translate(760,70)" tabindex="0" role="button" aria-label="dim.fontes">
+<rect class="corpo" width="290" height="142" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">fontes</text>
+<text class="sub" x="12" y="35">dim · 5 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_fonte</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">sigla</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="sigla" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">url</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="url" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">descricao</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="descricao" y="116" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.estados" transform="translate(760,250)" tabindex="0" role="button" aria-label="dim.estados">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">estados</text>
+<text class="sub" x="12" y="35">dim · 27 linhas · 20 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_estado</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">cd_uf</text>
+<text class="tp" x="280" y="75" text-anchor="end">character(2)</text>
+<rect class="hit" data-c="cd_uf" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome_uf</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_uf" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">sigla_uf</text>
+<text class="tp" x="280" y="111" text-anchor="end">character(2)</text>
+<rect class="hit" data-c="sigla_uf" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">cd_regiao</text>
+<text class="tp" x="280" y="129" text-anchor="end">character(1)</text>
+<rect class="hit" data-c="cd_regiao" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">nome_regiao</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_regiao" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">sigla_regiao</text>
+<text class="tp" x="280" y="165" text-anchor="end">character(2)</text>
+<rect class="hit" data-c="sigla_regiao" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m geo" x="10" y="183">geo</text>
+<text class="col" x="44" y="183">geom</text>
+<text class="tp" x="280" y="183" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="201">fonte</text>
+<text class="col" x="44" y="201">id_fonte</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 3 colunas (clique para ver todas)</text>
+</g>
+<g class="tab dim" data-t="dim.municipios" transform="translate(760,514)" tabindex="0" role="button" aria-label="dim.municipios">
+<rect class="corpo" width="290" height="214" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">municipios</text>
+<text class="sub" x="12" y="35">dim · 5.573 linhas · 430 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_municipio</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome_municipio</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_municipio" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_estado</text>
+<text class="tp" x="280" y="93" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">sigla_uf</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="sigla_uf" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">area_km2</text>
+<text class="tp" x="280" y="129" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_km2" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="m fonte" x="10" y="165">fonte</text>
+<text class="col" x="44" y="165">id_fonte</text>
+<text class="tp" x="280" y="165" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">importado_em</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">ano_malha</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="ano_malha" y="188" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.biomas" transform="translate(760,766)" tabindex="0" role="button" aria-label="dim.biomas">
+<rect class="corpo" width="290" height="160" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">biomas</text>
+<text class="sub" x="12" y="35">dim · 7 linhas · 18 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_bioma</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_bioma" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">codigo_bioma</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo_bioma" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome_bioma</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_bioma" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m geo" x="10" y="111">geo</text>
+<text class="col" x="44" y="111">geom</text>
+<text class="tp" x="280" y="111" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="98" width="290" height="18"/>
+<text class="m fonte" x="10" y="129">fonte</text>
+<text class="col" x="44" y="129">id_fonte</text>
+<text class="tp" x="280" y="129" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">importado_em</text>
+<text class="tp" x="280" y="147" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="134" width="290" height="18"/>
+</g>
+<g class="tab vetorial esp" data-t="vetorial.prodes_desmatamento" transform="translate(1120,70)" tabindex="0" role="button" aria-label="vetorial.prodes_desmatamento">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">prodes_desmatamento</text>
+<text class="sub" x="12" y="35">vetorial · 6.936.963 linhas · 7,0 GB</text>
+<text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">uuid</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="uuid" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">bioma</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="bioma" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="111">FK</text>
+<text class="col" x="44" y="111">id_bioma</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_bioma" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="129">FK</text>
+<text class="col" x="44" y="129">id_estado</text>
+<text class="tp" x="280" y="129" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="m fonte" x="10" y="165">fonte</text>
+<text class="col" x="44" y="165">id_fonte</text>
+<text class="tp" x="280" y="165" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">vigente_desde</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_desde" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">vigente_ate</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_ate" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 20 colunas (clique para ver todas)</text>
+</g>
+<g class="tab vetorial esp" data-t="vetorial.sicar_imoveis" transform="translate(1120,334)" tabindex="0" role="button" aria-label="vetorial.sicar_imoveis">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sicar_imoveis</text>
+<text class="sub" x="12" y="35">vetorial · 8.547.089 linhas · 7,8 GB</text>
+<text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">fid_wfs</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="fid_wfs" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">cod_imovel</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="cod_imovel" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="111">FK</text>
+<text class="col" x="44" y="111">id_estado</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="129">FK</text>
+<text class="col" x="44" y="129">id_municipio</text>
+<text class="tp" x="280" y="129" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="m fonte" x="10" y="165">fonte</text>
+<text class="col" x="44" y="165">id_fonte</text>
+<text class="tp" x="280" y="165" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">vigente_desde</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_desde" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">vigente_ate</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_ate" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 14 colunas (clique para ver todas)</text>
+</g>
+<g class="tab vetorial" data-t="vetorial.incra_assentamentos" transform="translate(1120,598)" tabindex="0" role="button" aria-label="vetorial.incra_assentamentos">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">incra_assentamentos</text>
+<text class="sub" x="12" y="35">vetorial · 7.525 linhas · 69 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">gid_incra</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="gid_incra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">cd_sipra</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="cd_sipra" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">nome_projeto</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_projeto" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">municipio</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="municipio" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m FK" x="10" y="147">FK</text>
+<text class="col" x="44" y="147">id_estado</text>
+<text class="tp" x="280" y="147" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="165">geo</text>
+<text class="col" x="44" y="165">geom</text>
+<text class="tp" x="280" y="165" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="183">fonte</text>
+<text class="col" x="44" y="183">id_fonte</text>
+<text class="tp" x="280" y="183" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="170" width="290" height="18"/>
+<text class="m FK" x="10" y="201">FK</text>
+<text class="col" x="44" y="201">id_estado_camada</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_estado_camada" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 10 colunas (clique para ver todas)</text>
+</g>
+<g class="tab vetorial esp" data-t="vetorial.mapbiomas_alerta" transform="translate(1120,862)" tabindex="0" role="button" aria-label="vetorial.mapbiomas_alerta">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">mapbiomas_alerta</text>
+<text class="sub" x="12" y="35">vetorial · 543.378 linhas · 865 MB</text>
+<text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">alert_code</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="alert_code" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">area_ha</text>
+<text class="tp" x="280" y="93" text-anchor="end">numeric</text>
+<rect class="hit" data-c="area_ha" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">sources</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="sources" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">biomes</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="biomes" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="147">geo</text>
+<text class="col" x="44" y="147">geom</text>
+<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
+<text class="m fonte" x="10" y="165">fonte</text>
+<text class="col" x="44" y="165">id_fonte</text>
+<text class="tp" x="280" y="165" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">vigente_desde</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_desde" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">vigente_ate</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="vigente_ate" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 18 colunas (clique para ver todas)</text>
+</g>
+<g class="tab resultados" data-t="resultados.prodes_municipio" transform="translate(1480,70)" tabindex="0" role="button" aria-label="resultados.prodes_municipio">
+<rect class="corpo" width="290" height="124" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">prodes_municipio</text>
+<text class="sub" x="12" y="35">resultados · 7.084.906 linhas · 883 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_prodes</text>
+<text class="tp" x="280" y="75" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_prodes" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_municipio</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">calculado_em</text>
+<text class="tp" x="280" y="111" text-anchor="end">date</text>
+<rect class="hit" data-c="calculado_em" y="98" width="290" height="18"/>
+</g>
+<g class="tab vetorial vw" data-t="vetorial.v_prodes_municipio" transform="translate(1480,232)" tabindex="0" role="button" aria-label="vetorial.v_prodes_municipio">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">v_prodes_municipio</text>
+<text class="sub" x="12" y="35">vetorial · view · </text>
+<text class="col" x="44" y="57">id_ponte</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_ponte" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">id_municipio</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_municipio" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">id_prodes</text>
+<text class="tp" x="280" y="93" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_prodes" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">year</text>
+<text class="tp" x="280" y="111" text-anchor="end">integer</text>
+<rect class="hit" data-c="year" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">main_class</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="main_class" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">class_name</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="class_name" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">area_km</text>
+<text class="tp" x="280" y="165" text-anchor="end">float8</text>
+<rect class="hit" data-c="area_km" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">image_date</text>
+<text class="tp" x="280" y="183" text-anchor="end">date</text>
+<rect class="hit" data-c="image_date" y="170" width="290" height="18"/>
+<text class="m geo" x="10" y="201">geo</text>
+<text class="col" x="44" y="201">geom</text>
+<text class="tp" x="280" y="201" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 2 colunas (clique para ver todas)</text>
+</g>
+<g class="tab vetorial" data-t="vetorial.ibge_dominios_naturais" transform="translate(1480,496)" tabindex="0" role="button" aria-label="vetorial.ibge_dominios_naturais">
+<rect class="corpo" width="290" height="214" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">ibge_dominios_naturais</text>
+<text class="sub" x="12" y="35">vetorial · 52 linhas · 30 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">codigo_bioma</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo_bioma" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome_bioma</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_bioma" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">codigo_dominio</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo_dominio" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">nome_dominio</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_dominio" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">tipo_dominio</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="tipo_dominio" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="165">geo</text>
+<text class="col" x="44" y="165">geom</text>
+<text class="tp" x="280" y="165" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="183">fonte</text>
+<text class="col" x="44" y="183">id_fonte</text>
+<text class="tp" x="280" y="183" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">importado_em</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="188" width="290" height="18"/>
+</g>
+<g class="tab vetorial" data-t="vetorial.ibge_regioes_naturais" transform="translate(1480,748)" tabindex="0" role="button" aria-label="vetorial.ibge_regioes_naturais">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">ibge_regioes_naturais</text>
+<text class="sub" x="12" y="35">vetorial · 271 linhas · 42 MB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">codigo_bioma</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo_bioma" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome_bioma</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome_bioma" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">geologia_dominante</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="geologia_dominante" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">geomorfologia_dominante</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="geomorfologia_dominante" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">vegetacao_dominante</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="vegetacao_dominante" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">pedologia_dominante</text>
+<text class="tp" x="280" y="165" text-anchor="end">text</text>
+<rect class="hit" data-c="pedologia_dominante" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="m geo" x="10" y="183">geo</text>
+<text class="col" x="44" y="183">geom</text>
+<text class="tp" x="280" y="183" text-anchor="end">MultiPolygon 4674</text>
+<rect class="hit" data-c="geom" y="170" width="290" height="18"/>
+<text class="m fonte" x="10" y="201">fonte</text>
+<text class="col" x="44" y="201">id_fonte</text>
+<text class="tp" x="280" y="201" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 7 colunas (clique para ver todas)</text>
+</g>
+<g class="tab dim" data-t="dim.sidra_pesquisa" transform="translate(1840,70)" tabindex="0" role="button" aria-label="dim.sidra_pesquisa">
+<rect class="corpo" width="290" height="106" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_pesquisa</text>
+<text class="sub" x="12" y="35">dim · 1 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_pesquisa</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_pesquisa" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">codigo</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="codigo" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="80" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_tabela" transform="translate(1840,214)" tabindex="0" role="button" aria-label="dim.sidra_tabela">
+<rect class="corpo" width="290" height="160" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_tabela</text>
+<text class="sub" x="12" y="35">dim · 1 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_tabela</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_tabela" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_pesquisa</text>
+<text class="tp" x="280" y="75" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_pesquisa" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">periodicidade</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="periodicidade" y="98" width="290" height="18"/>
+<text class="m fonte" x="10" y="129">fonte</text>
+<text class="col" x="44" y="129">id_fonte</text>
+<text class="tp" x="280" y="129" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">importado_em</text>
+<text class="tp" x="280" y="147" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="134" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_tabela_eixo" transform="translate(1840,412)" tabindex="0" role="button" aria-label="dim.sidra_tabela_eixo">
+<rect class="corpo" width="290" height="106" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_tabela_eixo</text>
+<text class="sub" x="12" y="35">dim · 3 linhas · 24 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_tabela</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_tabela" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m PK" x="10" y="75">PK</text>
+<text class="col pk" x="44" y="75">posicao</text>
+<text class="tp" x="280" y="75" text-anchor="end">smallint</text>
+<rect class="hit" data-c="posicao" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_classificacao</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_classificacao" y="80" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_classificacao" transform="translate(1840,556)" tabindex="0" role="button" aria-label="dim.sidra_classificacao">
+<rect class="corpo" width="290" height="88" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_classificacao</text>
+<text class="sub" x="12" y="35">dim · 4 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_classificacao</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_classificacao" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_categoria" transform="translate(1840,682)" tabindex="0" role="button" aria-label="dim.sidra_categoria">
+<rect class="corpo" width="290" height="214" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_categoria</text>
+<text class="sub" x="12" y="35">dim · 175 linhas · 80 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_categoria</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_categoria" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_classificacao</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_classificacao" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">codigo_sidra</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="codigo_sidra" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">nome</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="98" width="290" height="18"/>
+<text class="m FK" x="10" y="129">FK</text>
+<text class="col" x="44" y="129">id_unidade</text>
+<text class="tp" x="280" y="129" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_unidade" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">limite_inferior</text>
+<text class="tp" x="280" y="147" text-anchor="end">numeric</text>
+<rect class="hit" data-c="limite_inferior" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">limite_superior</text>
+<text class="tp" x="280" y="165" text-anchor="end">numeric</text>
+<rect class="hit" data-c="limite_superior" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">ordem</text>
+<text class="tp" x="280" y="183" text-anchor="end">smallint</text>
+<rect class="hit" data-c="ordem" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">importado_em</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="importado_em" y="188" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_variavel" transform="translate(2200,70)" tabindex="0" role="button" aria-label="dim.sidra_variavel">
+<rect class="corpo" width="290" height="106" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_variavel</text>
+<text class="sub" x="12" y="35">dim · 2 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_variavel</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_variavel" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="93">FK</text>
+<text class="col" x="44" y="93">id_unidade</text>
+<text class="tp" x="280" y="93" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_unidade" y="80" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.unidade" transform="translate(2200,214)" tabindex="0" role="button" aria-label="dim.unidade">
+<rect class="corpo" width="290" height="106" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">unidade</text>
+<text class="sub" x="12" y="35">dim · 1 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_unidade</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_unidade" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">simbolo</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="simbolo" y="80" width="290" height="18"/>
+</g>
+<g class="tab dim" data-t="dim.sidra_situacao" transform="translate(2200,358)" tabindex="0" role="button" aria-label="dim.sidra_situacao">
+<rect class="corpo" width="290" height="124" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_situacao</text>
+<text class="sub" x="12" y="35">dim · 4 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_situacao</text>
+<text class="tp" x="280" y="57" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_situacao" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">simbolo_sidra</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="simbolo_sidra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nome</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">descricao</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="descricao" y="98" width="290" height="18"/>
+</g>
+<g class="tab catalogo" data-t="catalogo.sidra_recorte" transform="translate(2200,520)" tabindex="0" role="button" aria-label="catalogo.sidra_recorte">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">sidra_recorte</text>
+<text class="sub" x="12" y="35">catalogo · 2 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id_recorte</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_recorte" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m FK" x="10" y="75">FK</text>
+<text class="col" x="44" y="75">id_tabela</text>
+<text class="tp" x="280" y="75" text-anchor="end">integer</text>
+<rect class="hit" data-c="id_tabela" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">nivel</text>
+<text class="tp" x="280" y="93" text-anchor="end">smallint</text>
+<rect class="hit" data-c="nivel" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">periodo_inicio</text>
+<text class="tp" x="280" y="111" text-anchor="end">integer</text>
+<rect class="hit" data-c="periodo_inicio" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">periodo_fim</text>
+<text class="tp" x="280" y="129" text-anchor="end">integer</text>
+<rect class="hit" data-c="periodo_fim" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">filtros</text>
+<text class="tp" x="280" y="147" text-anchor="end">jsonb</text>
+<rect class="hit" data-c="filtros" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">linhas_lidas</text>
+<text class="tp" x="280" y="165" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_lidas" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">linhas_gravadas</text>
+<text class="tp" x="280" y="183" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_gravadas" y="170" width="290" height="18"/>
+<text class="m FK" x="10" y="201">FK</text>
+<text class="col" x="44" y="201">id_carga</text>
+<text class="tp" x="280" y="201" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id_carga" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 1 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.datasets" transform="translate(40,1192)" tabindex="0" role="button" aria-label="catalogo.datasets">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">datasets</text>
+<text class="sub" x="12" y="35">catalogo · 15 linhas · 32 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">integer</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">nome</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="nome" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">tipo</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="tipo" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="m fonte" x="10" y="111">fonte</text>
+<text class="col" x="44" y="111">id_fonte</text>
+<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
+<rect class="hit" data-c="id_fonte" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">schema_tabela</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="schema_tabela" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">caminho_arquivo</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="caminho_arquivo" y="134" width="290" height="18"/>
+<text class="m geo" x="10" y="165">geo</text>
+<text class="col" x="44" y="165">cobertura</text>
+<text class="tp" x="280" y="165" text-anchor="end">Geometry 4674</text>
+<rect class="hit" data-c="cobertura" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">ano_referencia</text>
+<text class="tp" x="280" y="183" text-anchor="end">integer</text>
+<rect class="hit" data-c="ano_referencia" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">data_importacao</text>
+<text class="tp" x="280" y="201" text-anchor="end">date</text>
+<rect class="hit" data-c="data_importacao" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 2 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.cargas" transform="translate(366,1192)" tabindex="0" role="button" aria-label="catalogo.cargas">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">cargas</text>
+<text class="sub" x="12" y="35">catalogo · 76 linhas · 88 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">pipeline</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="pipeline" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">dataset</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="dataset" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">iniciada_em</text>
+<text class="tp" x="280" y="111" text-anchor="end">timestamptz</text>
+<rect class="hit" data-c="iniciada_em" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">finalizada_em</text>
+<text class="tp" x="280" y="129" text-anchor="end">timestamptz</text>
+<rect class="hit" data-c="finalizada_em" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">status</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="status" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">parametros</text>
+<text class="tp" x="280" y="165" text-anchor="end">jsonb</text>
+<rect class="hit" data-c="parametros" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">linhas_lidas</text>
+<text class="tp" x="280" y="183" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_lidas" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">linhas_inseridas</text>
+<text class="tp" x="280" y="201" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_inseridas" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 3 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.coletas" transform="translate(692,1192)" tabindex="0" role="button" aria-label="catalogo.coletas">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">coletas</text>
+<text class="sub" x="12" y="35">catalogo · 44 linhas · 88 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">dataset</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="dataset" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">recorte</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="recorte" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">fonte</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="fonte" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">url</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="url" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">metodo</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="metodo" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">coletado_em</text>
+<text class="tp" x="280" y="165" text-anchor="end">timestamptz</text>
+<rect class="hit" data-c="coletado_em" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">total_anunciado</text>
+<text class="tp" x="280" y="183" text-anchor="end">bigint</text>
+<rect class="hit" data-c="total_anunciado" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">linhas_lidas</text>
+<text class="tp" x="280" y="201" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_lidas" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 8 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.coletas_duplicados" transform="translate(1018,1192)" tabindex="0" role="button" aria-label="catalogo.coletas_duplicados">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">coletas_duplicados</text>
+<text class="sub" x="12" y="35">catalogo · 10 linhas · 48 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">id</text>
+<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
+<rect class="hit" data-c="id" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">dataset</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="dataset" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">recorte</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="recorte" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">cod_imovel</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="cod_imovel" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">fid_mantido</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="fid_mantido" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">fid_descartado</text>
+<text class="tp" x="280" y="147" text-anchor="end">text</text>
+<rect class="hit" data-c="fid_descartado" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">status_mantido</text>
+<text class="tp" x="280" y="165" text-anchor="end">text</text>
+<rect class="hit" data-c="status_mantido" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">status_descartado</text>
+<text class="tp" x="280" y="183" text-anchor="end">text</text>
+<rect class="hit" data-c="status_descartado" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">condicao_mantida</text>
+<text class="tp" x="280" y="201" text-anchor="end">text</text>
+<rect class="hit" data-c="condicao_mantida" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 8 colunas (clique para ver todas)</text>
+</g>
+<g class="tab catalogo" data-t="catalogo.mapa_colunas" transform="translate(1344,1192)" tabindex="0" role="button" aria-label="catalogo.mapa_colunas">
+<rect class="corpo" width="290" height="142" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">mapa_colunas</text>
+<text class="sub" x="12" y="35">catalogo · 71 linhas · 64 kB</text>
+<text class="m PK" x="10" y="57">PK</text>
+<text class="col pk" x="44" y="57">tabela</text>
+<text class="tp" x="280" y="57" text-anchor="end">text</text>
+<rect class="hit" data-c="tabela" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="m PK" x="10" y="75">PK</text>
+<text class="col pk" x="44" y="75">coluna</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="coluna" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">origem</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="origem" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">fonte</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="fonte" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">observacao</text>
+<text class="tp" x="280" y="129" text-anchor="end">text</text>
+<rect class="hit" data-c="observacao" y="116" width="290" height="18"/>
+</g>
+<g class="tab catalogo vw" data-t="catalogo.v_ultima_coleta" transform="translate(1670,1192)" tabindex="0" role="button" aria-label="catalogo.v_ultima_coleta">
+<rect class="corpo" width="290" height="226" rx="6"/>
+<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
+<text class="nome" x="12" y="18">v_ultima_coleta</text>
+<text class="sub" x="12" y="35">catalogo · view · </text>
+<text class="col" x="44" y="57">dataset</text>
+<text class="tp" x="280" y="57" text-anchor="end">text</text>
+<rect class="hit" data-c="dataset" y="44" width="290" height="18"/>
+<rect class="zebra" y="62" width="290" height="18"/>
+<text class="col" x="44" y="75">recorte</text>
+<text class="tp" x="280" y="75" text-anchor="end">text</text>
+<rect class="hit" data-c="recorte" y="62" width="290" height="18"/>
+<text class="col" x="44" y="93">fonte</text>
+<text class="tp" x="280" y="93" text-anchor="end">text</text>
+<rect class="hit" data-c="fonte" y="80" width="290" height="18"/>
+<rect class="zebra" y="98" width="290" height="18"/>
+<text class="col" x="44" y="111">metodo</text>
+<text class="tp" x="280" y="111" text-anchor="end">text</text>
+<rect class="hit" data-c="metodo" y="98" width="290" height="18"/>
+<text class="col" x="44" y="129">coletado_em</text>
+<text class="tp" x="280" y="129" text-anchor="end">timestamptz</text>
+<rect class="hit" data-c="coletado_em" y="116" width="290" height="18"/>
+<rect class="zebra" y="134" width="290" height="18"/>
+<text class="col" x="44" y="147">total_anunciado</text>
+<text class="tp" x="280" y="147" text-anchor="end">bigint</text>
+<rect class="hit" data-c="total_anunciado" y="134" width="290" height="18"/>
+<text class="col" x="44" y="165">linhas_lidas</text>
+<text class="tp" x="280" y="165" text-anchor="end">bigint</text>
+<rect class="hit" data-c="linhas_lidas" y="152" width="290" height="18"/>
+<rect class="zebra" y="170" width="290" height="18"/>
+<text class="col" x="44" y="183">novos</text>
+<text class="tp" x="280" y="183" text-anchor="end">bigint</text>
+<rect class="hit" data-c="novos" y="170" width="290" height="18"/>
+<text class="col" x="44" y="201">versoes_novas</text>
+<text class="tp" x="280" y="201" text-anchor="end">bigint</text>
+<rect class="hit" data-c="versoes_novas" y="188" width="290" height="18"/>
+<text class="mais" x="12" y="220">+ 4 colunas (clique para ver todas)</text>
+</g><g transform="translate(2000,1208)"><text class="nota" x="0" y="0">Fora do banco: 6 rasters (MapBiomas, TOPODATA)</text><text class="nota" x="0" y="16">ficam em arquivo COG e são servidos pelo GeoServer;</text><text class="nota" x="0" y="32">só o catálogo.datasets os registra.</text></g></svg>

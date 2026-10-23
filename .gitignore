@@ -1,0 +1,72 @@
+# Segredos: nunca versionar
+.env
+**/.env
+!**/.env.example
+
+# Dado bruto coletado pelos pipelines e baixado das fontes (reproduzível: rode o pipeline)
+**/bruto/
+_dump/
+backups/
+
+# Rasters e vetores grandes gerados localmente (o repositório guarda código, SQL e configuração)
+**/processado/
+*.tif
+*.tiff
+*.gpkg
+*.shp
+*.dbf
+*.shx
+*.prj
+*.cpg
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Historico e relatorios do monitor (gerados localmente)
+infra/monitoramento/
+
+# Logs e relatorios gerados localmente
+infra/logs/
+*.log
+
+# Material interno, pessoal ou de clientes: fica fora do repositorio publico (decisao de 2026-10-23; revisar antes do primeiro commit)
+HANDOFF_DESKTOP.md
+DICAS_DESENVOLVIMENTO_VAGAS.md
+infra/MIGRACAO_DESKTOP.md
+infra/migracao/
+projetos/mda/
+projetos/cecafe/
+**/*.xlsx
+pam_soja_2015_2025.sql
+
+# Politicas reais do Tailscale (e-mail e IPs da tailnet): o repositorio traz so o exemplo sanitizado
+infra/tailscale/politica_acesso.hujson
+infra/tailscale/politica_acesso_desktop.hujson
+
+# Configuracao local do assistente
+.claude/settings.local.json
+infra/diagrama/descricoes_colunas.sql
+
+# Infraestrutura de acesso em equipe (rede Tailscale, Colab, papeis de analistas, pg_hba): nao faz parte do case publico
+# (decisao de 2026-10-23: o foco do portfolio e o conteiner Docker e os pipelines que baixam da fonte e gravam no banco)
+infra/tailscale/
+infra/colab/
+infra/docker-compose.tailscale.yml
+infra/docker-compose.notebook.yml
+infra/postgres/pg_hba.conf
+infra/postgres/pg_hba.conf.original
+infra/postgres/LEIAME_pg_hba.md
+infra/postgres/analistas_setup.sql
+infra/postgres/novo_analista.sql
+infra/scripts/monitorar_docker_tailscale.ps1
+.claude/skills/
+projetos/wcs/
