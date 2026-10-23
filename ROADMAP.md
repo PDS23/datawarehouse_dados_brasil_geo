@@ -825,3 +825,20 @@ erDiagram
     Roda leve (segundos por fonte), então diário ou semanal cabe; a frequência entra na decisão do item 13.
     Só observa: **não carrega nada** (a carga continua sob demanda, regra coleta só sob demanda).
     Pasta no padrão: `infra/monitor/` (config.yaml com as fontes, scripts/, sql/).
+
+15. **Levantamento de novas fontes automatizáveis (2026-10-23)** — pesquisa só de leitura (CKAN, WFS, listagens, cabeçalhos HTTP; nada baixado além de
+    amostras), feita com a regra de que **dado novo só entra por automação direto da fonte**. Resultado:
+    | Fonte | Automatizável? | Canal verificado | Observações |
+    |---|---|---|---|
+    | **FUNAI, terras indígenas** | ✅ **feita** | WFS aberto `geoserver.funai.gov.br` | 665 terras; `count` obrigatório (403 sem ele); intermediária TLS em `dwlib/certs/` |
+    | **DETER (INPE), Amazônia e Cerrado** | ✅ | WFS do TerraBrasilis (mesmo servidor do PRODES): `deter-amz:deter_amz` (464 mil), `deter-cerrado-nb:deter_cerrado` (135 mil) | atualização diária; só esses dois biomas no WFS |
+    | **IBAMA, embargos** | ✅ (com cuidado) | CKAN `dadosabertos.ibama.gov.br` → CSV no armazenamento do IBAMA (`termo_de_embargo.csv` 210 MB, coluna `GEOM_AREA_EMBARGADA`; `..._coordenadas.csv` com vértices), atualizado diariamente | traz nome e CPF/CNPJ de embargados (dado pessoal: decidir o que guardar); o SHP-ZIP anunciado no CKAN dá 404 hoje |
+    | **MMA, áreas prioritárias para conservação** | ✅ | CKAN `dados.mma.gov.br`: 7 zips de shapefile por bioma (edição 2022) | base estática, carga única automatizada |
+    | **MMA, unidades de conservação (CNUC)** | ⚠️ parcial | CKAN: shapefile direto só até `2025_08`; as edições de 2026 (03 e 07) estão em links do SharePoint (com token, instáveis); CSV de 2026_07 direto, sem geometria | decidir: usar 2025_08 (13 meses defasado) ou esperar o CKAN |
+    | **SFB, Cadastro Nacional de Florestas Públicas** | ✅ | item público do portal ArcGIS (`mapas.florestal.gov.br`, Shapefile 2025, zip público) + CSV no CKAN `dados.florestal.gov.br` | edições anuais (2025 publicada em 07/2026) |
+    | **ANA, Base Hidrográfica (BHO 2017)** | ✅ | geonetwork do SNIRH: GPKG direto por camada (`metadados.snirh.gov.br/files/<id>/...gpkg`), uns 3 GB | base estática (2017) |
+    | **IBGE, geologia, geomorfologia, pedologia, vegetação** | ✅ | `geoftp.ibge.gov.br/informacoes_ambientais/` (listagem de diretórios) | edições estáticas; carga única |
+    | **IBGE, base de indígenas e quilombolas (2019)** | ✅ | `geoftp.ibge.gov.br/organizacao_do_territorio/tipologias_do_territorio/...` | é a base do IBGE, **não a do INCRA**: não substitui o INCRA |
+    | **MapBiomas, uso do solo (rasters)** | ✅ | bucket público do Google Cloud `mapbiomas-public` (`initiatives/brasil/collection11/lulc/coverage` e `transition`) | cobre a lacuna "sem script" dos rasters |
+    | **INCRA (assentamentos, quilombolas, SIGEF/SNCI)** | ❌ **bloqueado** | `acervofundiario.incra.gov.br` segue fora do DNS; SIGEF exige gov.br prata/ouro | ver item 11; alternativa parcial para quilombolas: base do IBGE |
+    Ainda **não pesquisados**: ICMBio (embargos), ANM (mineração), SPU, lista suja do trabalho escravo, ZEE estaduais.
