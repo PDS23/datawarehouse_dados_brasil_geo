@@ -831,7 +831,7 @@ erDiagram
     | Fonte | Automatizável? | Canal verificado | Observações |
     |---|---|---|---|
     | **FUNAI, terras indígenas** | ✅ **feita** | WFS aberto `geoserver.funai.gov.br` | 665 terras; `count` obrigatório (403 sem ele); intermediária TLS em `dwlib/certs/` |
-    | **DETER (INPE), Amazônia e Cerrado** | ✅ | WFS do TerraBrasilis (mesmo servidor do PRODES): `deter-amz:deter_amz` (464 mil), `deter-cerrado-nb:deter_cerrado` (135 mil) | atualização diária; só esses dois biomas no WFS |
+    | **DETER (INPE), Amazônia e Cerrado** | ✅ **feito 2026-10-25** | `vetorial.deter_alertas` (599.537 linhas, espelho versionado), `deter/alertas/`; SHAPE-ZIP por mês de publicação | o `gid` da fonte não é único: chave composta (`chave_linha`); falta decidir se entra na atualização agendada |
     | **IBAMA, embargos** | ✅ (com cuidado) | CKAN `dadosabertos.ibama.gov.br` → CSV no armazenamento do IBAMA (`termo_de_embargo.csv` 210 MB, coluna `GEOM_AREA_EMBARGADA`; `..._coordenadas.csv` com vértices), atualizado diariamente | traz nome e CPF/CNPJ de embargados (dado pessoal: decidir o que guardar); o SHP-ZIP anunciado no CKAN dá 404 hoje |
     | **MMA, áreas prioritárias para conservação** | ✅ | CKAN `dados.mma.gov.br`: 7 zips de shapefile por bioma (edição 2022) | base estática, carga única automatizada |
     | **MMA, unidades de conservação (CNUC)** | ⚠️ parcial | CKAN: shapefile direto só até `2025_08`; as edições de 2026 (03 e 07) estão em links do SharePoint (com token, instáveis); CSV de 2026_07 direto, sem geometria | decidir: usar 2025_08 (13 meses defasado) ou esperar o CKAN |

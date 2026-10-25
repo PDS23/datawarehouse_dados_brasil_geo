@@ -1,0 +1,25 @@
+# Pipeline do DETER (alertas de desmatamento quase em tempo real, INPE/TerraBrasilis). Configuracao versionada.
+# Fonte: servidor de mapas do TerraBrasilis (WFS aberto, sem login), o mesmo do PRODES. So Amazonia e Cerrado tem DETER publicado ali.
+fonte: INPE/TerraBrasilis          # nome exato em dim.fontes
+url_wfs: "https://terrabrasilis.dpi.inpe.br/geoserver/ows"
+destino_padrao: vetorial.deter_alertas
+
+# Uma camada por bioma. O gid e unico DENTRO da camada (os dois biomas repetem valores): a chave da feicao e (id_bioma, gid).
+biomas:
+  amazonia:
+    id_bioma: 1
+    camada: "deter-amz:deter_amz"
+  cerrado:
+    id_bioma: 3
+    camada: "deter-cerrado-nb:deter_cerrado"
+
+# O SHAPE-ZIP do servidor traz a precisao COMPLETA das coordenadas (GeoJSON e GML cortam em 4 casas, ~10 m), mas com os nomes dos
+# campos truncados em 10 letras (mapa em CAMPO_SHP no script). A camada e fatiada por mes de publicacao (publish_month).
+paralelo_padrao: 4                 # fatias baixadas ao mesmo tempo
+paralelo_maximo: 6
+tolerancia_coleta: 0.001           # baixou menos que (1 - isto) do anunciado: nao grava (a camada muda ao vivo: DETER e diario)
+max_queda: 0.10                    # mais que isso de alertas vigentes ausentes: nao grava (--aceitar-queda libera)
+srid_gravado: 4674                 # SIRGAS 2000 (srsName=EPSG:4674 devolve longitude/latitude)
+# Conferencia: caixa do Brasil (lon/lat). Alerta com a caixa fora dela (ou sem geometria) entra com geom NULL e o texto original.
+caixa_brasil: {lon_min: -75.0, lon_max: -28.0, lat_min: -35.0, lat_max: 6.0}
+licenca: "Dados abertos do INPE/TerraBrasilis; confirmar os termos antes de redistribuir"

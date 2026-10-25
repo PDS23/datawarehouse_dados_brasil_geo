@@ -5,7 +5,7 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 78,
+   "linhas": 85,
    "bytes": 90112,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
@@ -100,8 +100,8 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 46,
-   "bytes": 90112,
+   "linhas": 77,
+   "bytes": 98304,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
     {
@@ -230,8 +230,8 @@
    "sch": "catalogo",
    "nome": "coletas_duplicados",
    "view": false,
-   "linhas": 10,
-   "bytes": 49152,
+   "linhas": 40,
+   "bytes": 90112,
    "coment": "cod_imovel repetido no WFS do CAR: a feicao mantida e a descartada de cada coleta, com a regra aplicada.",
    "cols": [
     {
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 16,
+   "linhas": 17,
    "bytes": 32768,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,8 +448,8 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 95,
-   "bytes": 65536,
+   "linhas": 122,
+   "bytes": 73728,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
     {
@@ -1936,6 +1936,227 @@
    ]
   },
   {
+   "id": "vetorial.deter_alertas",
+   "sch": "vetorial",
+   "nome": "deter_alertas",
+   "view": false,
+   "linhas": 599537,
+   "bytes": 719822848,
+   "coment": "DETER (INPE): alertas de desmatamento e degradação quase em tempo real, Amazônia e Cerrado, do servidor de mapas do TerraBrasilis. Espelho versionado: vigente = vigente_ate IS NULL. É um sistema de alerta, não o dado oficial de desmatamento (PRODES). Ver deter/alertas/LEIAME_deter_alertas.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "id_bioma",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Bioma da camada de origem (1 Amazônia, 3 Cerrado)."
+    },
+    {
+     "n": "gid",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Identificador que o INPE dá à linha (sufixo _hist = histórico consolidado, _curr = mês corrente). NÃO é único: repete entre os municípios que um polígono cruza e é reutilizado por alertas diferentes."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: município | data da imagem | classe | área no município. Com id_bioma e gid identifica a linha, porque a fonte não traz identificador único."
+    },
+    {
+     "n": "classname",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Classe do alerta (DESMATAMENTO_CR, DESMATAMENTO_VEG, MINERACAO, CICATRIZ_DE_QUEIMADA, CS_DESORDENADO...)."
+    },
+    {
+     "n": "quadrant",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Quadrante da cena, quando houver."
+    },
+    {
+     "n": "path_row",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Órbita/ponto da cena do satélite."
+    },
+    {
+     "n": "view_date",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data da imagem em que o alerta foi visto."
+    },
+    {
+     "n": "created_date",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data de criação do alerta (só Cerrado)."
+    },
+    {
+     "n": "sensor",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sensor que detectou (AWFI, WFI...)."
+    },
+    {
+     "n": "satellite",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Satélite (CBERS-4, AMAZONIA-1...)."
+    },
+    {
+     "n": "areatotalkm",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Área total do polígono em km² (só Cerrado)."
+    },
+    {
+     "n": "areauckm",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Área em km² dentro de unidade de conservação."
+    },
+    {
+     "n": "uc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Unidade de conservação atingida, quando houver."
+    },
+    {
+     "n": "areamunkm",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Área em km² dentro do município da linha."
+    },
+    {
+     "n": "municipality",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Município como o INPE escreve."
+    },
+    {
+     "n": "mun_geocod",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código IBGE do município (só Amazônia)."
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sigla da UF como o INPE entrega."
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF, derivada de uf (dim.estados)."
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Município (dim.municipios), derivado de mun_geocod; NULL no Cerrado, onde a fonte só traz o nome."
+    },
+    {
+     "n": "publish_month",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Mês de publicação do alerta (dia 1)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "true = a fonte entregou a geometria fora do Brasil ou vazia; o original está em geom_origem_texto."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria original da fonte em texto, guardada só quando geom_anomala é true."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.funai_terras_indigenas",
    "sch": "vetorial",
    "nome": "funai_terras_indigenas",
@@ -2895,8 +3116,8 @@
    "sch": "vetorial",
    "nome": "sicar_imoveis",
    "view": false,
-   "linhas": 8547089,
-   "bytes": 8371363840,
+   "linhas": 8775363,
+   "bytes": 8652595200,
    "coment": "Imóveis do SICAR (CAR), coletados do WFS público do CAR, cancelados inclusive. Espelho versionado: vigente = vigente_ate IS NULL. Ver sicar/imoveis/LEIAME_sicar_imoveis.md.",
    "cols": [
     {
@@ -3202,6 +3423,24 @@
   },
   {
    "de": "dim.municipios",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.deter_alertas",
+   "col": "id_bioma",
+   "para": "dim.biomas",
+   "colpara": "id_bioma"
+  },
+  {
+   "de": "vetorial.deter_alertas",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "vetorial.deter_alertas",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"

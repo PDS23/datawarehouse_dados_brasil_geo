@@ -1,4 +1,4 @@
-# Atualizacao periodica das fontes vivas do data warehouse (decidida em 2026-10-23: a cada 15 dias; ver ROADMAP, item 13).
+﻿# Atualizacao periodica das fontes vivas do data warehouse (decidida em 2026-10-23: a cada 15 dias; ver ROADMAP, item 13).
 #
 # Roda em sequencia (decidido em 2026-10-23: backup antes e depois):
 #   0. BACKUP ANTES (backup_banco.ps1, so local). Se falhar, NADA e atualizado.
@@ -86,6 +86,7 @@ try {
         $inicio = Get-Date
         $extra = @{ Manter = 6 }                      # hashtable: parametros NOMEADOS (uma lista viraria argumentos posicionais)
         if ($drive) { $extra.CopiarDrive = $true }
+        if ($rotulo -eq "antes") { $extra.PularSeRecenteHoras = 24 }   # ja existe backup completo de menos de 24 h (ex.: o de 00:10)? reaproveita
         & $Backup @extra 2>&1 | ForEach-Object { Escrever ("    " + $_) }
         $codigo = $LASTEXITCODE
         $min = [math]::Round(((Get-Date) - $inicio).TotalMinutes, 1)
@@ -93,12 +94,12 @@ try {
         if ($codigo -eq 2) { Escrever "AVISO: backup $rotulo local ok, copia para o Drive falhou ($min min)"; $script:falhas += "Backup $rotulo (copia Drive)" }
         elseif ($codigo -ne 0) { Escrever "FALHOU: Backup $rotulo (codigo $codigo, $min min)"; $script:falhas += "Backup $rotulo" }
         else { Escrever "ok: Backup $rotulo ($min min)" }
-        return $codigo
+        $script:codigoBackup = $codigo                # variavel de script: `return` misturaria a saida de Escrever com o codigo
     }
 
     if ($fazerBackup) {
-        $c = Fazer-Backup "antes" $false
-        if ($c -ne 0 -and $c -ne 2) {
+        Fazer-Backup "antes" $false
+        if ($codigoBackup -ne 0 -and $codigoBackup -ne 2) {
             Escrever "=== ABORTADO: sem o backup de antes nada e atualizado. RESULTADO: FALHAS em: $($falhas -join ', ') ==="
             exit 1
         }
@@ -113,7 +114,7 @@ try {
         Passo "Retencao de versoes fechadas" (@("etl", "infra/scripts/limpar_versoes_fechadas.py") + $apagar)
     }
 
-    if ($fazerBackup) { [void](Fazer-Backup "depois" (-not $SemDrive)) }
+    if ($fazerBackup) { Fazer-Backup "depois" (-not $SemDrive) }
 
     Escrever "--- ultimas cargas registradas"
     & $Dw status 2>&1 | ForEach-Object { Escrever ("    " + $_) }
