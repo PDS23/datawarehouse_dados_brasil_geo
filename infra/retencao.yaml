@@ -34,3 +34,5 @@ tabelas:
       - {tabela: resultados.desmatamento_imovel_controle, coluna: id_imovel_sicar}   # por ultimo: referencia a mesma versao
   - tabela: vetorial.funai_terras_indigenas
     chave: [terrai_codigo]
+  - tabela: vetorial.deter_alertas
+    chave: [id_bioma, gid, chave_linha]

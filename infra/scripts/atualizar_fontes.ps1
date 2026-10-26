@@ -1,11 +1,12 @@
 ﻿# Atualizacao periodica das fontes vivas do data warehouse (decidida em 2026-10-23: a cada 15 dias; ver ROADMAP, item 13).
 #
 # Roda em sequencia (decidido em 2026-10-23: backup antes e depois):
-#   0. BACKUP ANTES (backup_banco.ps1, so local). Se falhar, NADA e atualizado.
+#   0. BACKUP ANTES (backup_banco.ps1, so local), SALVO se ja existe backup completo de menos de 24 h (reaproveita, ex.: o das 00:10). Se falhar, NADA e atualizado.
 #   cada fonte roda no conteiner etl (infra/scripts/dw.ps1 etl ...):
 #   1. PRODES        (so baixa e grava o bioma cuja edicao do INPE mudou; os demais sao pulados)
 #   2. MapBiomas Alerta
 #   2b. FUNAI (terras indigenas, ~10 s)
+#   2c. DETER (alertas do INPE, Amazonia e Cerrado, ~8 min na primeira carga; depois so as mudancas)
 #   3. SICAR         (as 27 UFs; ~25 min com o PC ligado)
 #   4. retencao      (apaga as versoes fechadas alem do prazo de infra/retencao.yaml; trava de 20% por tabela)
 #   5. BACKUP DEPOIS (backup_banco.ps1 com copia para o Drive). Como acontece no domingo, o backup agendado das 03:00 (DW-Backup-Domingo-3h)
@@ -20,10 +21,10 @@
 # Uso:
 #   .\infra\scripts\atualizar_fontes.ps1                 # tudo, de verdade (e o que a tarefa agendada roda)
 #   .\infra\scripts\atualizar_fontes.ps1 -Simular        # pipelines com --simular e retencao so em relatorio
-#   .\infra\scripts\atualizar_fontes.ps1 -Fontes prodes,mapbiomas   # so algumas (prodes, mapbiomas, funai, sicar, retencao)
+#   .\infra\scripts\atualizar_fontes.ps1 -Fontes prodes,mapbiomas   # so algumas (prodes, mapbiomas, funai, deter, sicar, retencao)
 # Log: infra\logs\atualizacao_AAAAMMDD-HHMMSS.log
 param(
-    [string[]]$Fontes = @("prodes", "mapbiomas", "funai", "sicar", "retencao"),
+    [string[]]$Fontes = @("prodes", "mapbiomas", "funai", "deter", "sicar", "retencao"),
     [switch]$Simular,
     [switch]$SemBackup,         # para testes: nao faz os backups
     [switch]$SemDrive           # para testes: o backup de depois nao copia para o Drive
@@ -108,6 +109,7 @@ try {
     if ($Fontes -contains "prodes")    { Passo "PRODES"            (@("etl", "prodes/desmatamento/scripts/prodes_desmatamento.py") + $sim) }
     if ($Fontes -contains "mapbiomas") { Passo "MapBiomas Alerta" (@("etl", "mapbiomas/alerta/scripts/mapbiomas_alerta.py") + $sim) }
     if ($Fontes -contains "funai")     { Passo "FUNAI (terras indigenas)" (@("etl", "funai/terras_indigenas/scripts/terras_indigenas.py") + $sim) }
+    if ($Fontes -contains "deter")     { Passo "DETER (alertas)" (@("etl", "deter/alertas/scripts/deter_alertas.py") + $sim) }
     if ($Fontes -contains "sicar")     { Passo "SICAR"             (@("etl", "sicar/imoveis/scripts/atualizar_imoveis_sicar.py", "--ufs", $UFs) + $sim) }
     if ($Fontes -contains "retencao") {
         $apagar = if ($Simular) { @() } else { @("--apagar") }

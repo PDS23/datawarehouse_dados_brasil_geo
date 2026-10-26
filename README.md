@@ -13,6 +13,7 @@ Um data warehouse geoespacial em **PostgreSQL 18 + PostGIS 3.6**, alimentado por
 | SICAR (Cadastro Ambiental Rural) | `vetorial.sicar_imoveis` | 8,5 milhões de imóveis, 27 UFs | espelho versionado, atualizado do WFS público do CAR |
 | PRODES (INPE) | `vetorial.prodes_desmatamento` | 6,9 milhões de polígonos, 6 biomas | espelho versionado, por edição publicada no TerraBrasilis |
 | MapBiomas Alerta | `vetorial.mapbiomas_alerta` | 543 mil alertas de desmatamento (2018 a 2026) | espelho versionado, WFS aberto do MapBiomas |
+| DETER (INPE) | `vetorial.deter_alertas` | 600 mil alertas de desmatamento, Amazônia e Cerrado (2016 a 2026) | espelho versionado, WFS aberto do TerraBrasilis |
 | FUNAI (terras indígenas) | `vetorial.funai_terras_indigenas` | 665 terras, 117 milhões de ha | espelho versionado, WFS aberto da FUNAI |
 | IBGE (malhas, domínios naturais) | `dim.municipios`, `dim.estados`, `dim.biomas`, `vetorial.ibge_*` | 5.573 municípios, 27 UFs | carga por script |
 | IBGE/SIDRA (Censo Agropecuário, PAM) | `tabular.sidra_valor` (camada genérica), `tabular.ibge_pam` | por demanda | **sob demanda**, por tabela e recorte |

@@ -808,9 +808,9 @@ erDiagram
 13. **Frequência de atualização periódica (SICAR, PRODES, MapBiomas Alerta...)** — ✅ **agendada em 2026-10-23.**
     Tarefa do Windows "DW - Atualizacao das fontes": **domingo às 00:10, a cada 2 semanas** (14 dias: o mais próximo de "15 em 15" que cabe
     num domingo fixo; primeira execução em 2026-10-25), com o usuário logado e o Docker ligado (se o PC estiver desligado, roda ao ligar).
-    Roda `infra/scripts/atualizar_fontes.ps1`: **backup antes** (local; se falhar, nada é atualizado), PRODES (só biomas com edição nova), MapBiomas
-    Alerta, SICAR (27 UFs), a **retenção com `--apagar`** e **backup depois** (com cópia para o Drive). O backup agendado de domingo às 03:00
-    (`DW-Backup-Domingo-3h`) passou a usar `-PularSeRecenteHoras 6` e não duplica nos domingos de atualização. A retenção (30 dias nos dois prazos, `infra/retencao.yaml`; trava de 20% por tabela). Falha de uma fonte não derruba as outras:
+    Roda `infra/scripts/atualizar_fontes.ps1`: **backup antes** (local; reaproveita um backup completo de menos de 24 h, como o das 00:10; se falhar, nada é atualizado), PRODES (só biomas com edição nova), MapBiomas
+    Alerta, FUNAI, DETER (incluído em 2026-10-26), SICAR (27 UFs), a **retenção com `--apagar`** e **backup depois** (com cópia para o Drive). O backup agendado de domingo às 03:00
+    (`DW-Backup-Domingo-3h`) passou a usar `-PularSeRecenteHoras 6` e não duplica nos domingos de atualização. (Correção de 2026-10-25: a primeira execução abortou por um bug no retorno da função de backup.) A retenção (30 dias nos dois prazos, `infra/retencao.yaml`; trava de 20% por tabela). Falha de uma fonte não derruba as outras:
     fica em `catalogo.cargas` e em `infra/logs/`. **SIDRA continua só sob demanda; INCRA (assentamentos e SIGEF) entra quando o servidor
     do Acervo Fundiário voltar** (item 11). Criar/alterar/remover a tarefa: `infra/scripts/registrar_tarefa_atualizacao.ps1` (`-Remover`).
     Não usa `--aceitar-queda`: fonte que entregar muito menos que o banco não é gravada e aparece como falha para conferência.
@@ -831,7 +831,7 @@ erDiagram
     | Fonte | Automatizável? | Canal verificado | Observações |
     |---|---|---|---|
     | **FUNAI, terras indígenas** | ✅ **feita** | WFS aberto `geoserver.funai.gov.br` | 665 terras; `count` obrigatório (403 sem ele); intermediária TLS em `dwlib/certs/` |
-    | **DETER (INPE), Amazônia e Cerrado** | ✅ **feito 2026-10-25** | `vetorial.deter_alertas` (599.537 linhas, espelho versionado), `deter/alertas/`; SHAPE-ZIP por mês de publicação | o `gid` da fonte não é único: chave composta (`chave_linha`); falta decidir se entra na atualização agendada |
+    | **DETER (INPE), Amazônia e Cerrado** | ✅ **feito 2026-10-25** | `vetorial.deter_alertas` (599.537 linhas, espelho versionado), `deter/alertas/`; SHAPE-ZIP por mês de publicação | o `gid` da fonte não é único: chave composta (`chave_linha`); entra na atualização agendada (decidido em 2026-10-26) |
     | **IBAMA, embargos** | ✅ (com cuidado) | CKAN `dadosabertos.ibama.gov.br` → CSV no armazenamento do IBAMA (`termo_de_embargo.csv` 210 MB, coluna `GEOM_AREA_EMBARGADA`; `..._coordenadas.csv` com vértices), atualizado diariamente | traz nome e CPF/CNPJ de embargados (dado pessoal: decidir o que guardar); o SHP-ZIP anunciado no CKAN dá 404 hoje |
     | **MMA, áreas prioritárias para conservação** | ✅ | CKAN `dados.mma.gov.br`: 7 zips de shapefile por bioma (edição 2022) | base estática, carga única automatizada |
     | **MMA, unidades de conservação (CNUC)** | ⚠️ parcial | CKAN: shapefile direto só até `2025_08`; as edições de 2026 (03 e 07) estão em links do SharePoint (com token, instáveis); CSV de 2026_07 direto, sem geometria | decidir: usar 2025_08 (13 meses defasado) ou esperar o CKAN |
