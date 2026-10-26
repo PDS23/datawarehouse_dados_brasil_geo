@@ -3,6 +3,9 @@
 **/.env
 !**/.env.example
 
+# Chaves geradas pelos pipelines (ex.: chave do hash de CPF dos embargos do IBAMA)
+**/segredo/
+
 # Dado bruto coletado pelos pipelines e baixado das fontes (reproduzível: rode o pipeline)
 **/bruto/
 _dump/

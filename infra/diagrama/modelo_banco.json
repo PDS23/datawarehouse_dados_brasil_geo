@@ -5,7 +5,7 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 85,
+   "linhas": 86,
    "bytes": 90112,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
@@ -100,7 +100,7 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 77,
+   "linhas": 78,
    "bytes": 98304,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 17,
+   "linhas": 18,
    "bytes": 32768,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,8 +448,8 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 122,
-   "bytes": 73728,
+   "linhas": 189,
+   "bytes": 98304,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
     {
@@ -903,7 +903,7 @@
    "sch": "dim",
    "nome": "fontes",
    "view": false,
-   "linhas": 6,
+   "linhas": 7,
    "bytes": 49152,
    "coment": "Órgãos e sistemas de onde vêm os dados. Quase toda tabela aponta para cá por id_fonte.",
    "cols": [
@@ -2357,6 +2357,486 @@
    ]
   },
   {
+   "id": "vetorial.ibama_embargos",
+   "sch": "vetorial",
+   "nome": "ibama_embargos",
+   "view": false,
+   "linhas": 116944,
+   "bytes": 221675520,
+   "coment": "Termos de embargo do IBAMA, do CSV dos dados abertos (regerado todo dia). Espelho versionado: vigente = vigente_ate IS NULL. Traz o nome do embargado e o CNPJ como o IBAMA publica; o CPF de pessoa física só como hash. Ver ibama/embargos/LEIAME_embargos.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_tad",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: número do termo | série | sequência (NUM_TAD, SER_TAD, SEQ_TAD). A fonte não tem identificador único; os três juntos são únicos."
+    },
+    {
+     "n": "seq_tad",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Sequência interna do termo no IBAMA (vazia em cerca de 3 mil termos)."
+    },
+    {
+     "n": "des_status_formulario",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Situação do termo: Lavrado, Cancelado, Excluído, Substituído por outro."
+    },
+    {
+     "n": "des_status_formulario_aie",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sit_cancelado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "S/N: termo cancelado."
+    },
+    {
+     "n": "num_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do termo de embargo (texto: há números alfanuméricos)."
+    },
+    {
+     "n": "ser_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Série do termo."
+    },
+    {
+     "n": "cod_substituicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dat_embargo",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": "Data e hora do embargo, sem fuso. Há erros de digitação na fonte (ex.: 2925): veja data_embargo_suspeita."
+    },
+    {
+     "n": "dat_impressao",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "forma_entrega",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_pessoa_embargo",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Código interno do IBAMA para a pessoa embargada; permite contar embargos por pessoa."
+    },
+    {
+     "n": "nome_embargado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome do embargado, como o IBAMA publica."
+    },
+    {
+     "n": "cpf_cnpj_embargado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "CNPJ do embargado (e outros documentos que não são CPF). O CPF de pessoa física NÃO é guardado aqui: veja cpf_embargado_hash."
+    },
+    {
+     "n": "tipo_doc_embargado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: CPF (11 dígitos), CNPJ (14) ou OUTRO; vazio se a fonte não traz o documento."
+    },
+    {
+     "n": "cpf_embargado_hash",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: HMAC-SHA256 do CPF de 11 dígitos, com chave secreta fora do banco. Permite contar embargos por pessoa sem expor o número."
+    },
+    {
+     "n": "num_processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "des_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Texto do termo de embargo."
+    },
+    {
+     "n": "cod_municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código IBGE do município, como o IBAMA entrega."
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Município, como o IBAMA escreve."
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sigla da UF."
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF (dim.estados), derivada de uf."
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Município (dim.municipios), derivado de cod_municipio; vazio se não casar."
+    },
+    {
+     "n": "des_localizacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Descrição da localização (linha, km, propriedade...)."
+    },
+    {
+     "n": "num_longitude_tad",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Longitude do ponto do termo (cerca de 15% vêm vazias)."
+    },
+    {
+     "n": "num_latitude_tad",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Latitude do ponto do termo."
+    },
+    {
+     "n": "deter_prodes",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Deter ou Prodes: o embargo foi ligado a um polígono de desmatamento desse sistema."
+    },
+    {
+     "n": "id_poligono",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador do polígono DETER/PRODES ligado ao embargo."
+    },
+    {
+     "n": "embarga_poligono",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "qtd_area_embargada",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área embargada em hectares."
+    },
+    {
+     "n": "nome_imovel",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "tipo_area",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Tipo da área: Desmatamento, Atividade, Queimada, Outros..."
+    },
+    {
+     "n": "dat_ult_alter_geom",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "unid_apresentacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "unid_controle",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sit_desembargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "S = o embargo foi levantado (desembargo)."
+    },
+    {
+     "n": "tipo_desembargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Administrativo ou Judicial."
+    },
+    {
+     "n": "dat_desembargo",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": "Data do desembargo."
+    },
+    {
+     "n": "des_desembargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "seq_auto_infracao",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_auto_infracao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do auto de infração que originou o embargo."
+    },
+    {
+     "n": "seq_notificacao",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "seq_acao_fiscalizatoria",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_acao_fiscalizatoria",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "operacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "seq_ordem_fiscalizacao",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ordem_fiscalizacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da ordem de fiscalização."
+    },
+    {
+     "n": "unid_ordenadora",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "seq_solicitacao_recurso",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "solicitacao_recurso",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "operacao_sol_recurso",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dat_ult_alteracao",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "tipo_alteracao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "justificativa_alteracao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ultima_atualizacao_relatorio",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": "Hora em que o IBAMA gerou o CSV (igual em todas as linhas, muda todo dia); não entra na comparação."
+    },
+    {
+     "n": "data_embargo_suspeita",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: true se dat_embargo está no futuro ou antes de 1989 (erro de digitação na fonte). O valor não é corrigido."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono da área embargada (WKT do IBAMA, tratado como SIRGAS 2000). Só cerca de 51% dos termos têm polígono."
+    },
+    {
+     "n": "geom_ponto",
+     "t": "geometry(Point,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: ponto da latitude/longitude do termo."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "true = a fonte entregou a geometria fora do Brasil ou vazia; o original está em geom_origem_texto."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria original da fonte em texto, guardada só quando geom_anomala é true."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.ibge_dominios_naturais",
    "sch": "vetorial",
    "nome": "ibge_dominios_naturais",
@@ -3441,6 +3921,18 @@
   },
   {
    "de": "vetorial.deter_alertas",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ibama_embargos",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "vetorial.ibama_embargos",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"

@@ -1,0 +1,22 @@
+# Pipeline dos termos de embargo do IBAMA. Configuracao versionada.
+# Fonte: portal de dados abertos do IBAMA (CKAN, pacote "fiscalizacao-termo-de-embargo"); o CSV fica no armazenamento publico do IBAMA e e
+# regerado todos os dias. Sem login.
+fonte: IBAMA                       # nome exato em dim.fontes
+url_csv: "https://stibamadadosabertosprd.blob.core.windows.net/dados-abertos/dados/TERMOS_DE_EMBARGO/TERMO_EMBARGO/termo_de_embargo.csv"
+url_catalogo: "https://dadosabertos.ibama.gov.br/dataset/fiscalizacao-termo-de-embargo"
+destino_padrao: vetorial.ibama_embargos
+srid_gravado: 4674                 # o IBAMA nao declara o CRS do WKT; tratamos como SIRGAS 2000 (as coordenadas caem no Brasil; ver LEIAME)
+
+delimitador: ";"
+tamanho_minimo_bytes: 100000000    # o arquivo tem ~210 MB; menos que isto = download truncado ou arquivo trocado: nao grava
+linhas_minimas: 100000             # idem (hoje ~117 mil linhas)
+ano_embargo_minimo: 1989           # o IBAMA foi criado em 1989: DAT_EMBARGO antes disso (ou depois de hoje) e marcada em data_embargo_suspeita
+
+max_queda: 0.10                    # mais que isso de embargos vigentes ausentes numa coleta: nao grava (--aceitar-queda libera)
+# Conferencia: caixa do Brasil (lon/lat). Poligono com a caixa fora dela entra com geom NULL e o texto original (geom_anomala).
+caixa_brasil: {lon_min: -75.0, lon_max: -28.0, lat_min: -35.0, lat_max: 6.0}
+
+# Dado pessoal (decisao do usuario, 2026-10-26, opcao 1): tudo entra como a fonte publica, EXCETO o CPF de pessoa fisica (11 digitos), que
+# vai so como hash HMAC-SHA256 (cpf_embargado_hash). CNPJ e nome entram como vem. A chave do HMAC fica fora do git e do Drive.
+arquivo_chave_hash: "segredo/chave_hash_cpf.key"      # relativo a esta pasta; criada na primeira carga; variavel DW_CHAVE_HASH_CPF tem prioridade
+licenca: "Dados abertos do IBAMA; confirmar os termos de uso antes de redistribuir"

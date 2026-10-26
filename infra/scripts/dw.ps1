@@ -79,7 +79,7 @@ switch ($Comando) {
     }
     "sync-drive" {
         # Copia (nunca apaga no destino) so codigo e documentacao. Fora: dados brutos/processados, segredos, caches, dumps.
-        $semPastas = @("bruto", "processado", "__pycache__", ".git", "_dump", "dw_dump", "node_modules", ".venv")
+        $semPastas = @("bruto", "processado", "segredo", "__pycache__", ".git", "_dump", "dw_dump", "node_modules", ".venv")
         $semArquivos = @(".env", "*.pyc", "*.gpkg", "*.zip", "*.tif", "*.tiff", "*.shp", "*.dbf", "*.shx", "*.prj", "*.cpg", "*.sbn", "*.sbx",
                          "*.parquet", "*.dump", "*.backup", "*.log")
         $opcoes = @("/E", "/XD") + $semPastas + @("/XF") + $semArquivos + @("/R:1", "/W:1", "/NFL", "/NDL", "/NP", "/NJH")

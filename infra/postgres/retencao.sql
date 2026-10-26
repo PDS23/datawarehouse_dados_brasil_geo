@@ -6,7 +6,7 @@
 DO $$
 DECLARE t text;
 BEGIN
-  FOREACH t IN ARRAY ARRAY['vetorial.prodes_desmatamento', 'vetorial.sicar_imoveis', 'vetorial.mapbiomas_alerta', 'vetorial.funai_terras_indigenas', 'vetorial.deter_alertas', 'resultados.prodes_municipio',
+  FOREACH t IN ARRAY ARRAY['vetorial.prodes_desmatamento', 'vetorial.sicar_imoveis', 'vetorial.mapbiomas_alerta', 'vetorial.funai_terras_indigenas', 'vetorial.deter_alertas', 'vetorial.ibama_embargos', 'resultados.prodes_municipio',
                            'resultados.desmatamento_imovel', 'resultados.desmatamento_imovel_controle'] LOOP
     IF to_regclass(t) IS NOT NULL THEN
       EXECUTE format('GRANT SELECT, DELETE ON %s TO etl', t);
