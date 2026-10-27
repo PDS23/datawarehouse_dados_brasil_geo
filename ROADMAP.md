@@ -1,6 +1,33 @@
 # Roadmap — Data Warehouse GIS Brasil
 
-Última atualização: 2026-10-23 (itens 11 a 14 em "Próximos passos": SIGEF, camada genérica do SIDRA, frequência de atualização, monitor de fontes)
+Última atualização: 2026-10-27 (resumo do estado atual abaixo; itens 15 e 16 de "Próximos passos": fontes novas e preparação do banco para a pré-análise de legalidade)
+
+## Estado em 2026-10-27 (resumo)
+
+**O que está no banco** (PostgreSQL 18 + PostGIS 3.6 em Docker, `dw-postgis`; GeoServer `dw-geoserver`; Tailscale `dw-tailscale`). Tudo em SIRGAS 2000 (4674), versão vigente = `vigente_ate IS NULL`:
+
+| Fonte | Tabela | Vigentes | Como atualiza |
+|---|---|---|---|
+| INPE, PRODES (6 biomas) | `vetorial.prodes_desmatamento` | 6.936.963 | agendada (só biomas com edição nova) |
+| SICAR, imóveis rurais (27 UFs) | `vetorial.sicar_imoveis` | 8.551.530 | agendada |
+| MapBiomas Alerta | `vetorial.mapbiomas_alerta` | 543.378 | agendada |
+| INPE, DETER (Amazônia e Cerrado) | `vetorial.deter_alertas` | 599.537 | agendada |
+| FUNAI, terras indígenas | `vetorial.funai_terras_indigenas` | 665 | agendada |
+| IBAMA, termos de embargo | `vetorial.ibama_embargos` | 116.944 | agendada (desde 27/10); CPF só como hash |
+| MMA, unidades de conservação (CNUC) | `vetorial.mma_unidades_conservacao` | 3.576 | **manual autorizada** (zip em `bruto/`); `--verificar` |
+| SFB, florestas públicas (CNFP) | `vetorial.sfb_florestas_publicas` | 12.874 | automática, sob demanda (1 edição por ano) |
+| INCRA, assentamentos | `vetorial.incra_assentamentos` | 7.525 | fonte fora do ar (item 11); carga antiga |
+| IBGE, domínios e regiões naturais | `vetorial.ibge_dominios_naturais`, `ibge_regioes_naturais` | 52 e 271 | carga única |
+| IBGE/SIDRA (Censo Agropecuário 2017, PAM, próximas) | `tabular.sidra_valor` (+ `dim.sidra_*`), `tabular.ibge_pam` | — | só sob demanda |
+| IBGE, malha (estados, municípios), biomas | `dim.estados`, `dim.municipios`, `dim.biomas` | — | carga única |
+
+Rasters (fora do banco, em arquivo/COG, servidos pelo GeoServer): MapBiomas uso do solo 1985/2008/2015/2025 e TOPODATA (declividade RS+SC), 8 arquivos, 11,7 GB.
+
+**Operação:** atualização agendada (domingos alternados, 00:10) com backup antes (reaproveitado se tiver menos de 24 h) e depois, retenção de 30 dias; backup semanal de domingo 03:00;
+diagrama do banco publicado como artefato (versão 10); repositório público no GitHub sincronizado; guia de uso em [GUIA_DE_USO.md](GUIA_DE_USO.md).
+
+**Pendências principais:** (1) preparar o banco para a pré-análise de legalidade EUDR (item 16: faltam ICMBio, SEMA-MT, MTE e a consulta por CPF/CNPJ); (2) INCRA (assentamentos, quilombolas, SIGEF) depende do servidor voltar (item 11);
+(3) MinIO e catálogo de rasters (ver "Caminho 1"); (4) monitor de fontes (item 14); (5) política do Tailscale e acesso dos analistas ao PostGIS (seção "Migração"); (6) fontes novas do item 15 ainda não carregadas (áreas prioritárias do MMA, ANA BHO, IBGE ambientais, MapBiomas rasters automatizados).
 
 ## Objetivo
 
@@ -35,25 +62,22 @@ ideia é o data warehouse crescer continuamente conforme a demanda de
 processamento pedir, então a estrutura (pastas, schema do PostGIS, catálogo)
 precisa ser pensada **desde já** pra escalar, não só pro que já temos.
 
-Camadas já previstas pra entrar (lista não-exaustiva, vai crescer):
+Camadas já previstas pra entrar (lista não-exaustiva, vai crescer). Situação em 2026-10-27:
 
-- **Geologia, geomorfologia, pedologia, vegetação** (fonte: IBGE) — ✅ já
-  baixadas, aguardando import. Ver [LEIAME_ibge.md](ibge/LEIAME_ibge.md).
-- **Assentamentos rurais** e **territórios quilombolas** (fonte: INCRA) —
-  ✅ já baixados, aguardando import. Ver [LEIAME_incra.md](incra/LEIAME_incra.md).
-- **Imóveis certificados — SIGEF e SNCI** (fonte: INCRA, Acervo Fundiário) —
-  🗓️ **no roadmap, NÃO iniciado** (2026-10-20): o usuário vai esclarecer antes
-  como funcionam as certificações por norma. Ver "Próximos passos", item 11.
-- **Terras indígenas** (fonte: FUNAI) — ✅ já baixado, aguardando import.
-  Ver [LEIAME_funai.md](funai/LEIAME_funai.md).
-- **Áreas prioritárias pra conservação** e **Unidades de Conservação/CNUC**
-  (fonte: MMA) — ✅ já baixados, aguardando import. Ver
-  [LEIAME_mma.md](mma/LEIAME_mma.md).
-- **Hidrografia** (Base Hidrográfica Ordinária, fonte: ANA) — ✅ já
-  baixada, aguardando import. Ver [LEIAME_ana.md](ana/LEIAME_ana.md).
-- **Produção agrícola** (erva-mate/RS, fonte: IBGE/PAM) — ✅ já baixada,
-  candidata ao schema `tabular`. Ver [LEIAME_ibge.md](ibge/LEIAME_ibge.md).
-- outras camadas correlatas conforme a demanda de processamento pedir
+- **Geologia, geomorfologia, pedologia, vegetação** (fonte: IBGE) — domínios e regiões naturais já no banco; o resto aguarda import
+  (fonte automatizável em `geoftp.ibge.gov.br`, item 15). Ver [LEIAME_ibge.md](ibge/LEIAME_ibge.md).
+- **Assentamentos rurais** (INCRA) — ✅ no banco (carga antiga); **territórios quilombolas** — ⛔ dependem do INCRA voltar (item 11).
+  Os assentamentos também aparecem no CNFP do SFB. Ver [LEIAME_assentamentos.md](incra/assentamentos/LEIAME_assentamentos.md).
+- **Imóveis certificados — SIGEF e SNCI** (INCRA) — ⛔ bloqueado (item 11).
+- **Terras indígenas** (FUNAI) — ✅ pipeline automatizado e na atualização agendada
+  ([LEIAME](funai/terras_indigenas/LEIAME_terras_indigenas.md)).
+- **Unidades de Conservação/CNUC** (MMA) — ✅ no banco (carga manual autorizada, [LEIAME](mma/unidades_conservacao/LEIAME_unidades_conservacao.md));
+  **áreas prioritárias pra conservação** — a carregar (item 15).
+- **Florestas públicas** (SFB, CNFP) — ✅ no banco ([LEIAME](sfb/florestas_publicas/LEIAME_florestas_publicas.md)).
+- **Alertas e fiscalização:** DETER (INPE) ✅, embargos do IBAMA ✅; ICMBio, SEMA-MT e lista de empregadores (MTE) a carregar (item 16).
+- **Hidrografia** (Base Hidrográfica Ordinária, fonte: ANA) — a carregar (item 15); ver [LEIAME_ana.md](ana/LEIAME_ana.md).
+- **Produção agrícola** (IBGE/PAM e Censo Agropecuário) — ✅ no banco (tabular), sob demanda pela camada genérica do SIDRA (item 12).
+- outras camadas correlatas conforme a demanda de processamento pedir (ver itens 15 e 16 de "Próximos passos")
 
 ⚠️ **Nota (2026-10-01)**: essas 5 fontes (IBGE-temas pendentes, INCRA,
 FUNAI, MMA, ANA) já estavam baixadas no disco há tempo, mas sem nenhuma
@@ -183,8 +207,8 @@ referência que todo dataset novo segue.
       periódica. Detalhes completos e pegadinhas encontradas (duplicata na
       origem, município sem código IBGE, bug de codificação no script) em
       [HISTORICO.md](sicar/imoveis/HISTORICO.md).
-- [ ] Desenhar o pipeline de atualização periódica (comparar `dat_atuali`,
-      fechar/abrir versões) — candidato natural pra aprender Airflow
+- [x] **Pipeline de atualização periódica pronto e agendado** (2026-10-23, item 13): espelho versionado (SCD2), 27 UFs, domingos alternados.
+      Hoje: 8.551.530 imóveis vigentes. (Airflow não foi necessário; a tarefa agendada do Windows cumpre o papel.)
 
 ### PostGIS
 
@@ -217,7 +241,8 @@ referência que todo dataset novo segue.
 
 ## Tornar o projeto replicável (portfólio público no GitHub)
 
-> **Estado em 2026-10-23:** repositório Git iniciado (`git init`, ramo `main`) com **um commit local** de 104 arquivos (sem envio a lugar nenhum). Feito:
+> **Estado em 2026-10-27:** repositório **público no GitHub** (`PDS23/datawarehouse_dados_brasil_geo`, ramo `main`), sincronizado a cada etapa (push autorizado pelo usuário). Há `README.md`, `LICENSE` (MIT),
+> `GUIA_DE_USO.md`, pipelines reexecutáveis por fonte e a pilha em Docker (`infra/`). **Falta** conferir a renderização do README no GitHub e um guia de instalação do zero. *(Histórico, 2026-10-23:)* repositório Git iniciado com **um commit local** de 104 arquivos. Feito:
 > `README.md` na raiz (com o diagrama do banco), `LICENSE` (MIT; o titular está só como "Pedro": trocar pelo nome completo antes de publicar),
 > `.gitignore` reforçado (sem dados, segredos, logs, infraestrutura de acesso em equipe, material interno e trabalhos de clientes) e varredura de
 > segredos, e-mails e IPs nos arquivos versionados (nenhum segredo encontrado; identificadores trocados por placeholders). **Fora do repositório público,
@@ -234,29 +259,24 @@ não é o mecanismo de distribuição do projeto).
 
 Isso é trabalho real, não só documentação — o que falta:
 
-- [ ] `README.md` na raiz do projeto (visão geral, requisitos, link pros
+- [x] `README.md` na raiz do projeto (visão geral, requisitos, link pros
       LEIAMEs de cada fonte)
 - [ ] Guia de instalação passo a passo (hoje está espalhado no
       ARQUITETURA.md) — Postgres+PostGIS (via Docker Compose, ver item
       abaixo), extensões, schemas, `dim.fontes`/`catalogo.datasets`
       iniciais
-- [ ] `docker-compose.yml` — GeoServer direto em Docker (nunca instalado
+- [x] (feito: stack `infra/docker-compose.stack.yml`, PostGIS e GeoServer em Docker desde o corte para o desktop) `docker-compose.yml` — GeoServer direto em Docker (nunca instalado
       nativo, sem bagagem legada); avaliar se/quando migrar o
       PostgreSQL/PostGIS nativo pra Docker também (ver conversa de
       2026-10-01 — não migrar só por migrar, migrar quando for mesmo pro
       desktop)
-- [ ] Completar scripts de download que faltam — hoje só PRODES e TOPODATA
-      têm (`baixar_prodes_biomas.py`, `baixar_topodata_*.py`). IBGE,
-      SICAR, ANA, FUNAI, INCRA, MMA foram baixados manualmente no
-      navegador, sem script nenhum
+- [~] Scripts de download: **feitos** para PRODES, SICAR, MapBiomas Alerta, FUNAI, DETER, IBAMA, SFB (CNFP), IBGE/SIDRA e TOPODATA; o CNUC é carga manual autorizada. **Faltam** ANA, IBGE ambientais, MapBiomas rasters e INCRA (fora do ar)
 - [ ] Completar scripts de import que faltam — hoje têm script reexecutável o SICAR
       (`sicar/imoveis/scripts/atualizar_imoveis_sicar.py`, baixando do CAR), o PAM,
       o Censo Agropecuário, os assentamentos do INCRA e `dim.estados`/`dim.municipios`
       (`localidades.py`). PRODES e `dim.biomas` foram comandos soltos rodados direto no
       chat, nunca viraram script salvo/reexecutável
-- [ ] Confirmar licença de cada fonte (já começou via
-      `catalogo.datasets.licenca`) e decidir a licença do próprio
-      repositório de código
+- [~] Licença do repositório decidida (MIT); a licença de cada fonte está em `catalogo.datasets.licenca`, e várias dizem "confirmar os termos antes de redistribuir"
 
 ## Migração notebook → desktop
 
@@ -399,6 +419,10 @@ sem camada de serviço no meio.
 - [ ] **Raster**: subir um **MinIO** (servidor S3-compatível, local, sem
       nuvem) pra servir os COGs. GDAL/rasterio falam nativamente com S3
       (`/vsis3/`), com autenticação embutida no MinIO.
+      **Não é o GeoServer** (que já temos): o GeoServer é um *servidor de mapas* (entrega imagem, feição ou valor de pixel por WMS/WFS/WCS); o MinIO seria um
+      *servidor de arquivos* ("pasta na rede" com protocolo S3) que entrega o próprio COG, em pedaços, ao Python/QGIS. **Não feito de propósito** (2026-10-27): o GeoServer já
+      atende a equipe SIG e, hoje, nenhuma análise real precisa ler raster pela rede (as análises em curso usam só vetor). **Decisão pendente do usuário:** manter como
+      baixa prioridade, ou trocar por algo mais simples (um servidor de arquivos com suporte a `Range` lido por `/vsicurl/`, ou o próprio WCS do GeoServer) quando um notebook Colab precisar de raster.
 
 ### Caminho 2 — Equipe SIG (QGIS/ArcGIS, pouca familiaridade técnica)
 
@@ -616,9 +640,7 @@ portfólio (banco relacional + formato cloud-native).
    3.6 instalados, `data_warehouse` criado, arquitetura formalizada em
    [ARQUITETURA.md](ARQUITETURA.md), PRODES rodando como primeiro dataset
    completo (dado + `dim.fontes` + `catalogo.datasets`).
-3. **Baixar SICAR** e importar pro PostGIS seguindo o padrão do
-   ARQUITETURA.md (schema `vetorial`, `id_fonte`, registro no catálogo) —
-   próximo passo natural agora que o pipeline está validado
+3. ~~Baixar SICAR e importar pro PostGIS~~ — feito (2026-10-01) e agendado (item 13)
 4. ~~Baixar o PRODES vetorial dos biomas Mata Atlântica + Pampa~~ — feito e
    validado, depois **expandido pros 6 biomas** (2026-09-27, ver seção
    PRODES). Falta decidir se o raster Brasil-inteiro já baixado é mantido
@@ -629,14 +651,13 @@ portfólio (banco relacional + formato cloud-native).
    chegar (script já pronto)
 7. ~~Revisar MapBiomas: vale re-tile + overviews (perfil COG)?~~ — feito
    (2026-10-01, ver seção MapBiomas)
-8. Configurar acesso em equipe (ver seção "Acesso em equipe"):
+8. Configurar acesso em equipe (ver seção "Acesso em equipe"; Tailscale, PostGIS pela rede, GeoServer e papéis de analistas ✅; **MinIO pendente de decisão**):
    - Tailscale (rede, base dos dois caminhos)
    - Caminho automação: `pg_hba.conf`/usuário read-only (PostGIS) + MinIO
    - Caminho equipe SIG: instalar GeoServer e publicar WFS (vetor) +
      WMS/WCS (raster)
-9. Ir incorporando as demais camadas (geologia, geomorfologia, vegetação,
-   assentamentos, terras quilombolas, dados tabulares) conforme a demanda de
-   processamento pedir, seguindo a convenção definida no ARQUITETURA.md
+9. Ir incorporando as demais camadas conforme a demanda de processamento pedir, seguindo a convenção do ARQUITETURA.md. **Em andamento** pelos itens 15 e 16
+   (já entraram FUNAI, DETER, IBAMA, CNUC e CNFP; seguem ICMBio, SEMA-MT, MTE, áreas prioritárias do MMA, ANA, IBGE ambientais e rasters do MapBiomas)
 10. Avaliar estrutura de schema pra reduzir o tamanho do banco (levantado em
     2026-10-01, com o banco em ~19GB e o SICAR ainda carregando) — avaliar
     quando tiver mais dado real carregado (SICAR completo + mais camadas do
@@ -809,9 +830,9 @@ erDiagram
     Tarefa do Windows "DW - Atualizacao das fontes": **domingo às 00:10, a cada 2 semanas** (14 dias: o mais próximo de "15 em 15" que cabe
     num domingo fixo; primeira execução em 2026-10-25), com o usuário logado e o Docker ligado (se o PC estiver desligado, roda ao ligar).
     Roda `infra/scripts/atualizar_fontes.ps1`: **backup antes** (local; reaproveita um backup completo de menos de 24 h, como o das 00:10; se falhar, nada é atualizado), PRODES (só biomas com edição nova), MapBiomas
-    Alerta, FUNAI, DETER (incluído em 2026-10-26), SICAR (27 UFs), a **retenção com `--apagar`** e **backup depois** (com cópia para o Drive). O backup agendado de domingo às 03:00
+    Alerta, FUNAI, DETER (incluído em 2026-10-26), IBAMA embargos (incluído em 2026-10-27), SICAR (27 UFs), a **retenção com `--apagar`** e **backup depois** (com cópia para o Drive). O backup agendado de domingo às 03:00
     (`DW-Backup-Domingo-3h`) passou a usar `-PularSeRecenteHoras 6` e não duplica nos domingos de atualização. (Correção de 2026-10-25: a primeira execução abortou por um bug no retorno da função de backup.) A retenção (30 dias nos dois prazos, `infra/retencao.yaml`; trava de 20% por tabela). Falha de uma fonte não derruba as outras:
-    fica em `catalogo.cargas` e em `infra/logs/`. **SIDRA continua só sob demanda; INCRA (assentamentos e SIGEF) entra quando o servidor
+    fica em `catalogo.cargas` e em `infra/logs/`. **SIDRA, CNUC e CNFP continuam fora da agenda (sob demanda ou 1 edição por ano); INCRA (assentamentos e SIGEF) entra quando o servidor
     do Acervo Fundiário voltar** (item 11). Criar/alterar/remover a tarefa: `infra/scripts/registrar_tarefa_atualizacao.ps1` (`-Remover`).
     Não usa `--aceitar-queda`: fonte que entregar muito menos que o banco não é gravada e aparece como falha para conferência.
 14. **Monitor de atualização das fontes + dashboard (baixa prioridade, a fazer)** — um script leve que só
@@ -841,4 +862,73 @@ erDiagram
     | **IBGE, base de indígenas e quilombolas (2019)** | ✅ | `geoftp.ibge.gov.br/organizacao_do_territorio/tipologias_do_territorio/...` | é a base do IBGE, **não a do INCRA**: não substitui o INCRA |
     | **MapBiomas, uso do solo (rasters)** | ✅ | bucket público do Google Cloud `mapbiomas-public` (`initiatives/brasil/collection11/lulc/coverage` e `transition`) | cobre a lacuna "sem script" dos rasters |
     | **INCRA (assentamentos, quilombolas, SIGEF/SNCI)** | ❌ **bloqueado** | `acervofundiario.incra.gov.br` segue fora do DNS; SIGEF exige gov.br prata/ouro | ver item 11; alternativa parcial para quilombolas: base do IBGE |
-    Ainda **não pesquisados**: ICMBio (embargos), ANM (mineração), SPU, lista suja do trabalho escravo, ZEE estaduais.
+    | **ICMBio, áreas embargadas** (pesquisado 2026-10-27) | ✅ | FeatureServer público `services3.arcgis.com/KYEMegXJrTiWSYWk/.../areas_embargadas_icmbio` (mesma conta do painel linkado em `gov.br/icmbio/.../areas-embargadas`); 14.779 polígonos, editado em 06/10/2026; `maxRecordCount` 2000 (paginar) | traz `cpf_cnpj` e `autuado` (dado pessoal: mesma decisão do IBAMA), `numero_ai`, `nome_uc`, `cnuc` |
+    | **SEMA-MT, áreas embargadas e desembargadas** (pesquisado 2026-10-27) | ✅ | WFS `geo.sema.mt.gov.br/geoserver/Geoportal` (`AREAS_EMBARGADAS_SEMA`, 8.357; `AREAS_DESEMBARGADAS_SEMA`), SHAPE-ZIP/CSV; a `authkey` é a pública publicada no GeoNetwork da SEMA (`geonetwork.sema.mt.gov.br`): ler do catálogo a cada execução, não fixar | traz `NOME` e `CPF_CNPJ`; o WFS sem `authkey` não lista camadas |
+    | **MTE, Cadastro de Empregadores (lista suja do trabalho escravo)** (pesquisado 2026-10-27) | ✅ | CSV estável `gov.br/trabalho-e-emprego/.../areas-de-atuacao/cadastro_de_empregadores.csv` (latin1, `;`); `HEAD` dá 403, `GET` funciona | tabular, sem geometria; chave `CNPJ/CPF`; atualização semestral; há também o cadastro de empregadores em ajustamento de conduta (TAC) |
+    Ainda **não pesquisados**: ANM (mineração), SPU, ZEE estaduais.
+    *(2026-10-27: SFB/CNFP, CNUC, IBAMA e DETER já carregados; os demais ✅ "automatizáveis" seguem a fazer. ICMBio, SEMA-MT e MTE, abaixo, entram pelo item 16.)*
+
+16. **Preparar o banco para uma pré-análise de legalidade EUDR no Brasil (levantamento de 2026-10-27; a executar)** — 📐 desenho a aprovar. **Situação:** 7 dos 12 critérios já têm a fonte no banco (itens 1 a 7); faltam ICMBio, SEMA-MT, MTE (8 a 11) e o quilombola (12, bloqueado).
+    **Objetivo:** o banco ter todas as fontes públicas que uma checagem prévia de imóveis contra o Regulamento Europeu de Desmatamento
+    (EUDR, Reg. UE 2023/1115) usa, para barrar **antes do envio** os imóveis que seriam negados. **Regra do usuário:** as fontes entram como
+    qualquer outra, no padrão `<grupo>/<fonte>/` e com **nome pela fonte**; nada no banco (schema, tabela, coluna, LEIAME de fonte) cita
+    EUDR nem legalidade. A análise em si é derivada, só sob demanda, e fica fora das tabelas de fonte (regra 4).
+    **Referência usada:** um relatório comercial de verificação de protocolo EUDR (Serasa Experian, Agro Report) que o usuário trouxe, com 12
+    critérios eletrônicos sobre bases públicas. O PDF é confidencial de terceiro: **não entra no repositório nem no Drive**; aqui fica só a
+    lista de critérios. A coleta das fontes novas é feita pela conversa que automatiza a busca de fontes (item 15); este item só registra o
+    que foi descoberto e o caminho.
+
+    **16.1 Critérios de referência × o que o banco já tem**
+    | # | Critério (desmatamento ou legalidade) | Fonte | No banco? | Colunas que servem / observação |
+    |---|---|---|---|---|
+    | 1 | Sem PRODES depois de 31/12/2020 | INPE, PRODES | ✅ `vetorial.prodes_desmatamento` | `year`, `image_date`; ver 16.3 (ano PRODES vai de agosto a julho) |
+    | 2 | Sem alerta MapBiomas depois de 31/12/2020 | MapBiomas Alerta | ✅ `vetorial.mapbiomas_alerta` | `detected_at`, `status_name='published'` (mesmo filtro do CECAFÉ) |
+    | 3 | CAR ativo ou pendente | SFB, SICAR | ✅ `vetorial.sicar_imoveis` | `ind_status`, `des_condic`; a geometria do imóvel vem daqui |
+    | 4 | Sem sobreposição com terra indígena | FUNAI | ✅ `vetorial.funai_terras_indigenas` | `fase_ti` (decidir se "em estudo" conta) |
+    | 5 | Sem sobreposição com unidade de conservação | MMA, CNUC | ✅ `vetorial.mma_unidades_conservacao` | `grupo`, `categoria`: produção agrícola só é admitida em APA (uso sustentável) |
+    | 6 | Sem sobreposição com embargo do IBAMA | IBAMA | ✅ `vetorial.ibama_embargos` | `sit_desembargo`, `sit_cancelado` (excluir os já desembargados/cancelados) |
+    | 7 | CPF/CNPJ fora da lista de embargos do IBAMA | IBAMA | ✅ mesma tabela | `cpf_cnpj_embargado` (CNPJ) e `cpf_embargado_hash` (CPF de PF, HMAC) |
+    | 8 | Sem sobreposição com embargo do ICMBio | ICMBio | ❌ a carregar | FeatureServer público, 14.779 polígonos (item 15) |
+    | 9 | CPF/CNPJ fora da lista de embargos do ICMBio | ICMBio | ❌ a carregar | mesma camada (`cpf_cnpj`, `autuado`) |
+    | 10 | Sem sobreposição com embargo da SEMA-MT | SEMA-MT | ❌ a carregar | WFS do Geoportal, 8.357 polígonos + camada de desembargadas (item 15) |
+    | 11 | CPF/CNPJ fora da lista suja do trabalho escravo | MTE, Cadastro de Empregadores | ❌ a carregar | CSV oficial estável, sem geometria (item 15) |
+    | 12 | Sem sobreposição com território quilombola | INCRA | ⛔ bloqueado | acervo fundiário exige login (item 11); IBGE só tem localidades em ponto |
+
+    **16.2 Próximos passos: fontes (coleta automatizada, conversa do item 15)**
+    1. **ICMBio, áreas embargadas** → `icmbio/areas_embargadas/`, `vetorial.icmbio_areas_embargadas` (espelho SCD2; paginar de 2.000 em 2.000).
+    2. **SEMA-MT, áreas embargadas e desembargadas** → `sema_mt/areas_embargadas/` (duas camadas da mesma fonte; a `authkey` pública é lida
+       do GeoNetwork da SEMA a cada execução, nunca fixada no código).
+    3. **MTE, Cadastro de Empregadores** → `mte/cadastro_empregadores/`, tabela tabular (sem geometria), uma linha por empregador e edição
+       semestral; avaliar junto o cadastro de empregadores em ajustamento de conduta (TAC), que é publicado na mesma página.
+    4. **LGPD, igual ao IBAMA** (e como buscar por CPF: o banco guarda só o HMAC-SHA256 do CPF de 11 dígitos, com chave fora do banco e do git; quem tem a chave calcula o
+       HMAC do CPF consultado e compara com `cpf_embargado_hash`; quem não tem a chave não consegue nem testar um CPF. Falta o **auxiliar** que faz isso sem expor a chave
+       nem o CPF: `dwlib` com `hash_documento()` e um comando de consulta por CPF/CNPJ, que também serve ao notebook do lote de imóveis): CPF de pessoa física só como HMAC, **com a mesma chave** do IBAMA, para que um CPF consultado case em todas
+       as fontes com um único hash; CNPJ como vem. Generalizar a função de hash do IBAMA para `dwlib` antes da segunda fonte usá-la.
+    5. **Quilombolas:** continua dependendo do INCRA voltar (item 11). Paliativo a decidir: imóveis do tipo PCT do SICAR (`ind_tipo`), que
+       têm outra metodologia e não substituem o INCRA. Registrar a lacuna em qualquer resultado até lá.
+    6. **Atualização agendada:** decidir se ICMBio, SEMA-MT e MTE entram no `atualizar_fontes.ps1` (as três são fontes vivas) e na retenção.
+
+    **16.3 Próximos passos: decisões de metodologia (antes de escrever a verificação)**
+    - **Corte de 31/12/2020 no PRODES:** o ano PRODES cobre agosto a julho; decidir se vale `image_date > 2020-12-31` ou os anos PRODES
+      2021 em diante (que incluem agosto a dezembro de 2020).
+    - **Tolerância de sobreposição:** área ou percentual mínimo para não acusar ruído de borda entre bases de escalas diferentes (o relatório
+      de referência diz que as regras de aprovação são definidas pelo cliente).
+    - **O que conta como ativo** em cada fonte: TI por fase, UC por grupo/categoria (APA liberada?), embargo vigente (sem desembargo nem
+      cancelamento), lista suja só da edição vigente.
+    - **Entrada:** lista de `cod_imovel` do SICAR, polígonos de um lote (como o CECAFÉ faz com a tabela temporária) e o CPF/CNPJ do produtor.
+
+    **16.4 Próximos passos: a verificação (derivado, sob demanda)**
+    - Um script reprodutível, no molde de `analises/desmatamento_imovel/`, que recebe a entrada de 16.3 e devolve **um resultado por critério
+      e por imóvel** (passa / não passa / sem dado), com a área sobreposta e o identificador da feição que causou o bloqueio; registra em
+      `catalogo.cargas` os ids das versões de cada fonte usada (regra 4). Local e nome a decidir; o notebook CECAFÉ passa a consumi-lo.
+    - Validar contra relatórios de referência já emitidos (mesmo imóvel, mesmo resultado; diferenças explicadas, como no Lote 14 do CECAFÉ).
+
+    **16.5 Além da referência (cobertura mais ampla da EUDR, a pesquisar)**
+    A definição de "produção legal" da EUDR (art. 2º, 40) vai além dos 12 critérios: direitos de uso da terra, proteção ambiental, regras
+    florestais, direitos de terceiros, trabalho, direitos humanos, consentimento livre, prévio e informado, tributos e anticorrupção.
+    Candidatos já no banco: **florestas públicas não destinadas** (SFB, `vetorial.sfb_florestas_publicas`) e **assentamentos** (INCRA,
+    bloqueado). A pesquisar: embargos de outros órgãos estaduais (Pará e demais estados da Amazônia Legal), autos de infração do IBAMA,
+    áreas de mineração (ANM), terras da União (SPU) e a lista de empregadores em ajustamento de conduta (MTE).
+
+17. **Guia de uso do banco** — ✅ feito 2026-10-27: [GUIA_DE_USO.md](GUIA_DE_USO.md) (versão vigente, geometrias inválidas e `ST_MakeValid`, áreas em `geography`/EPSG 5880, ids e `dim.*`,
+    armadilhas por tabela, como conectar). Manter atualizado a cada fonte nova com cuidado próprio. **A fazer, se o usuário quiser:** pasta de consultas prontas e testadas por tema.
