@@ -77,7 +77,7 @@ Pré-requisitos: Docker (Compose v2) e PowerShell no Windows (os scripts de orqu
 .\infra\scripts\dw.ps1 etl mapbiomas/alerta/scripts/mapbiomas_alerta.py
 ```
 
-`infra/scripts/dw.ps1` reúne os comandos do dia a dia (`consulta` somente leitura, `psql`, `etl`, `backup`, `sync-drive`, `status`).
+**Para consultar o banco (versão vigente, `ST_MakeValid`, áreas, armadilhas por fonte): [`GUIA_DE_USO.md`](GUIA_DE_USO.md).** `infra/scripts/dw.ps1` reúne os comandos do dia a dia (`consulta` somente leitura, `psql`, `etl`, `backup`, `sync-drive`, `status`).
 O guia dos pipelines está em [`scripts_comuns/LEIAME_pipelines.md`](scripts_comuns/LEIAME_pipelines.md).
 
 ## Limites e licenças dos dados
