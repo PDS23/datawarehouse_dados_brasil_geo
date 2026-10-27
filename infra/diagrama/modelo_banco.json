@@ -5,7 +5,7 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 86,
+   "linhas": 87,
    "bytes": 90112,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
@@ -100,7 +100,7 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 78,
+   "linhas": 79,
    "bytes": 98304,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 18,
+   "linhas": 19,
    "bytes": 32768,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,8 +448,8 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 189,
-   "bytes": 98304,
+   "linhas": 242,
+   "bytes": 106496,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
     {
@@ -903,7 +903,7 @@
    "sch": "dim",
    "nome": "fontes",
    "view": false,
-   "linhas": 7,
+   "linhas": 8,
    "bytes": 49152,
    "coment": "Órgãos e sistemas de onde vêm os dados. Quase toda tabela aponta para cá por id_fonte.",
    "cols": [
@@ -3378,6 +3378,388 @@
    ]
   },
   {
+   "id": "vetorial.mma_unidades_conservacao",
+   "sch": "vetorial",
+   "nome": "mma_unidades_conservacao",
+   "view": false,
+   "linhas": 3576,
+   "bytes": 85688320,
+   "coment": "Unidades de conservação do CNUC (Ministério do Meio Ambiente): 3.406 com polígono e 170 só com ponto esquemático (edição 2026_07). Espelho versionado; carga manual autorizada (o shapefile recente só existe em SharePoint). Ver mma/unidades_conservacao/LEIAME_unidades_conservacao.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "cd_cnuc",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Código da UC no CNUC. Chave estável; uma versão vigente por UC."
+    },
+    {
+     "n": "camada_origem",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: poligonos (UC com limite) ou pontos (UC sem polígono na edição; só um ponto esquemático)."
+    },
+    {
+     "n": "docleg_id",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador do documento legal da UC no CNUC (só polígonos)."
+    },
+    {
+     "n": "uc_id",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da UC no CNUC (só polígonos)."
+    },
+    {
+     "n": "wdpa_pid",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da UC no World Database on Protected Areas."
+    },
+    {
+     "n": "nome_uc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da unidade de conservação."
+    },
+    {
+     "n": "nome_abrev",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome abreviado da UC (só pontos)."
+    },
+    {
+     "n": "cria_ano",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Data de criação como o CNUC entrega: dd-mm-aaaa nos polígonos, só o ano nos pontos."
+    },
+    {
+     "n": "ano_criacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: ano de criação, extraído de cria_ano."
+    },
+    {
+     "n": "cria_ato",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Ato legal de criação da UC (decreto, lei, portaria)."
+    },
+    {
+     "n": "outro_ato",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Outros atos legais da UC (só polígonos)."
+    },
+    {
+     "n": "pl_manejo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Se a UC tem plano de manejo (Sim/Não)."
+    },
+    {
+     "n": "co_gestor",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Se a UC tem conselho gestor (Sim/Não)."
+    },
+    {
+     "n": "quali_pol",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Qualidade do polígono: memorial descritivo, estimativa dos limites ou representação esquemática."
+    },
+    {
+     "n": "ppgr",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Programa ou projeto de gestão relacionado (ex.: mosaico), só polígonos."
+    },
+    {
+     "n": "ppgr_rev",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Programa ou projeto relacionado, revisado (só pontos)."
+    },
+    {
+     "n": "ha_total",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área do polígono em hectares (só polígonos)."
+    },
+    {
+     "n": "ha_ato",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área em hectares segundo o ato de criação (só polígonos)."
+    },
+    {
+     "n": "esfera",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Esfera de governo: Federal, Estadual ou Municipal. A capitalização varia entre as camadas: compare com lower()."
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "UF(s) da UC por extenso; lista separada por vírgula se cruza UFs."
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Município(s) da UC, no formato NOME (UF), NOME (UF) (só polígonos)."
+    },
+    {
+     "n": "org_gestor",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Órgão gestor da UC."
+    },
+    {
+     "n": "grupo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Proteção Integral ou Uso Sustentável (nos pontos, PI ou US)."
+    },
+    {
+     "n": "categoria",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Categoria da UC (Parque, Reserva Biológica, APA, RPPN...)."
+    },
+    {
+     "n": "cat_iucn",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Categoria equivalente da IUCN (só polígonos)."
+    },
+    {
+     "n": "amazonia",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Hectares da UC dentro do bioma Amazônia (só polígonos)."
+    },
+    {
+     "n": "caatinga",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Hectares da UC dentro do bioma Caatinga."
+    },
+    {
+     "n": "cerrado",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Hectares da UC dentro do bioma Cerrado."
+    },
+    {
+     "n": "matlantica",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Hectares da UC dentro do bioma Mata Atlântica."
+    },
+    {
+     "n": "pampa",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Hectares da UC dentro do bioma Pampa."
+    },
+    {
+     "n": "pantanal",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Hectares da UC dentro do bioma Pantanal."
+    },
+    {
+     "n": "marinho",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Hectares da UC em área marinha."
+    },
+    {
+     "n": "situacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Situação da UC (hoje sempre Ativo; só polígonos)."
+    },
+    {
+     "n": "limite",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Tipo de limite informado pelo CNUC (só polígonos)."
+    },
+    {
+     "n": "sitiopatri",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sítio do patrimônio mundial associado (só pontos)."
+    },
+    {
+     "n": "ramsar",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sítio Ramsar associado (só pontos)."
+    },
+    {
+     "n": "mosaico",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Mosaico de áreas protegidas a que a UC pertence (só pontos)."
+    },
+    {
+     "n": "biosfera",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Reserva da biosfera associada (só pontos)."
+    },
+    {
+     "n": "siscosmar",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Indicador do SisCosMar (só pontos)."
+    },
+    {
+     "n": "longitude_ponto",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Longitude do ponto esquemático da UC (só pontos)."
+    },
+    {
+     "n": "latitude_ponto",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Latitude do ponto esquemático da UC (só pontos)."
+    },
+    {
+     "n": "geom_ponto",
+     "t": "geometry(Point,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: ponto esquemático das UCs sem polígono."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono da UC (SIRGAS 2000). Vazio nas UCs só de ponto."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "true = a fonte entregou a geometria fora do Brasil ou vazia; o original está em geom_origem_texto."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria original da fonte em texto, guardada só quando geom_anomala é true."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Edição do CNUC (AAAA_MM, do nome do zip) em que esta versão da UC entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.prodes_desmatamento",
    "sch": "vetorial",
    "nome": "prodes_desmatamento",
@@ -4254,6 +4636,12 @@
    "col": "id_variavel",
    "para": "dim.sidra_variavel",
    "colpara": "id_variavel"
+  },
+  {
+   "de": "vetorial.mma_unidades_conservacao",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
   }
  ],
  "rasters": 6

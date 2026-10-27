@@ -39,7 +39,7 @@ Não pergunte o que o pedido já respondeu; se houver duas opções razoáveis, 
    (PRODES, MapBiomas Alerta, FUNAI, DETER, SICAR; domingos alternados às 00:10, com retenção de 30 dias; `infra/scripts/atualizar_fontes.ps1`). SIDRA segue só sob demanda; não agendar nada além disso sem o usuário decidir.
 8. **Reprodutível por script e SEMPRE automatizado (regra de 2026-10-23)**: metodologia fica em script + LEIAME, nunca ajuste manual de linhas. Dado novo entra **só por pipeline que
    baixa direto da fonte** (WFS, API, download estável); nada de arquivo baixado à mão. Só o usuário diz quando uma carga manual é aceitável; sem esse aviso, a prioridade é
-   sempre achar a automação (se a fonte não oferece, relatar e propor o que fazer, sem improvisar um upload manual). Arquivos antigos no Drive não são fonte: o pipeline baixa de novo.
+   sempre achar a automação (se a fonte não oferece, relatar e propor o que fazer, sem improvisar um upload manual). Exceção autorizada (2026-10-27): unidades de conservação do CNUC (MMA), cujo shapefile recente só existe em SharePoint; o usuário baixa o zip, o pipeline lê de `bruto/` e `--verificar` avisa quando o link direto voltar. Arquivos antigos no Drive não são fonte: o pipeline baixa de novo.
 9. **Fonte da verdade é `D:\data_warehouse`**; a cópia no Drive é espelho (só código e documentação; sem `bruto/`, `processado/`, `.env`).
 10. Todo pipeline usa `dwlib.catalogo.Carga` (registro em `catalogo.cargas` e `ANALYZE` ao fim).
 

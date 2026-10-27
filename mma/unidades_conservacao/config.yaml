@@ -1,0 +1,24 @@
+# Pipeline das unidades de conservacao (CNUC, Ministerio do Meio Ambiente). Configuracao versionada.
+# Fonte: Cadastro Nacional de Unidades de Conservacao (CNUC), publicado no portal de dados abertos do MMA (CKAN).
+# ATENCAO: CARGA MANUAL AUTORIZADA PELO USUARIO (2026-10-27). O MMA publica o shapefile mais recente (2026_03 e 2026_07) so em links do SharePoint,
+# instaveis e com token, que nao se baixam por script; o CKAN so tem o shapefile ate 2025_08. Por isso o usuario baixa o zip e o coloca em bruto/,
+# e o pipeline le dali. `--verificar` consulta o CKAN e avisa quando o MMA passar a publicar o shapefile num link direto (ai a coleta vira automatica).
+fonte: MMA                         # nome exato em dim.fontes
+url_ckan_pacote: "https://dados.mma.gov.br/api/3/action/package_show?id=44b6dc8a-dc82-4a84-8d95-1b0da7c85dac"
+url_pagina: "https://dados.mma.gov.br/dataset/44b6dc8a-dc82-4a84-8d95-1b0da7c85dac"
+destino_padrao: vetorial.mma_unidades_conservacao
+srid_gravado: 4674                 # os shapefiles ja vem em SIRGAS 2000
+padrao_arquivo: 'cnuc_(\d{4})_(\d{2})\.zip'      # a edicao (AAAA_MM) vem do nome do zip
+
+# O zip traz dois shapefiles: poligonos (uma linha por UC com limite) e pontos (UCs sem poligono, so um ponto esquematico). Sao UCs diferentes.
+campos_poligonos_esperados: [docleg_id, uc_id, cd_cnuc, wdpa_pid, nome_uc, cria_ano, cria_ato, outro_ato, pl_manejo, co_gestor, quali_pol, ppgr, ha_total, ha_ato,
+                             esfera, uf, municipio, org_gestor, grupo, categoria, cat_iucn, amazonia, caatinga, cerrado, matlantica, pampa, pantanal, marinho,
+                             situacao, limite]
+campos_pontos_esperados: [nome_uc, categoria, grupo, esfera, cria_ano, quali_pol, cria_ato, cd_cnuc, org_gestor, NomeAbrev, ppgr_rev, sitiopatri, ramsar, mosaico,
+                          biosfera, SisCosMar]
+linhas_minimas: 3000               # menos que isto = arquivo errado: nao grava
+
+max_queda: 0.10                    # mais que isso de UCs vigentes ausentes numa edicao: nao grava (--aceitar-queda libera)
+# Conferencia: caixa do Brasil (lon/lat), larga o bastante para as UCs marinhas e ilhas oceanicas.
+caixa_brasil: {lon_min: -75.0, lon_max: -25.0, lat_min: -36.0, lat_max: 7.0}
+licenca: "Dados abertos do MMA (CNUC); confirmar os termos de uso e a citacao exigida antes de redistribuir"
