@@ -5,3 +5,4 @@
   `NUM_TAD`+`SER_TAD` não é único (chave = `NUM_TAD|SER_TAD|SEQ_TAD`); `ULTIMA_ATUALIZACAO_RELATORIO` muda todo dia (fora da comparação); 8 datas de embargo absurdas (erros de digitação,
   marcadas); 1 polígono com anel aberto (geom NULL + texto original). Pipeline criado (`scripts/embargos.py`) e primeira carga: 116.944 termos (88.791 CPFs só como hash, 17.784 CNPJs,
   59.769 polígonos); segunda execução sem nenhuma mudança (hash estável). Ficou fora da atualização agendada até o usuário decidir (regra 7).
+- **2026-10-27** — entra na atualização agendada (`atualizar_fontes.ps1`, passo "IBAMA (embargos)", depois do DETER); decisão do usuário.
