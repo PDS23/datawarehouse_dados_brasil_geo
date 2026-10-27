@@ -11,7 +11,7 @@ Trava: se os ausentes passam de `max_queda` dos vigentes, não grava (`aceitar_q
 A tabela de destino T precisa ter: id (identity), as colunas de `campos`, geom (geometry), geom_anomala, geom_origem_texto, id_fonte, importado_em,
 vigente_desde, vigente_ate, coletado_em, reaberto_em, e um índice único parcial na chave onde vigente_ate IS NULL.
 A tabela temporária `stage` (ON COMMIT DROP, na mesma transação) precisa ter as colunas de `campos` + geom + geom_anomala + geom_origem_texto
-e uma única linha por chave. Não faz commit nem rollback: quem chama decide (com simular=True nada é escrito, só se conta).
+e uma única linha por chave. Com `com_geometria=False` (tabela sem geometria) T e `stage` não têm geom, geom_anomala nem geom_origem_texto. Não faz commit nem rollback: quem chama decide (com simular=True nada é escrito, só se conta).
 """
 from datetime import date, datetime, timezone
 
@@ -21,7 +21,7 @@ def _juncao(chave, a="c", b="s"):
 
 
 def reconciliar(conn, T, chave, comparar, campos, *, fonte, stage="_stage", id_carga=None, max_queda=0.10, aceitar_queda=False,
-                simular=False, escopo_sql=None, log=print):
+                simular=False, escopo_sql=None, com_geometria=True, log=print):
     """Reconcilia `stage` com a tabela T. escopo_sql (opcional, com alias `c`) limita quais vigentes podem ser considerados AUSENTES
     (coleta parcial, ex.: uma UF). Retorna um dict com os contadores."""
     cur = conn.cursor()
@@ -30,15 +30,16 @@ def reconciliar(conn, T, chave, comparar, campos, *, fonte, stage="_stage", id_c
     chaves = ", ".join(chave)
     comp = " OR ".join(f"c.{c} IS DISTINCT FROM s.{c}" for c in comparar)
     geom_dif = ("((c.geom IS NULL) <> (s.geom IS NULL)) OR "
-                "(c.geom IS NOT NULL AND s.geom IS NOT NULL AND NOT ST_OrderingEquals(c.geom, s.geom))")
+                "(c.geom IS NOT NULL AND s.geom IS NOT NULL AND NOT ST_OrderingEquals(c.geom, s.geom))") if com_geometria else "FALSE"
     idem = " AND ".join(f"NOT (c.{c} IS DISTINCT FROM s.{c})" for c in comparar)
-    idem += " AND ((c.geom IS NULL) = (s.geom IS NULL)) AND (c.geom IS NULL OR ST_OrderingEquals(c.geom, s.geom))"
+    if com_geometria:
+        idem += " AND ((c.geom IS NULL) = (s.geom IS NULL)) AND (c.geom IS NULL OR ST_OrderingEquals(c.geom, s.geom))"
 
     cur.execute(f"SELECT count(*) FROM {stage}")
     n = cur.fetchone()[0]
-    cur.execute(f"CREATE TEMP TABLE _alt AS SELECT c.id AS id_antigo FROM {stage} s JOIN {T} c ON {_juncao(chave)} AND c.vigente_ate IS NULL "
+    cur.execute(f"CREATE TEMP TABLE _alt ON COMMIT DROP AS SELECT c.id AS id_antigo FROM {stage} s JOIN {T} c ON {_juncao(chave)} AND c.vigente_ate IS NULL "
                 f"WHERE {comp} OR {geom_dif}")
-    cur.execute(f"CREATE TEMP TABLE _aus AS SELECT c.id AS id_antigo FROM {T} c WHERE c.vigente_ate IS NULL{esc} "
+    cur.execute(f"CREATE TEMP TABLE _aus ON COMMIT DROP AS SELECT c.id AS id_antigo FROM {T} c WHERE c.vigente_ate IS NULL{esc} "
                 f"AND NOT EXISTS (SELECT 1 FROM {stage} s WHERE {_juncao(chave)})")
     cur.execute(f"SELECT count(*) FROM {T} c WHERE c.vigente_ate IS NULL{esc}")
     vigentes_antes = cur.fetchone()[0]
@@ -46,7 +47,7 @@ def reconciliar(conn, T, chave, comparar, campos, *, fonte, stage="_stage", id_c
     n_alt, n_aus = cur.fetchone()
     cur.execute(f"SELECT count(*) FROM {stage} s WHERE NOT EXISTS (SELECT 1 FROM {T} c WHERE {_juncao(chave)} AND c.vigente_ate IS NULL)")
     n_novos = cur.fetchone()[0]
-    cur.execute(f"""CREATE TEMP TABLE _reab AS
+    cur.execute(f"""CREATE TEMP TABLE _reab ON COMMIT DROP AS
         WITH ult AS (SELECT DISTINCT ON ({", ".join('c.' + k for k in chave)}) c.* FROM {T} c WHERE c.vigente_ate IS NOT NULL
                      AND EXISTS (SELECT 1 FROM {stage} s WHERE {_juncao(chave)})
                      ORDER BY {", ".join('c.' + k for k in chave)}, c.vigente_ate DESC, c.id DESC)
@@ -66,8 +67,9 @@ def reconciliar(conn, T, chave, comparar, campos, *, fonte, stage="_stage", id_c
     cur.execute(f"UPDATE {T} SET vigente_ate = %s WHERE id IN (SELECT id_antigo FROM _alt UNION SELECT id_antigo FROM _aus)", (hoje,))
     cur.execute(f"UPDATE {T} SET vigente_ate = NULL, reaberto_em = %s WHERE id IN (SELECT id_antigo FROM _reab)", (hoje,))
     cols = ", ".join(campos)
-    cur.execute(f"""INSERT INTO {T} ({cols}, geom, geom_anomala, geom_origem_texto, id_fonte, importado_em, vigente_desde, coletado_em)
-                    SELECT {", ".join('s.' + c for c in campos)}, s.geom, s.geom_anomala, s.geom_origem_texto, %s, %s, %s, %s
+    extra_c, extra_s = (", geom, geom_anomala, geom_origem_texto", ", s.geom, s.geom_anomala, s.geom_origem_texto") if com_geometria else ("", "")
+    cur.execute(f"""INSERT INTO {T} ({cols}{extra_c}, id_fonte, importado_em, vigente_desde, coletado_em)
+                    SELECT {", ".join('s.' + c for c in campos)}{extra_s}, %s, %s, %s, %s
                     FROM {stage} s WHERE NOT EXISTS (SELECT 1 FROM {T} c WHERE {_juncao(chave)} AND c.vigente_ate IS NULL)""",
                 (fonte, hoje, hoje, agora))
     stats["inseridos"] = cur.rowcount

@@ -5,8 +5,8 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 131,
-   "bytes": 106496,
+   "linhas": 145,
+   "bytes": 114688,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
     {
@@ -100,7 +100,7 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 83,
+   "linhas": 94,
    "bytes": 106496,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
@@ -360,8 +360,8 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 21,
-   "bytes": 32768,
+   "linhas": 24,
+   "bytes": 65536,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
     {
@@ -448,8 +448,8 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 319,
-   "bytes": 122880,
+   "linhas": 403,
+   "bytes": 139264,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
     {
@@ -903,7 +903,7 @@
    "sch": "dim",
    "nome": "fontes",
    "view": false,
-   "linhas": 10,
+   "linhas": 12,
    "bytes": 49152,
    "coment": "Órgãos e sistemas de onde vêm os dados. Quase toda tabela aponta para cá por id_fonte.",
    "cols": [
@@ -1630,6 +1630,185 @@
      "nn": true,
      "pk": false,
      "c": "Moeda do valor: mil reais a partir de 1994; antes, moeda nominal da época."
+    }
+   ]
+  },
+  {
+   "id": "tabular.mte_cadastro_empregadores",
+   "sch": "tabular",
+   "nome": "mte_cadastro_empregadores",
+   "view": false,
+   "linhas": 508,
+   "bytes": 450560,
+   "coment": "Cadastro de Empregadores que submeteram trabalhadores a condição análoga à de escravo (a lista suja), do Ministério do Trabalho e Emprego; 508 empregadores na carga de 27/10/2026. Sem geometria. Espelho versionado: vigente = consta na lista hoje (o MTE retira os nomes após 2 anos). Dado pessoal: CPF só como HMAC. Ver mte/cadastro_empregadores/LEIAME_cadastro_empregadores.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: o ID do arquivo muda a cada edição; identidade = documento (hash do CPF ou CNPJ), ano da ação fiscal e estabelecimento (mais ordinal nos idênticos)."
+    },
+    {
+     "n": "id_arquivo",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "ID da linha no arquivo da edição; não entra na comparação."
+    },
+    {
+     "n": "ano_acao_fiscal",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "Ano da ação fiscal que flagrou o trabalho análogo ao de escravo."
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "UF do estabelecimento fiscalizado."
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado de uf (dim.estados)."
+    },
+    {
+     "n": "empregador",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome ou razão social do empregador como a fonte publica (dado pessoal)."
+    },
+    {
+     "n": "cpf_cnpj",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "CNPJ do empregador (só dígitos); CPF de pessoa física não é guardado (NULL)."
+    },
+    {
+     "n": "tipo_doc_empregador",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: CPF, CNPJ, OUTRO ou vazio."
+    },
+    {
+     "n": "doc_valido",
+     "t": "boolean",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: os dígitos verificadores conferem."
+    },
+    {
+     "n": "cpf_empregador_hash",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: HMAC-SHA256 dos 11 dígitos do CPF, mesma chave do IBAMA, do ICMBio e da SEMA-MT."
+    },
+    {
+     "n": "estabelecimento",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Endereço do local fiscalizado."
+    },
+    {
+     "n": "trabalhadores_envolvidos",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Número de trabalhadores resgatados ou envolvidos."
+    },
+    {
+     "n": "cnae",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Atividade econômica (código CNAE)."
+    },
+    {
+     "n": "decisao_administrativa",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Data da decisão administrativa de procedência, como a fonte publica."
+    },
+    {
+     "n": "decisao_administrativa_data",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: decisão administrativa como date."
+    },
+    {
+     "n": "inclusao_cadastro",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Inclusão no cadastro como a fonte publica (data, ou lista de datas e períodos)."
+    },
+    {
+     "n": "inclusao_cadastro_data",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: última data encontrada em inclusao_cadastro."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
     }
    ]
   },
@@ -6256,6 +6435,448 @@
    ]
   },
   {
+   "id": "vetorial.sema_mt_areas_desembargadas",
+   "sch": "vetorial",
+   "nome": "sema_mt_areas_desembargadas",
+   "view": false,
+   "linhas": 4729,
+   "bytes": 12861440,
+   "coment": "Áreas desembargadas da SEMA-MT (Secretaria de Estado de Meio Ambiente de Mato Grosso): uma linha por polígono, WFS do Geoportal da SEMA. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome como a fonte publica. Embargo ENCERRADO: não conta como embargo vigente. Ver sema_mt/areas_embargadas/LEIAME_areas_embargadas.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: a camada não tem id único; identidade = termo de embargo, processo, auto de infração, documento, propriedade, data de lavratura e ano do desmatamento (mais ordinal nos idênticos)."
+    },
+    {
+     "n": "objectid",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "OBJECTID da camada na origem; não entra na comparação."
+    },
+    {
+     "n": "nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome do embargado como a fonte publica (dado pessoal)."
+    },
+    {
+     "n": "cpf_cnpj",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Documento como a fonte publica, exceto CPF de pessoa física, que não é guardado (NULL); CNPJ só com dígitos."
+    },
+    {
+     "n": "tipo_doc_embargado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: CPF, CNPJ, OUTRO (texto livre) ou vazio."
+    },
+    {
+     "n": "doc_valido",
+     "t": "boolean",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: os dígitos verificadores do CPF/CNPJ conferem (falso = provável erro de digitação)."
+    },
+    {
+     "n": "cpf_embargado_hash",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: HMAC-SHA256 dos 11 dígitos do CPF, mesma chave do IBAMA, do ICMBio e do MTE."
+    },
+    {
+     "n": "propriedad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da propriedade."
+    },
+    {
+     "n": "dano",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Dano ambiental descrito (corte raso, desmate em APP...)."
+    },
+    {
+     "n": "ano_desmat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Ano do desmatamento."
+    },
+    {
+     "n": "a_infrac",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do auto de infração."
+    },
+    {
+     "n": "t_embargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do termo de embargo; repete entre polígonos do mesmo termo."
+    },
+    {
+     "n": "dat_lavrat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Data da lavratura como a fonte publica (DD/MM/AAAA; há datas incompletas como 00/07/2017)."
+    },
+    {
+     "n": "data_lavratura",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: dat_lavrat como date (NULL se incompleta ou inválida)."
+    },
+    {
+     "n": "n_processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do processo administrativo."
+    },
+    {
+     "n": "coord_x",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Longitude em graus, minutos e segundos (texto)."
+    },
+    {
+     "n": "coord_y",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Latitude em graus, minutos e segundos (texto)."
+    },
+    {
+     "n": "fonte",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Setor da SEMA que registrou."
+    },
+    {
+     "n": "obs",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Observações."
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área em hectares segundo a fonte."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora de Mato Grosso (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.sema_mt_areas_embargadas",
+   "sch": "vetorial",
+   "nome": "sema_mt_areas_embargadas",
+   "view": false,
+   "linhas": 8357,
+   "bytes": 20463616,
+   "coment": "Áreas embargadas da SEMA-MT (Secretaria de Estado de Meio Ambiente de Mato Grosso): uma linha por polígono, WFS do Geoportal da SEMA. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome como a fonte publica. Embargo vigente. Ver sema_mt/areas_embargadas/LEIAME_areas_embargadas.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: a camada não tem id único; identidade = termo de embargo, processo, auto de infração, documento, propriedade, data de lavratura e ano do desmatamento (mais ordinal nos idênticos)."
+    },
+    {
+     "n": "objectid",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "OBJECTID da camada na origem; não entra na comparação."
+    },
+    {
+     "n": "nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome do embargado como a fonte publica (dado pessoal)."
+    },
+    {
+     "n": "cpf_cnpj",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Documento como a fonte publica, exceto CPF de pessoa física, que não é guardado (NULL); CNPJ só com dígitos."
+    },
+    {
+     "n": "tipo_doc_embargado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: CPF, CNPJ, OUTRO (texto livre) ou vazio."
+    },
+    {
+     "n": "doc_valido",
+     "t": "boolean",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: os dígitos verificadores do CPF/CNPJ conferem (falso = provável erro de digitação)."
+    },
+    {
+     "n": "cpf_embargado_hash",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: HMAC-SHA256 dos 11 dígitos do CPF, mesma chave do IBAMA, do ICMBio e do MTE."
+    },
+    {
+     "n": "propriedad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da propriedade."
+    },
+    {
+     "n": "dano",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Dano ambiental descrito (corte raso, desmate em APP...)."
+    },
+    {
+     "n": "ano_desmat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Ano do desmatamento."
+    },
+    {
+     "n": "a_infrac",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do auto de infração."
+    },
+    {
+     "n": "t_embargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do termo de embargo; repete entre polígonos do mesmo termo."
+    },
+    {
+     "n": "dat_lavrat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Data da lavratura como a fonte publica (DD/MM/AAAA; há datas incompletas como 00/07/2017)."
+    },
+    {
+     "n": "data_lavratura",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: dat_lavrat como date (NULL se incompleta ou inválida)."
+    },
+    {
+     "n": "n_processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do processo administrativo."
+    },
+    {
+     "n": "coord_x",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Longitude em graus, minutos e segundos (texto)."
+    },
+    {
+     "n": "coord_y",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Latitude em graus, minutos e segundos (texto)."
+    },
+    {
+     "n": "fonte",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Setor da SEMA que registrou."
+    },
+    {
+     "n": "obs",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Observações."
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área em hectares segundo a fonte."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora de Mato Grosso (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.sfb_florestas_publicas",
    "sch": "vetorial",
    "nome": "sfb_florestas_publicas",
@@ -8201,6 +8822,30 @@
   },
   {
    "de": "vetorial.icmbio_areas_embargadas",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.sema_mt_areas_embargadas",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.sema_mt_areas_desembargadas",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "tabular.mte_cadastro_empregadores",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.mte_cadastro_empregadores",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"

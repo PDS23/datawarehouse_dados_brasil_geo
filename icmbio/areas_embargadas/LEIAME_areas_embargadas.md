@@ -48,3 +48,6 @@ Para buscar um CPF ou CNPJ sem expor chave nem documento: `infra/scripts/consult
 ## Licença
 
 Dados abertos do ICMBio; confirmar os termos de uso e a citação exigida antes de redistribuir.
+
+## Atualização agendada
+Entra na atualização agendada (domingos alternados, 00:10) desde 2026-10-27; a retenção de 30 dias já cobre a tabela.

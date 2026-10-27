@@ -1,0 +1,12 @@
+# Pipeline do Cadastro de Empregadores que submeteram trabalhadores a condicoes analogas a de escravo ("lista suja") do Ministerio do Trabalho e Emprego. Configuracao versionada.
+# Fonte: CSV oficial no portal gov.br do MTE (sem login; atualizado semestralmente). Codificacao Windows-1252, separador ';'. O HEAD responde 403, o GET funciona.
+fonte: MTE                         # nome exato em dim.fontes
+url_csv: "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/areas-de-atuacao/cadastro_de_empregadores.csv"
+url_pagina: "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/areas-de-atuacao/combate-ao-trabalho-escravo-e-analogo-ao-de-escravo"
+destino_padrao: tabular.mte_cadastro_empregadores
+cabecalho_esperado: ["ID", "Ano da ação fiscal", "UF", "Empregador", "CNPJ/CPF", "Estabelecimento", "Trabalhadores envolvidos", "CNAE",
+                     "Decisão administrativa de procedência", "Inclusão no Cadastro de Empregadores"]
+tamanho_minimo_bytes: 20000        # hoje ~77 KB
+linhas_minimas: 300                # hoje 508
+max_queda: 0.50                    # a lista e pequena e o MTE retira nomes ao fim de 2 anos: queda grande e normal numa edicao nova (a trava so barra arquivo quase vazio)
+licenca: "Dados abertos do MTE (Cadastro de Empregadores, Portaria Interministerial MTE/MDHC 18/2024); confirmar a citacao exigida antes de redistribuir"

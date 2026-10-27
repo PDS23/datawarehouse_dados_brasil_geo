@@ -1,0 +1,21 @@
+# Pipeline das areas embargadas e desembargadas da SEMA-MT (Mato Grosso). Configuracao versionada.
+# Fonte: WFS do Geoportal da SEMA-MT (geo.sema.mt.gov.br/geoserver/Geoportal). O servico exige uma `authkey` que a propria SEMA publica nos links de download
+# do catalogo GeoNetwork (geonetwork.sema.mt.gov.br); o pipeline le o catalogo a cada execucao e usa o link publicado (nunca fixa a chave no codigo).
+fonte: SEMA-MT                     # nome exato em dim.fontes
+url_catalogo: "https://geonetwork.sema.mt.gov.br/geonetwork/srv/por/q"      # busca JSON do GeoNetwork (resultType=details)
+url_pagina: "https://geonetwork.sema.mt.gov.br/geonetwork/srv/por/catalog.search"
+busca_catalogo: "embargad*"
+srid_gravado: 4674                 # o shapefile ja vem em SIRGAS 2000
+campos_esperados: [OBJECTID, NOME, CPF_CNPJ, PROPRIEDAD, DANO, ANO_DESMAT, A_INFRAC, T_EMBARGO, DAT_LAVRAT, N_PROCESSO, COORD_X, COORD_Y, FONTE, OBS, AREA_HA]
+camadas:                           # uma tabela por camada, mesmo esquema
+  embargadas:
+    type_name: "Geoportal:AREAS_EMBARGADAS_SEMA"
+    destino: vetorial.sema_mt_areas_embargadas
+    linhas_minimas: 5000           # hoje 8.357
+  desembargadas:
+    type_name: "Geoportal:AREAS_DESEMBARGADAS_SEMA"
+    destino: vetorial.sema_mt_areas_desembargadas
+    linhas_minimas: 3000           # hoje 4.729
+max_queda: 0.10
+caixa_mt: {lon_min: -62.0, lon_max: -50.0, lat_min: -18.5, lat_max: -7.0}   # Mato Grosso com folga; fora disso a geometria e anomala
+licenca: "Dados abertos da SEMA-MT (Geoportal); confirmar os termos de uso e a citacao exigida antes de redistribuir"

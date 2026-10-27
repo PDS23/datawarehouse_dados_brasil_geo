@@ -36,7 +36,7 @@ Não pergunte o que o pedido já respondeu; se houver duas opções razoáveis, 
 5. **Ids em vez de texto** nas tabelas de fato (dimensões em `dim.*`).
 6. **Espelho versionado (SCD2)** para fontes vivas: `vigente_desde`/`vigente_ate`; nada é apagado na coleta; retenção em `infra/retencao.yaml`.
 7. **Coleta só sob demanda**: pipelines carregam só o produto pedido; nada de carga completa "para adiantar". Única exceção aprovada: a atualização agendada das fontes vivas
-   (PRODES, MapBiomas Alerta, FUNAI, DETER, IBAMA (embargos), SICAR; domingos alternados às 00:10, com retenção de 30 dias; `infra/scripts/atualizar_fontes.ps1`). SIDRA segue só sob demanda; não agendar nada além disso sem o usuário decidir.
+   (PRODES, MapBiomas Alerta, FUNAI, DETER, IBAMA (embargos), ICMBio (áreas embargadas), SICAR; domingos alternados às 00:10, com retenção de 30 dias; `infra/scripts/atualizar_fontes.ps1`). SIDRA segue só sob demanda; não agendar nada além disso sem o usuário decidir.
 8. **Reprodutível por script e SEMPRE automatizado (regra de 2026-10-23)**: metodologia fica em script + LEIAME, nunca ajuste manual de linhas. Dado novo entra **só por pipeline que
    baixa direto da fonte** (WFS, API, download estável); nada de arquivo baixado à mão. Só o usuário diz quando uma carga manual é aceitável; sem esse aviso, a prioridade é
    sempre achar a automação (se a fonte não oferece, relatar e propor o que fazer, sem improvisar um upload manual). Exceção autorizada (2026-10-27): unidades de conservação do CNUC (MMA), cujo shapefile recente só existe em SharePoint; o usuário baixa o zip, o pipeline lê de `bruto/` e `--verificar` avisa quando o link direto voltar. Arquivos antigos no Drive não são fonte: o pipeline baixa de novo.

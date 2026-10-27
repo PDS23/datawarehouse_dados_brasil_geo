@@ -27,17 +27,17 @@ LARGURA_CATALOGO = 2500
 # colunas do layout: x e as tabelas de cima para baixo
 LAYOUT = [
     (40, ["dim.cultura", "dim.cultura_equivalencia", "dim.malha_anterior"]),
-    (400, ["tabular.ibge_pam", "tabular.ibge_censoagro2017_estab_lavoura_perm", "tabular.sidra_valor"]),
+    (400, ["tabular.ibge_pam", "tabular.ibge_censoagro2017_estab_lavoura_perm", "tabular.sidra_valor", "tabular.mte_cadastro_empregadores"]),
     (760, ["dim.fontes", "dim.estados", "dim.municipios", "dim.biomas"]),
-    (1120, ["vetorial.prodes_desmatamento", "vetorial.sicar_imoveis", "vetorial.incra_assentamentos", "vetorial.mapbiomas_alerta", "vetorial.funai_terras_indigenas", "vetorial.deter_alertas", "vetorial.ibama_embargos", "vetorial.mma_unidades_conservacao", "vetorial.sfb_florestas_publicas", "vetorial.icmbio_areas_embargadas"]),
-    (1480, ["resultados.prodes_municipio", "vetorial.v_prodes_municipio", "vetorial.ibge_dominios_naturais", "vetorial.ibge_regioes_naturais"]),
+    (1120, ["vetorial.prodes_desmatamento", "vetorial.sicar_imoveis", "vetorial.incra_assentamentos", "vetorial.mapbiomas_alerta", "vetorial.funai_terras_indigenas", "vetorial.deter_alertas", "vetorial.ibama_embargos", "vetorial.mma_unidades_conservacao", "vetorial.sfb_florestas_publicas"]),
+    (1480, ["resultados.prodes_municipio", "vetorial.v_prodes_municipio", "vetorial.ibge_dominios_naturais", "vetorial.ibge_regioes_naturais", "vetorial.icmbio_areas_embargadas", "vetorial.sema_mt_areas_embargadas", "vetorial.sema_mt_areas_desembargadas"]),
     # camada generica do SIDRA (dimensoes que dizem o que cada id de tabular.sidra_valor significa)
     (1840, ["dim.sidra_pesquisa", "dim.sidra_tabela", "dim.sidra_tabela_eixo", "dim.sidra_classificacao", "dim.sidra_categoria"]),
     (2200, ["dim.sidra_variavel", "dim.unidade", "dim.sidra_situacao", "catalogo.sidra_recorte"]),
 ]
 CATALOGO = ["catalogo.datasets", "catalogo.cargas", "catalogo.coletas", "catalogo.coletas_duplicados", "catalogo.mapa_colunas",
             "catalogo.v_ultima_coleta"]
-ESPELHOS = {"vetorial.sicar_imoveis", "vetorial.prodes_desmatamento", "vetorial.mapbiomas_alerta", "vetorial.funai_terras_indigenas", "vetorial.deter_alertas", "vetorial.ibama_embargos", "vetorial.mma_unidades_conservacao", "vetorial.sfb_florestas_publicas", "vetorial.icmbio_areas_embargadas", "tabular.sidra_valor"}      # versionados (vigente_desde / vigente_ate)
+ESPELHOS = {"vetorial.sicar_imoveis", "vetorial.prodes_desmatamento", "vetorial.mapbiomas_alerta", "vetorial.funai_terras_indigenas", "vetorial.deter_alertas", "vetorial.ibama_embargos", "vetorial.mma_unidades_conservacao", "vetorial.sfb_florestas_publicas", "vetorial.icmbio_areas_embargadas", "vetorial.sema_mt_areas_embargadas", "vetorial.sema_mt_areas_desembargadas", "tabular.mte_cadastro_empregadores", "tabular.sidra_valor"}      # versionados (vigente_desde / vigente_ate)
 VIEWS_USAM = {"vetorial.v_prodes_municipio": ["resultados.prodes_municipio", "vetorial.prodes_desmatamento"],
               "tabular.ibge_censoagro2017_estab_lavoura_perm": ["tabular.sidra_valor"],
               "catalogo.v_ultima_coleta": ["catalogo.coletas"]}

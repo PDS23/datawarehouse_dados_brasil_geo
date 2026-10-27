@@ -93,6 +93,8 @@ Quando a fonte não tem o id (ex.: `uf`/`municipio` do CNUC são **listas em tex
 | `mma_unidades_conservacao` | `esfera` varia a caixa (`Federal`/`federal`): use `lower()`. 170 UCs só têm ponto (`geom` NULL, `geom_ponto` preenchido). Áreas somadas contam sobreposições. |
 | `ibama_embargos` | **Dado pessoal.** CPF de pessoa física só existe como HMAC (`cpf_embargado_hash`), útil para contar embargos por pessoa. `nome_embargado` vem como o IBAMA publica: **não publique a tabela no GeoServer sem tirá-lo**. 8 datas de embargo suspeitas (`data_embargo_suspeita`). |
 | `icmbio_areas_embargadas` | Mesmo tratamento do IBAMA: CPF só como hash (`cpf_autuado_hash`, mesma chave), `autuado` é dado pessoal (não publicar no GeoServer). Um embargo tem vários polígonos (`numero_emb` repete); `area` é texto livre; 278 polígonos sem geometria. |
+| `sema_mt_areas_embargadas` / `sema_mt_areas_desembargadas` | **Duas tabelas de propósito**: embargo vigente x encerrado; só Mato Grosso. Mesmo tratamento de CPF/nome do IBAMA (`nome` é dado pessoal). `t_embargo` repete entre polígonos; `data_lavratura` NULL quando a data da fonte é incompleta. |
+| `mte_cadastro_empregadores` | Lista suja: **vigente = consta hoje** (o MTE retira nomes após 2 anos). Sem geometria; o endereço é texto. Mesmo tratamento de CPF. |
 | `deter_alertas` | O `gid` da fonte **não é único**; a chave é `(id_bioma, gid, chave_linha)`. Só Amazônia e Cerrado. É alerta (sinal), **não** é o dado oficial de desmatamento (PRODES). |
 | `prodes_desmatamento` vs `deter_alertas` vs `mapbiomas_alerta` | Três metodologias diferentes (PRODES = oficial anual; DETER = alerta quase em tempo real; MapBiomas Alerta = laudos validados). **Não se misturam numa soma**; cada tabela tem uma só metodologia. |
 | `sicar_imoveis` | Cadastro **autodeclarado**: pode haver sobreposição entre imóveis e inconsistência. Volume alto: sempre filtre por UF/município antes de fazer join espacial. |
@@ -100,7 +102,7 @@ Quando a fonte não tem o id (ex.: `uf`/`municipio` do CNUC são **listas em tex
 
 ### Buscar um CPF ou CNPJ nos embargos
 
-O banco não guarda CPF de pessoa física, só o hash. Para consultar sem expor chave nem documento, use o auxiliar (IBAMA e ICMBio de uma vez; `--tudo` inclui os já desembargados):
+O banco não guarda CPF de pessoa física, só o hash. Para consultar sem expor chave nem documento, use o auxiliar (IBAMA, ICMBio, SEMA-MT e a lista suja do MTE de uma vez; `--tudo` inclui os já desembargados/encerrados):
 
 ```powershell
 .\infra\scripts\dw.ps1 etl infra/scripts/consultar_documento.py 123.456.789-09
