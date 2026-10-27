@@ -100,6 +100,11 @@ Quando a fonte não tem o id (ex.: `uf`/`municipio` do CNUC são **listas em tex
 | `sicar_imoveis` | Cadastro **autodeclarado**: pode haver sobreposição entre imóveis e inconsistência. Volume alto: sempre filtre por UF/município antes de fazer join espacial. |
 | `tabular.sidra_valor` e `sidra_valor_t*` | Valores do SIDRA têm unidade e variável próprias (`dim.sidra_*`, `dim.unidade`): confira a unidade antes de somar. |
 
+### Do embargo no mapa ao titular, e do documento aos embargos
+
+- **Do embargo ao titular** (o analista viu um embargo no GeoServer): `.\infra\scripts\dw.ps1 etl infra/scripts/consultar_embargo.py <chave_tad | numero_emb | t_embargo | auto | processo>`. Devolve nome e CNPJ; do CPF só existe o hash, então use `--documento <CPF ou CNPJ>` para confirmar se aquela pessoa é a titular.
+- **Do documento aos embargos:** abaixo.
+
 ### Buscar um CPF ou CNPJ nos embargos
 
 O banco não guarda CPF de pessoa física, só o hash. Para consultar sem expor chave nem documento, use o auxiliar (IBAMA, ICMBio, SEMA-MT e a lista suja do MTE de uma vez; `--tudo` inclui os já desembargados/encerrados):
@@ -120,7 +125,7 @@ Sem a chave do projeto (`ibama/embargos/segredo/`) não há como buscar CPF; CNP
 - **Somente leitura pelo dia a dia:** `infra/scripts/dw.ps1 consulta -Sql "..."` (ou `-Arquivo consulta.sql`).
 - **Cliente SQL/QGIS** (DBeaver, QGIS): host, porta 5432, banco do projeto, papel `leitura` ou `analistas` (o `etl` é dos pipelines; papéis e senhas ficam com o administrador, não estão neste repositório).
 - **De fora da máquina:** só pela tailnet (Tailscale); nada é exposto na internet. Ver `infra/LEIAME_infra.md` e `infra/colab/LEIAME_colab.md` (Colab).
-- **GeoServer** (`localhost:8080`): publica camadas para mapa; para análise, prefira o SQL direto.
+- **GeoServer** (`localhost:8080`, workspace `dw`): publica camadas para mapa (lista em `infra/LEIAME_infra.md`); só a versão vigente e, nos embargos, **sem nome nem documento**. Para saber o titular de um embargo visto no mapa: `infra/scripts/consultar_embargo.py <identificador do termo>`. Para análise, prefira o SQL direto.
 
 ## 8. Como saber se o dado está fresco
 

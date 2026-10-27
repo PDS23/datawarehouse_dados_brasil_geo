@@ -50,6 +50,13 @@ ESTILOS = [
     ("declividade_pct", "declividade_pct.sld"),
     ("prodes_desmatamento", "prodes_desmatamento.sld"),
     ("sicar_imoveis", "sicar_imoveis.sld"),
+    ("terra_indigena", "terra_indigena.sld"),
+    ("unidade_conservacao", "unidade_conservacao.sld"),
+    ("floresta_publica", "floresta_publica.sld"),
+    ("alerta_desmatamento", "alerta_desmatamento.sld"),
+    ("embargo", "embargo.sld"),
+    ("embargo_ponto", "embargo_ponto.sld"),
+    ("embargo_encerrado", "embargo_encerrado.sld"),
 ]
 
 # (nome do store, schema do PostgreSQL). Um store por schema.
@@ -88,6 +95,45 @@ VETORIAIS = [
                "cruza a divisa aparece uma vez por município. Filtre por "
                "id_municipio (código IBGE) para consultas leves.",
      "estilo": "prodes_desmatamento"},
+    # Fontes novas (2026-10-27): sempre por VIEW (infra/postgres/views_geoserver.sql), so a versao vigente. As de embargo NAO trazem nome nem documento do
+    # embargado: o titular se obtem com infra/scripts/consultar_embargo.py (quem tem acesso ao banco).
+    {"store": "dw_vetorial", "nome": "v_funai_terras_indigenas", "titulo": "FUNAI - Terras indígenas",
+     "resumo": "665 terras indígenas da FUNAI (WFS da FUNAI), versão vigente. fase_ti diz a fase do processo (declarada, homologada, regularizada...).",
+     "estilo": "terra_indigena"},
+    {"store": "dw_vetorial", "nome": "v_mma_unidades_conservacao", "titulo": "MMA - Unidades de conservação (CNUC)",
+     "resumo": "3.406 unidades de conservação com polígono (CNUC, MMA), edição 2026_07, versão vigente. As 170 UCs que só têm ponto esquemático não estão nesta camada. "
+               "esfera varia a capitalização (Federal/federal): use lower().",
+     "estilo": "unidade_conservacao"},
+    {"store": "dw_vetorial", "nome": "v_sfb_florestas_publicas", "titulo": "SFB - Florestas públicas (CNFP)",
+     "resumo": "Cadastro Nacional de Florestas Públicas (SFB), edição 2025: assentamentos, UCs, terras indígenas, glebas e áreas militares. Há sobreposição entre registros "
+               "(sobreposic = SIM): não some área sem filtrar. Desenha só em escala maior que 1:5.000.000.",
+     "estilo": "floresta_publica"},
+    {"store": "dw_vetorial", "nome": "v_deter_alertas", "titulo": "DETER (INPE) - Alertas de desmatamento, Amazônia e Cerrado",
+     "resumo": "Cerca de 600 mil alertas do DETER (INPE), versão vigente. É alerta, não o dado oficial de desmatamento (PRODES). Desenha só em escala maior que 1:500.000; "
+               "para consultas filtre por uf, id_municipio ou publish_month (o WFS corta em 100.000 feições, em silêncio).",
+     "estilo": "alerta_desmatamento"},
+    {"store": "dw_vetorial", "nome": "v_mapbiomas_alerta", "titulo": "MapBiomas Alerta - Alertas validados de desmatamento",
+     "resumo": "Cerca de 540 mil alertas validados do MapBiomas Alerta, versão vigente. Desenha só em escala maior que 1:500.000; filtre por estado ou ano antes de pedir feições "
+               "(o WFS corta em 100.000, em silêncio).",
+     "estilo": "alerta_desmatamento"},
+    {"store": "dw_vetorial", "nome": "v_ibama_embargos_poligonos", "titulo": "IBAMA - Termos de embargo (com polígono)",
+     "resumo": "Termos de embargo do IBAMA que têm polígono (~60 mil), versão vigente, INCLUSIVE os já desembargados (veja sit_desembargo e sit_cancelado). Sem nome nem documento do "
+               "embargado: use o identificador chave_tad (ou num_auto_infracao, num_processo) com infra/scripts/consultar_embargo.py para saber o titular. Desenha só em escala maior que 1:2.000.000.",
+     "estilo": "embargo"},
+    {"store": "dw_vetorial", "nome": "v_ibama_embargos_pontos", "titulo": "IBAMA - Termos de embargo (só ponto)",
+     "resumo": "Termos de embargo do IBAMA SEM polígono, só com o ponto (latitude/longitude do termo): o ponto indica o lugar, não a área embargada. Sem nome nem documento do embargado: "
+               "use chave_tad com infra/scripts/consultar_embargo.py. Há ainda cerca de 15 mil termos sem geometria nenhuma, que só aparecem na busca por documento.",
+     "estilo": "embargo_ponto"},
+    {"store": "dw_vetorial", "nome": "v_icmbio_areas_embargadas", "titulo": "ICMBio - Áreas embargadas",
+     "resumo": "Áreas embargadas pelo ICMBio (~14,5 mil polígonos), versão vigente. Um embargo (numero_emb) tem vários polígonos. Sem nome nem documento do autuado: use numero_emb "
+               "(ou numero_ai, processo) com infra/scripts/consultar_embargo.py. area_texto é texto livre da fonte, não a área do polígono.",
+     "estilo": "embargo"},
+    {"store": "dw_vetorial", "nome": "v_sema_mt_areas_embargadas", "titulo": "SEMA-MT - Áreas embargadas (Mato Grosso)",
+     "resumo": "Áreas embargadas pela SEMA-MT (Mato Grosso), embargo vigente, versão vigente. Sem nome nem documento: use t_embargo com infra/scripts/consultar_embargo.py.",
+     "estilo": "embargo"},
+    {"store": "dw_vetorial", "nome": "v_sema_mt_areas_desembargadas", "titulo": "SEMA-MT - Áreas desembargadas (Mato Grosso, embargo encerrado)",
+     "resumo": "Áreas cujo embargo pela SEMA-MT foi ENCERRADO: não contam como embargo vigente. Sem nome nem documento: use t_embargo com infra/scripts/consultar_embargo.py.",
+     "estilo": "embargo_encerrado"},
 ]
 
 # Campos que o WCS exige e que a tela do GeoServer preenche sozinha, mas uma

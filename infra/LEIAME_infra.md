@@ -53,11 +53,36 @@ Partes: `workspace`, `estilos`, `stores`, `vetoriais`, `rasters`, `limites`.
 | Parte | O que garante |
 |---|---|
 | `workspace` | workspace `dw` com namespace `http://dw.local` |
-| `estilos` | os 5 SLD de `estilos/` (cria ou atualiza) |
+| `estilos` | os 12 SLD de `estilos/` (cria ou atualiza) |
 | `stores` | `dw_dim` (schema `dim`) e `dw_vetorial` (schema `vetorial`), papel `geoserver`, "Expose primary keys" ligado |
-| `vetoriais` | `biomas`, `estados`, `municipios`, `sicar_imoveis`, `v_prodes_municipio`, com título, resumo e estilo |
+| `vetoriais` | `biomas`, `estados`, `municipios`, `sicar_imoveis`, `v_prodes_municipio` e as **views das fontes novas** (abaixo), com título, resumo e estilo |
 | `rasters` | `mapbiomas_1985/2008/2015/2025`, `topodata_declividade_graus_rs_sc` e `_pct_rs_sc` |
 | `limites` | WFS 100.000 feições; WMS 60 s / 65.536 KB / 1.000 erros; WCS leitura 524.288, saída 262.144, overview `NEAREST` |
+
+### Camadas das fontes novas (2026-10-27): sempre por view, sem dado pessoal
+
+As fontes novas **não são publicadas pela tabela**: o GeoServer lê views `vetorial.v_*` de `infra/postgres/views_geoserver.sql` (rodar como `postgres` antes de publicar), que mostram só a **versão
+vigente** (`vigente_ate IS NULL`) e, nas fontes de embargo, **não trazem nome nem documento do embargado** (nem hash de CPF, nem campos de texto livre que possam citar pessoas).
+Publicar a tabela de embargo direto vazaria o nome de pessoas físicas para quem tem só o GeoServer.
+
+| Camada (`dw:`) | Fonte | Feições | Escala mínima do estilo |
+|---|---|---|---|
+| `v_funai_terras_indigenas` | FUNAI | 665 | sem limite |
+| `v_mma_unidades_conservacao` | MMA, CNUC | 3.406 (as 170 só com ponto ficam de fora) | sem limite |
+| `v_sfb_florestas_publicas` | SFB, CNFP | 12.874 | 1:5.000.000 |
+| `v_deter_alertas` | INPE, DETER | 599.537 | 1:500.000 |
+| `v_mapbiomas_alerta` | MapBiomas Alerta | 543.378 | 1:500.000 |
+| `v_ibama_embargos_poligonos` | IBAMA (com polígono) | 59.769 | 1:2.000.000 |
+| `v_ibama_embargos_pontos` | IBAMA (só ponto, sem polígono) | 42.371 | 1:2.000.000 |
+| `v_icmbio_areas_embargadas` | ICMBio | 14.501 | 1:2.000.000 |
+| `v_sema_mt_areas_embargadas` | SEMA-MT, embargo vigente | 8.357 | 1:2.000.000 |
+| `v_sema_mt_areas_desembargadas` | SEMA-MT, embargo ENCERRADO (cinza) | 4.728 | 1:2.000.000 |
+
+Os ~14,8 mil termos do IBAMA sem geometria nenhuma e a lista suja do MTE (sem geometria) **não são camadas**: só aparecem na busca por documento. As camadas grandes (DETER, MapBiomas Alerta, IBAMA)
+passam do limite de 100.000 feições do WFS, que corta **em silêncio**: filtre por UF, município ou data. **Rastrear o titular de um embargo:** a camada traz o identificador do termo (`chave_tad`
+no IBAMA, `numero_emb` no ICMBio, `t_embargo` na SEMA-MT); quem tem acesso ao banco roda `infra/scripts/consultar_embargo.py <identificador>` e obtém nome e CNPJ (do CPF só existe o hash;
+com `--documento` o auxiliar confirma se um CPF/CNPJ conhecido é o titular). Acrescentar fonte nova: view em `views_geoserver.sql`, linha em `VETORIAIS` e, se precisar, um SLD em `estilos/`.
+Rodar com o Python do sistema (usa só a biblioteca padrão): `python infra\scripts\publicar_geoserver.py --apenas estilos vetoriais`.
 
 Idempotente e só aditivo: o que existe é atualizado, nada é apagado. Lê
 usuário, senha e endereço do `.env`. O que muda pra publicar uma camada nova é
