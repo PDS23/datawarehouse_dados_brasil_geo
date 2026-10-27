@@ -1,0 +1,21 @@
+# Pipeline do Cadastro Nacional de Florestas Publicas (CNFP, Servico Florestal Brasileiro). Configuracao versionada.
+# O SFB publica uma edicao por ano. No CKAN (dados.florestal.gov.br) cada edicao tem um recurso "AAAA - Cadastro Nacional de Florestas Publicas" que aponta para o
+# item do portal ArcGIS do SFB (mapas.florestal.gov.br); o item e um SHAPEFILE ZIP publico, baixavel sem login em .../sharing/rest/content/items/<id>/data.
+# O pipeline le o CKAN, escolhe a edicao mais recente, baixa o zip e reconcilia. Nao ha arquivo manual.
+fonte: SFB                         # nome exato em dim.fontes
+url_ckan_pacote: "https://dados.florestal.gov.br/api/3/action/package_show?id=cadastro-nacional-de-florestas-publicas-cnfp"
+url_pagina: "https://dados.florestal.gov.br/dataset/cadastro-nacional-de-florestas-publicas-cnfp"
+padrao_recurso: '^(\d{4}) - Cadastro Nacional de Florestas P.blicas'      # o ano e a edicao; ignora os recursos de CSV e PDF
+padrao_item: 'item\.html\?id=([0-9a-f]{32})'
+url_download: "https://mapas.florestal.gov.br/portal/sharing/rest/content/items/{item}/data"
+destino_padrao: vetorial.sfb_florestas_publicas
+srid_gravado: 4674                 # o shapefile ja vem em SIRGAS 2000 (Polygon Z)
+tamanho_minimo_bytes: 50000000     # o zip de 2025 tem 229 MB; menos que isto = download truncado ou arquivo errado
+linhas_minimas: 10000              # 2025 tem 12.874 poligonos
+campos_esperados: [nome, categoria, protecao, tipo, governo, comunitari, classe, orgao, sobreposic, atolegal, anocriacao, estagio, codigo, observacao, uf,
+                   Shape_Leng, Shape_Area, bioma, municipio, geocodigo, area_ha]
+chave_campos: [nome, categoria, classe, uf, geocodigo, atolegal, anocriacao, orgao]    # o shapefile nao tem id: a chave e a identidade do registro
+lote_leitura: 1000                 # poligonos por leitura (o .shp tem 837 MB descompactado)
+max_queda: 0.10
+caixa_brasil: {lon_min: -75.0, lon_max: -25.0, lat_min: -36.0, lat_max: 7.0}
+licenca: "Dados abertos do Servico Florestal Brasileiro (SNIF/CNFP); confirmar os termos de uso e a citacao exigida antes de redistribuir"

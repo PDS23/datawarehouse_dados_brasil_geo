@@ -38,5 +38,7 @@ tabelas:
     chave: [cd_cnuc]
   - tabela: vetorial.ibama_embargos
     chave: [chave_tad]
+  - tabela: vetorial.sfb_florestas_publicas
+    chave: [chave_linha]
   - tabela: vetorial.deter_alertas
     chave: [id_bioma, gid, chave_linha]

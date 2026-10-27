@@ -5,8 +5,8 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 87,
-   "bytes": 90112,
+   "linhas": 129,
+   "bytes": 106496,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
     {
@@ -100,8 +100,8 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 79,
-   "bytes": 98304,
+   "linhas": 81,
+   "bytes": 106496,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
     {
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 19,
+   "linhas": 20,
    "bytes": 32768,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,8 +448,8 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 242,
-   "bytes": 106496,
+   "linhas": 275,
+   "bytes": 114688,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
     {
@@ -494,8 +494,8 @@
    "sch": "catalogo",
    "nome": "sidra_recorte",
    "view": false,
-   "linhas": 2,
-   "bytes": 49152,
+   "linhas": 41,
+   "bytes": 81920,
    "coment": "O que exatamente foi carregado de cada tabela do SIDRA (a coleta e sempre sob demanda, por recorte).",
    "cols": [
     {
@@ -903,7 +903,7 @@
    "sch": "dim",
    "nome": "fontes",
    "view": false,
-   "linhas": 8,
+   "linhas": 9,
    "bytes": 49152,
    "coment": "Órgãos e sistemas de onde vêm os dados. Quase toda tabela aponta para cá por id_fonte.",
    "cols": [
@@ -1090,8 +1090,8 @@
    "sch": "dim",
    "nome": "sidra_categoria",
    "view": false,
-   "linhas": 175,
-   "bytes": 81920,
+   "linhas": 246,
+   "bytes": 90112,
    "coment": "Categorias de cada classificacao (produtos, faixas de area...). id nosso; codigo_sidra e o codigo oficial.",
    "cols": [
     {
@@ -1164,7 +1164,7 @@
    "sch": "dim",
    "nome": "sidra_classificacao",
    "view": false,
-   "linhas": 4,
+   "linhas": 17,
    "bytes": 32768,
    "coment": "Classificacoes do SIDRA (eixos de cruzamento: produto, grupo de area, tipologia...).",
    "cols": [
@@ -1189,7 +1189,7 @@
    "sch": "dim",
    "nome": "sidra_pesquisa",
    "view": false,
-   "linhas": 1,
+   "linhas": 2,
    "bytes": 49152,
    "coment": "Pesquisas do IBGE que alimentam o SIDRA (Censo Agropecuario, PAM, LSPA...).",
    "cols": [
@@ -1260,7 +1260,7 @@
    "sch": "dim",
    "nome": "sidra_tabela",
    "view": false,
-   "linhas": 1,
+   "linhas": 14,
    "bytes": 32768,
    "coment": "Tabelas do SIDRA ja coletadas (id = numero oficial da tabela). So entram as pedidas.",
    "cols": [
@@ -1313,7 +1313,7 @@
    "sch": "dim",
    "nome": "sidra_tabela_eixo",
    "view": false,
-   "linhas": 3,
+   "linhas": 34,
    "bytes": 24576,
    "coment": "Diz que classificacao cada id_catN de tabular.sidra_valor representa em cada tabela.",
    "cols": [
@@ -1345,7 +1345,7 @@
    "sch": "dim",
    "nome": "sidra_variavel",
    "view": false,
-   "linhas": 2,
+   "linhas": 18,
    "bytes": 32768,
    "coment": "Variaveis do SIDRA (id = codigo oficial).",
    "cols": [
@@ -1377,7 +1377,7 @@
    "sch": "dim",
    "nome": "unidade",
    "view": false,
-   "linhas": 1,
+   "linhas": 5,
    "bytes": 32768,
    "coment": "Unidades de medida do SIDRA (id = codigo MC do SIDRA).",
    "cols": [
@@ -1529,7 +1529,7 @@
    "sch": "tabular",
    "nome": "ibge_pam",
    "view": false,
-   "linhas": 238780,
+   "linhas": 241937,
    "bytes": 120586240,
    "coment": "PAM/IBGE (SIDRA 5457), 1974 em diante. Valores como o IBGE devolve; a API rotula tudo como toneladas, por isso unidade_* registra a unidade real quando ela e conhecida.",
    "cols": [
@@ -1638,7 +1638,7 @@
    "sch": "tabular",
    "nome": "sidra_valor",
    "view": false,
-   "linhas": 111440,
+   "linhas": 637049,
    "bytes": 0,
    "coment": "Valores de tabelas do SIDRA (IBGE), uma particao por tabela. Ids em vez de texto: ver dim.sidra_*. id_catN = categoria da classificacao que dim.sidra_tabela_eixo indica na posicao N. Sem linha = zero ou nao se aplica.",
    "cols": [
@@ -1785,12 +1785,1975 @@
    ]
   },
   {
+   "id": "tabular.sidra_valor_t10061",
+   "sch": "tabular",
+   "nome": "sidra_valor_t10061",
+   "view": false,
+   "linhas": 27990,
+   "bytes": 6914048,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t10261",
+   "sch": "tabular",
+   "nome": "sidra_valor_t10261",
+   "view": false,
+   "linhas": 92772,
+   "bytes": 23478272,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t10268",
+   "sch": "tabular",
+   "nome": "sidra_valor_t10268",
+   "view": false,
+   "linhas": 50382,
+   "bytes": 13041664,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t10295",
+   "sch": "tabular",
+   "nome": "sidra_valor_t10295",
+   "view": false,
+   "linhas": 16794,
+   "bytes": 4153344,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t10299",
+   "sch": "tabular",
+   "nome": "sidra_valor_t10299",
+   "view": false,
+   "linhas": 100725,
+   "bytes": 25993216,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t202",
+   "sch": "tabular",
+   "nome": "sidra_valor_t202",
+   "view": false,
+   "linhas": 11118,
+   "bytes": 2834432,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t6804",
+   "sch": "tabular",
+   "nome": "sidra_valor_t6804",
+   "view": false,
+   "linhas": 43326,
+   "bytes": 11018240,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t6805",
+   "sch": "tabular",
+   "nome": "sidra_valor_t6805",
+   "view": false,
+   "linhas": 51646,
+   "bytes": 12746752,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t6806",
+   "sch": "tabular",
+   "nome": "sidra_valor_t6806",
+   "view": false,
+   "linhas": 46918,
+   "bytes": 12148736,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
    "id": "tabular.sidra_valor_t6956",
    "sch": "tabular",
    "nome": "sidra_valor_t6956",
    "view": false,
    "linhas": 111440,
    "bytes": 28139520,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t9515",
+   "sch": "tabular",
+   "nome": "sidra_valor_t9515",
+   "view": false,
+   "linhas": 5598,
+   "bytes": 1474560,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t9542",
+   "sch": "tabular",
+   "nome": "sidra_valor_t9542",
+   "view": false,
+   "linhas": 50382,
+   "bytes": 13434880,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t9543",
+   "sch": "tabular",
+   "nome": "sidra_valor_t9543",
+   "view": false,
+   "linhas": 16794,
+   "bytes": 4161536,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t9923",
+   "sch": "tabular",
+   "nome": "sidra_valor_t9923",
+   "view": false,
+   "linhas": 11164,
+   "bytes": 2752512,
    "coment": null,
    "cols": [
     {
@@ -3974,6 +5937,248 @@
    ]
   },
   {
+   "id": "vetorial.sfb_florestas_publicas",
+   "sch": "vetorial",
+   "nome": "sfb_florestas_publicas",
+   "view": false,
+   "linhas": 12874,
+   "bytes": 329228288,
+   "coment": "Cadastro Nacional de Florestas Públicas (Serviço Florestal Brasileiro): assentamentos, unidades de conservação, terras indígenas, glebas e áreas militares com floresta pública; edição 2025. Espelho versionado, baixado direto do portal do SFB. Ver sfb/florestas_publicas/LEIAME_florestas_publicas.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: o shapefile não tem id; identidade do registro = nome, categoria, classe, UF, códigos IBGE, ato legal, ano de criação e órgão (mais ordinal nos 4 casos idênticos)."
+    },
+    {
+     "n": "nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da área (assentamento, UC, gleba, terra indígena...)."
+    },
+    {
+     "n": "categoria",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sigla da categoria (PA, TI, APA, PARNA, FLONA, GLEBA ARRECADADA...); 'A / B' quando a área tem dupla afetação."
+    },
+    {
+     "n": "protecao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Regime: uso sustentável, proteção integral, sem destinação, uso militar ou outros usos."
+    },
+    {
+     "n": "tipo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "TIPO A = floresta pública destinada; TIPO B = gleba sem destinação."
+    },
+    {
+     "n": "governo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Esfera responsável: federal, estadual ou municipal."
+    },
+    {
+     "n": "comunitari",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "SIM/NAO: se a área é de uso comunitário."
+    },
+    {
+     "n": "classe",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Classe do cadastro (ASSENTFED, UCFED, UCEST, UCMUN, TI, GLEBAFED, AREAMILIT...)."
+    },
+    {
+     "n": "orgao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Órgão responsável (INCRA, FUNAI, ICMBio, órgãos estaduais)."
+    },
+    {
+     "n": "sobreposic",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "SIM/NAO: se se sobrepõe a outra área do cadastro."
+    },
+    {
+     "n": "atolegal",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Ato legal de criação (decreto, lei, portaria), quando informado."
+    },
+    {
+     "n": "anocriacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Data ou ano de criação como a fonte publica (formatos mistos: AAAA-MM-DD, DD-MM-AAAA, AAAA/MM/DD hh:mm:ss)."
+    },
+    {
+     "n": "ano_criacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: ano extraído de anocriacao."
+    },
+    {
+     "n": "estagio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Estágio da área (ativo, certificada, regularizada, arrecadada...)."
+    },
+    {
+     "n": "codigo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da área; vazio na edição 2025."
+    },
+    {
+     "n": "observacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Observação; vazia na edição 2025."
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sigla da UF (uma por registro)."
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado de uf (dim.estados)."
+    },
+    {
+     "n": "bioma",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Bioma(s) da área; 'A/B' quando cruza biomas."
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Município(s) da área, separados por '/'."
+    },
+    {
+     "n": "geocodigo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Códigos IBGE dos municípios, separados por '/'."
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área em hectares segundo a fonte."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono da área (SIRGAS 2000; o Z da fonte é descartado)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL e o texto original vai em geom_origem_texto)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: edição do CNFP (ano) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.sicar_imoveis",
    "sch": "vetorial",
    "nome": "sicar_imoveis",
@@ -4290,6 +6495,42 @@
    "colpara": "id_fonte"
   },
   {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
    "de": "vetorial.deter_alertas",
    "col": "id_bioma",
    "para": "dim.biomas",
@@ -4356,6 +6597,60 @@
    "colpara": "id_cultura"
   },
   {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t10261",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
    "de": "vetorial.incra_assentamentos",
    "col": "id_estado",
    "para": "dim.estados",
@@ -4420,6 +6715,18 @@
    "col": "id_classificacao",
    "para": "dim.sidra_classificacao",
    "colpara": "id_classificacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
   },
   {
    "de": "dim.sidra_categoria",
@@ -4560,6 +6867,18 @@
    "colpara": "id"
   },
   {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
    "de": "tabular.sidra_valor_t6956",
    "col": "id_carga",
    "para": "catalogo.cargas",
@@ -4638,7 +6957,919 @@
    "colpara": "id_variavel"
   },
   {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
    "de": "vetorial.mma_unidades_conservacao",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t9542",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t202",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t9923",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t9515",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t10295",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t10268",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t10299",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t9543",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t10061",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t6804",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t6805",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t6806",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "vetorial.sfb_florestas_publicas",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "vetorial.sfb_florestas_publicas",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"
