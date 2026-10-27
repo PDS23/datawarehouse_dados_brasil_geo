@@ -15,6 +15,7 @@ Um data warehouse geoespacial em **PostgreSQL 18 + PostGIS 3.6**, alimentado por
 | MapBiomas Alerta | `vetorial.mapbiomas_alerta` | 543 mil alertas de desmatamento (2018 a 2026) | espelho versionado, WFS aberto do MapBiomas |
 | DETER (INPE) | `vetorial.deter_alertas` | 600 mil alertas de desmatamento, Amazônia e Cerrado (2016 a 2026) | espelho versionado, WFS aberto do TerraBrasilis |
 | MMA (unidades de conservação, CNUC) | `vetorial.mma_unidades_conservacao` | 3.576 UCs (3.406 com polígono), edição 2026_07 | espelho versionado; **carga manual autorizada** (shapefile recente só em SharePoint) |
+| ICMBio (áreas embargadas) | `vetorial.icmbio_areas_embargadas` | 14.779 polígonos, camada editada em 06/10/2026 | espelho versionado, API pública do ArcGIS Online; CPF só como hash |
 | SFB (florestas públicas, CNFP) | `vetorial.sfb_florestas_publicas` | 12.874 polígonos (assentamentos, UCs, terras indígenas, glebas), edição 2025 | espelho versionado, baixado direto do portal do SFB (CKAN → shapefile ZIP) |
 | IBAMA (termos de embargo) | `vetorial.ibama_embargos` | 117 mil embargos (1997 a 2026), 60 mil com polígono | espelho versionado, CSV diário dos dados abertos; CPF só como hash |
 | FUNAI (terras indígenas) | `vetorial.funai_terras_indigenas` | 665 terras, 117 milhões de ha | espelho versionado, WFS aberto da FUNAI |

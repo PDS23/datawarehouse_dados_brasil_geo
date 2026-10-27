@@ -5,7 +5,7 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 129,
+   "linhas": 131,
    "bytes": 106496,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
@@ -100,7 +100,7 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 81,
+   "linhas": 83,
    "bytes": 106496,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 20,
+   "linhas": 21,
    "bytes": 32768,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,8 +448,8 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 275,
-   "bytes": 114688,
+   "linhas": 319,
+   "bytes": 122880,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
     {
@@ -903,7 +903,7 @@
    "sch": "dim",
    "nome": "fontes",
    "view": false,
-   "linhas": 9,
+   "linhas": 10,
    "bytes": 49152,
    "coment": "Órgãos e sistemas de onde vêm os dados. Quase toda tabela aponta para cá por id_fonte.",
    "cols": [
@@ -4997,6 +4997,325 @@
    ]
   },
   {
+   "id": "vetorial.icmbio_areas_embargadas",
+   "sch": "vetorial",
+   "nome": "icmbio_areas_embargadas",
+   "view": false,
+   "linhas": 14779,
+   "bytes": 39690240,
+   "coment": "Áreas embargadas do ICMBio (camada pública do ArcGIS Online do ICMBio): uma linha por polígono; 14.779 na carga de 27/10/2026. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome do autuado como a fonte publica. Ver icmbio/areas_embargadas/LEIAME_areas_embargadas.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: a camada não tem id único; identidade do polígono = número do embargo, série, auto de infração, documento, UC, município, UF, data e processo (mais ordinal nos idênticos)."
+    },
+    {
+     "n": "objectid",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "OBJECTID da camada na origem; não é estável entre republicações e não entra na comparação."
+    },
+    {
+     "n": "vw_num_emb",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Sequencial da visão de origem; não entra na comparação."
+    },
+    {
+     "n": "numero_emb",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do termo de embargo; repete entre os polígonos do mesmo embargo."
+    },
+    {
+     "n": "serie",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Série do termo (A, B ou vazio)."
+    },
+    {
+     "n": "origem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Eletrônico ou Papel."
+    },
+    {
+     "n": "numero_ai",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do auto de infração."
+    },
+    {
+     "n": "cpf_cnpj",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Documento do autuado como a fonte publica, exceto CPF de pessoa física, que não é guardado (NULL)."
+    },
+    {
+     "n": "tipo_doc_autuado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: CPF, CNPJ, OUTRO (texto livre) ou vazio."
+    },
+    {
+     "n": "doc_valido",
+     "t": "boolean",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: os dígitos verificadores do CPF/CNPJ conferem (falso = provável erro de digitação na fonte)."
+    },
+    {
+     "n": "cpf_autuado_hash",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: HMAC-SHA256 dos 11 dígitos do CPF, com a mesma chave do IBAMA (permite achar a mesma pessoa nas duas fontes sem guardar o CPF)."
+    },
+    {
+     "n": "autuado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome do autuado como a fonte publica (dado pessoal)."
+    },
+    {
+     "n": "desc_infra",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Descrição da infração."
+    },
+    {
+     "n": "desc_sanc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Descrição da sanção."
+    },
+    {
+     "n": "artigo_1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Artigo infringido (1)."
+    },
+    {
+     "n": "artigo_2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Artigo infringido (2)."
+    },
+    {
+     "n": "tipo_infra",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Tipo da infração (flora, poluição, exclusivamente em UC...)."
+    },
+    {
+     "n": "nome_uc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Unidade de conservação onde ocorreu o embargo."
+    },
+    {
+     "n": "cnuc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da UC no CNUC."
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Município."
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "UF (sigla)."
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado de uf (dim.estados)."
+    },
+    {
+     "n": "data",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Data do embargo como a fonte publica (AAAA-MM-DD; 'None' em poucas linhas)."
+    },
+    {
+     "n": "data_embargo",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: data como tipo date."
+    },
+    {
+     "n": "ano",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Ano como a fonte publica."
+    },
+    {
+     "n": "obs",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Observações do ICMBio."
+    },
+    {
+     "n": "julgamento",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Situação do julgamento (homologado em 1ª ou 2ª instância...)."
+    },
+    {
+     "n": "area",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Área em TEXTO livre, como a fonte publica ('2,55ha', '300 m²', 'Não informada'); não é a área do polígono."
+    },
+    {
+     "n": "area_informada_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Derivado: hectares extraídos de area, só quando o texto é um número com ha/hectare(s)/m²; NULL nos demais. Não é a área do polígono."
+    },
+    {
+     "n": "processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Número do processo administrativo."
+    },
+    {
+     "n": "ngi",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Núcleo de gestão integrada responsável."
+    },
+    {
+     "n": "ct",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Coordenação técnica responsável."
+    },
+    {
+     "n": "gr",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Coordenação regional responsável (código)."
+    },
+    {
+     "n": "gr_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Coordenação regional responsável (nome)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono embargado (SIRGAS 2000). 278 polígonos vêm sem geometria na fonte."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.incra_assentamentos",
    "sch": "vetorial",
    "nome": "incra_assentamentos",
@@ -7870,6 +8189,18 @@
   },
   {
    "de": "vetorial.sfb_florestas_publicas",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.icmbio_areas_embargadas",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "vetorial.icmbio_areas_embargadas",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"

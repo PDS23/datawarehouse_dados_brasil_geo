@@ -14,6 +14,7 @@
 | INPE, DETER (Amazônia e Cerrado) | `vetorial.deter_alertas` | 599.537 | agendada |
 | FUNAI, terras indígenas | `vetorial.funai_terras_indigenas` | 665 | agendada |
 | IBAMA, termos de embargo | `vetorial.ibama_embargos` | 116.944 | agendada (desde 27/10); CPF só como hash |
+| ICMBio, áreas embargadas | `vetorial.icmbio_areas_embargadas` | 14.779 | automática, sob demanda (entrar na agenda: a decidir); CPF só como hash |
 | MMA, unidades de conservação (CNUC) | `vetorial.mma_unidades_conservacao` | 3.576 | **manual autorizada** (zip em `bruto/`); `--verificar` |
 | SFB, florestas públicas (CNFP) | `vetorial.sfb_florestas_publicas` | 12.874 | automática, sob demanda (1 edição por ano) |
 | INCRA, assentamentos | `vetorial.incra_assentamentos` | 7.525 | fonte fora do ar (item 11); carga antiga |
@@ -26,7 +27,7 @@ Rasters (fora do banco, em arquivo/COG, servidos pelo GeoServer): MapBiomas uso 
 **Operação:** atualização agendada (domingos alternados, 00:10) com backup antes (reaproveitado se tiver menos de 24 h) e depois, retenção de 30 dias; backup semanal de domingo 03:00;
 diagrama do banco publicado como artefato (versão 10); repositório público no GitHub sincronizado; guia de uso em [GUIA_DE_USO.md](GUIA_DE_USO.md).
 
-**Pendências principais:** (1) preparar o banco para a pré-análise de legalidade EUDR (item 16: faltam ICMBio, SEMA-MT, MTE e a consulta por CPF/CNPJ); (2) INCRA (assentamentos, quilombolas, SIGEF) depende do servidor voltar (item 11);
+**Pendências principais:** (1) preparar o banco para a pré-análise de legalidade EUDR (item 16: faltam SEMA-MT e MTE; ICMBio e a consulta por CPF/CNPJ já feitos); (2) INCRA (assentamentos, quilombolas, SIGEF) depende do servidor voltar (item 11);
 (3) MinIO e catálogo de rasters (ver "Caminho 1"); (4) monitor de fontes (item 14); (5) política do Tailscale e acesso dos analistas ao PostGIS (seção "Migração"); (6) fontes novas do item 15 ainda não carregadas (áreas prioritárias do MMA, ANA BHO, IBGE ambientais, MapBiomas rasters automatizados).
 
 ## Objetivo
@@ -868,7 +869,7 @@ erDiagram
     Ainda **não pesquisados**: ANM (mineração), SPU, ZEE estaduais.
     *(2026-10-27: SFB/CNFP, CNUC, IBAMA e DETER já carregados; os demais ✅ "automatizáveis" seguem a fazer. ICMBio, SEMA-MT e MTE, abaixo, entram pelo item 16.)*
 
-16. **Preparar o banco para uma pré-análise de legalidade EUDR no Brasil (levantamento de 2026-10-27; a executar)** — 📐 desenho a aprovar. **Situação:** 7 dos 12 critérios já têm a fonte no banco (itens 1 a 7); faltam ICMBio, SEMA-MT, MTE (8 a 11) e o quilombola (12, bloqueado).
+16. **Preparar o banco para uma pré-análise de legalidade EUDR no Brasil (levantamento de 2026-10-27; a executar)** — 📐 desenho a aprovar. **Situação (2026-10-27):** 9 dos 12 critérios já têm a fonte no banco (itens 1 a 9); faltam SEMA-MT, MTE (10 e 11) e o quilombola (12, bloqueado).
     **Objetivo:** o banco ter todas as fontes públicas que uma checagem prévia de imóveis contra o Regulamento Europeu de Desmatamento
     (EUDR, Reg. UE 2023/1115) usa, para barrar **antes do envio** os imóveis que seriam negados. **Regra do usuário:** as fontes entram como
     qualquer outra, no padrão `<grupo>/<fonte>/` e com **nome pela fonte**; nada no banco (schema, tabela, coluna, LEIAME de fonte) cita
@@ -888,21 +889,20 @@ erDiagram
     | 5 | Sem sobreposição com unidade de conservação | MMA, CNUC | ✅ `vetorial.mma_unidades_conservacao` | `grupo`, `categoria`: produção agrícola só é admitida em APA (uso sustentável) |
     | 6 | Sem sobreposição com embargo do IBAMA | IBAMA | ✅ `vetorial.ibama_embargos` | `sit_desembargo`, `sit_cancelado` (excluir os já desembargados/cancelados) |
     | 7 | CPF/CNPJ fora da lista de embargos do IBAMA | IBAMA | ✅ mesma tabela | `cpf_cnpj_embargado` (CNPJ) e `cpf_embargado_hash` (CPF de PF, HMAC) |
-    | 8 | Sem sobreposição com embargo do ICMBio | ICMBio | ❌ a carregar | FeatureServer público, 14.779 polígonos (item 15) |
-    | 9 | CPF/CNPJ fora da lista de embargos do ICMBio | ICMBio | ❌ a carregar | mesma camada (`cpf_cnpj`, `autuado`) |
+    | 8 | Sem sobreposição com embargo do ICMBio | ICMBio | ✅ `vetorial.icmbio_areas_embargadas` | 14.779 polígonos (278 sem geometria, 444 inválidos); `julgamento`, `data_embargo` |
+    | 9 | CPF/CNPJ fora da lista de embargos do ICMBio | ICMBio | ✅ mesma tabela | `cpf_cnpj` (CNPJ) e `cpf_autuado_hash` (CPF, mesma chave do IBAMA) |
     | 10 | Sem sobreposição com embargo da SEMA-MT | SEMA-MT | ❌ a carregar | WFS do Geoportal, 8.357 polígonos + camada de desembargadas (item 15) |
     | 11 | CPF/CNPJ fora da lista suja do trabalho escravo | MTE, Cadastro de Empregadores | ❌ a carregar | CSV oficial estável, sem geometria (item 15) |
     | 12 | Sem sobreposição com território quilombola | INCRA | ⛔ bloqueado | acervo fundiário exige login (item 11); IBGE só tem localidades em ponto |
 
     **16.2 Próximos passos: fontes (coleta automatizada, conversa do item 15)**
-    1. **ICMBio, áreas embargadas** → `icmbio/areas_embargadas/`, `vetorial.icmbio_areas_embargadas` (espelho SCD2; paginar de 2.000 em 2.000).
+    1. ~~**ICMBio, áreas embargadas**~~ — ✅ feito 2026-10-27 (`icmbio/areas_embargadas/`, `vetorial.icmbio_areas_embargadas`, 14.779 polígonos; espelho SCD2, paginado de 2.000 em 2.000).
     2. **SEMA-MT, áreas embargadas e desembargadas** → `sema_mt/areas_embargadas/` (duas camadas da mesma fonte; a `authkey` pública é lida
        do GeoNetwork da SEMA a cada execução, nunca fixada no código).
     3. **MTE, Cadastro de Empregadores** → `mte/cadastro_empregadores/`, tabela tabular (sem geometria), uma linha por empregador e edição
        semestral; avaliar junto o cadastro de empregadores em ajustamento de conduta (TAC), que é publicado na mesma página.
     4. **LGPD, igual ao IBAMA** (e como buscar por CPF: o banco guarda só o HMAC-SHA256 do CPF de 11 dígitos, com chave fora do banco e do git; quem tem a chave calcula o
-       HMAC do CPF consultado e compara com `cpf_embargado_hash`; quem não tem a chave não consegue nem testar um CPF. Falta o **auxiliar** que faz isso sem expor a chave
-       nem o CPF: `dwlib` com `hash_documento()` e um comando de consulta por CPF/CNPJ, que também serve ao notebook do lote de imóveis): CPF de pessoa física só como HMAC, **com a mesma chave** do IBAMA, para que um CPF consultado case em todas
+       HMAC do CPF consultado e compara com `cpf_embargado_hash`; quem não tem a chave não consegue nem testar um CPF. **Feito em 2026-10-27:** `dwlib/documento.py` (limpeza do documento, HMAC com a mesma chave) e `infra/scripts/consultar_documento.py` (busca por CPF/CNPJ no IBAMA e no ICMBio sem expor chave nem documento; 586 CPFs casam entre as duas fontes). Falta usá-lo no notebook do lote de imóveis): CPF de pessoa física só como HMAC, **com a mesma chave** do IBAMA, para que um CPF consultado case em todas
        as fontes com um único hash; CNPJ como vem. Generalizar a função de hash do IBAMA para `dwlib` antes da segunda fonte usá-la.
     5. **Quilombolas:** continua dependendo do INCRA voltar (item 11). Paliativo a decidir: imóveis do tipo PCT do SICAR (`ind_tipo`), que
        têm outra metodologia e não substituem o INCRA. Registrar a lacuna em qualquer resultado até lá.

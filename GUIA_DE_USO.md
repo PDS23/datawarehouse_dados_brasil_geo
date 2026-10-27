@@ -92,10 +92,21 @@ Quando a fonte não tem o id (ex.: `uf`/`municipio` do CNUC são **listas em tex
 | `sfb_florestas_publicas` (CNFP) | Há dupla afetação (`PA / APA`) e sobreposição entre registros (`sobreposic = 'SIM'`): **não some `area_ha` sem filtrar**; 1.638 polígonos inválidos. |
 | `mma_unidades_conservacao` | `esfera` varia a caixa (`Federal`/`federal`): use `lower()`. 170 UCs só têm ponto (`geom` NULL, `geom_ponto` preenchido). Áreas somadas contam sobreposições. |
 | `ibama_embargos` | **Dado pessoal.** CPF de pessoa física só existe como HMAC (`cpf_embargado_hash`), útil para contar embargos por pessoa. `nome_embargado` vem como o IBAMA publica: **não publique a tabela no GeoServer sem tirá-lo**. 8 datas de embargo suspeitas (`data_embargo_suspeita`). |
+| `icmbio_areas_embargadas` | Mesmo tratamento do IBAMA: CPF só como hash (`cpf_autuado_hash`, mesma chave), `autuado` é dado pessoal (não publicar no GeoServer). Um embargo tem vários polígonos (`numero_emb` repete); `area` é texto livre; 278 polígonos sem geometria. |
 | `deter_alertas` | O `gid` da fonte **não é único**; a chave é `(id_bioma, gid, chave_linha)`. Só Amazônia e Cerrado. É alerta (sinal), **não** é o dado oficial de desmatamento (PRODES). |
 | `prodes_desmatamento` vs `deter_alertas` vs `mapbiomas_alerta` | Três metodologias diferentes (PRODES = oficial anual; DETER = alerta quase em tempo real; MapBiomas Alerta = laudos validados). **Não se misturam numa soma**; cada tabela tem uma só metodologia. |
 | `sicar_imoveis` | Cadastro **autodeclarado**: pode haver sobreposição entre imóveis e inconsistência. Volume alto: sempre filtre por UF/município antes de fazer join espacial. |
 | `tabular.sidra_valor` e `sidra_valor_t*` | Valores do SIDRA têm unidade e variável próprias (`dim.sidra_*`, `dim.unidade`): confira a unidade antes de somar. |
+
+### Buscar um CPF ou CNPJ nos embargos
+
+O banco não guarda CPF de pessoa física, só o hash. Para consultar sem expor chave nem documento, use o auxiliar (IBAMA e ICMBio de uma vez; `--tudo` inclui os já desembargados):
+
+```powershell
+.\infra\scripts\dw.ps1 etl infra/scripts/consultar_documento.py 123.456.789-09
+```
+
+Sem a chave do projeto (`ibama/embargos/segredo/`) não há como buscar CPF; CNPJ não depende dela.
 
 ## 6. Desempenho em duas linhas
 

@@ -1,0 +1,15 @@
+# Pipeline das areas embargadas do ICMBio. Configuracao versionada.
+# Fonte: camada publica "embargos_icmbio" (FeatureServer do ArcGIS Online do ICMBio, mesma conta do painel linkado em
+# gov.br/icmbio/.../areas-embargadas). Sem login; o servidor entrega no maximo 2.000 feicoes por pedido (paginar por OBJECTID).
+fonte: ICMBio                      # nome exato em dim.fontes
+url_camada: "https://services3.arcgis.com/KYEMegXJrTiWSYWk/ArcGIS/rest/services/areas_embargadas_icmbio/FeatureServer/0"
+url_pagina: "https://www.gov.br/icmbio/pt-br/assuntos/fiscalizacao-1/areas-embargadas"
+destino_padrao: vetorial.icmbio_areas_embargadas
+srid_gravado: 4674                 # a camada ja entrega em SIRGAS 2000 (outSR 4674)
+pagina: 2000                       # maxRecordCount do servidor
+campos_esperados: [vw_num_emb, numero_emb, serie, origem, numero_ai, cpf_cnpj, autuado, desc_infra, desc_sanc, artigo_1, artigo_2, tipo_infra, nome_uc, cnuc,
+                   municipio, uf, data, ano, obs, julgamento, area, processo, ngi, ct, gr, gr_nome]
+linhas_minimas: 10000              # a camada tem ~14,8 mil poligonos; menos que isto = servico trocado ou truncado
+max_queda: 0.10
+caixa_brasil: {lon_min: -75.0, lon_max: -25.0, lat_min: -36.0, lat_max: 7.0}
+licenca: "Dados abertos do ICMBio; confirmar os termos de uso e a citacao exigida antes de redistribuir"
