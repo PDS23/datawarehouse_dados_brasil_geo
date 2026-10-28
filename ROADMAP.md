@@ -15,8 +15,8 @@
 | FUNAI, terras indígenas | `vetorial.funai_terras_indigenas` | 665 | agendada |
 | IBAMA, termos de embargo | `vetorial.ibama_embargos` | 116.944 | agendada (desde 27/10); CPF só como hash |
 | ICMBio, áreas embargadas | `vetorial.icmbio_areas_embargadas` | 14.779 | agendada (desde 27/10); CPF só como hash |
-| SEMA-MT, áreas embargadas e desembargadas | `vetorial.sema_mt_areas_embargadas`, `vetorial.sema_mt_areas_desembargadas` | 8.357 e 4.729 | automática, sob demanda (agenda: a decidir); CPF só como hash |
-| MTE, Cadastro de Empregadores (lista suja) | `tabular.mte_cadastro_empregadores` | 508 | automática, sob demanda (agenda: a decidir); CPF só como hash |
+| SEMA-MT, áreas embargadas e desembargadas | `vetorial.sema_mt_areas_embargadas`, `vetorial.sema_mt_areas_desembargadas` | 8.357 e 4.729 | agendada (desde 28/10); CPF só como hash |
+| MTE, Cadastro de Empregadores (lista suja) | `tabular.mte_cadastro_empregadores` | 508 | agendada (desde 28/10); CPF só como hash |
 | MMA, unidades de conservação (CNUC) | `vetorial.mma_unidades_conservacao` | 3.576 | **manual autorizada** (zip em `bruto/`); `--verificar` |
 | SFB, florestas públicas (CNFP) | `vetorial.sfb_florestas_publicas` | 12.874 | automática, sob demanda (1 edição por ano) |
 | INCRA, assentamentos | `vetorial.incra_assentamentos` | 7.525 | fonte fora do ar (item 11); carga antiga |
@@ -833,7 +833,7 @@ erDiagram
     Tarefa do Windows "DW - Atualizacao das fontes": **domingo às 00:10, a cada 2 semanas** (14 dias: o mais próximo de "15 em 15" que cabe
     num domingo fixo; primeira execução em 2026-10-25), com o usuário logado e o Docker ligado (se o PC estiver desligado, roda ao ligar).
     Roda `infra/scripts/atualizar_fontes.ps1`: **backup antes** (local; reaproveita um backup completo de menos de 24 h, como o das 00:10; se falhar, nada é atualizado), PRODES (só biomas com edição nova), MapBiomas
-    Alerta, FUNAI, DETER (incluído em 2026-10-26), IBAMA embargos (incluído em 2026-10-27), ICMBio áreas embargadas (idem), SICAR (27 UFs), a **retenção com `--apagar`** e **backup depois** (com cópia para o Drive). O backup agendado de domingo às 03:00
+    Alerta, FUNAI, DETER (incluído em 2026-10-26), IBAMA embargos (incluído em 2026-10-27), ICMBio áreas embargadas (idem), SEMA-MT e MTE (incluídos em 2026-10-28), SICAR (27 UFs), a **retenção com `--apagar`** e **backup depois** (com cópia para o Drive). O backup agendado de domingo às 03:00
     (`DW-Backup-Domingo-3h`) passou a usar `-PularSeRecenteHoras 6` e não duplica nos domingos de atualização. (Correção de 2026-10-25: a primeira execução abortou por um bug no retorno da função de backup.) A retenção (30 dias nos dois prazos, `infra/retencao.yaml`; trava de 20% por tabela). Falha de uma fonte não derruba as outras:
     fica em `catalogo.cargas` e em `infra/logs/`. **SIDRA, CNUC e CNFP continuam fora da agenda (sob demanda ou 1 edição por ano); INCRA (assentamentos e SIGEF) entra quando o servidor
     do Acervo Fundiário voltar** (item 11). Criar/alterar/remover a tarefa: `infra/scripts/registrar_tarefa_atualizacao.ps1` (`-Remover`).
@@ -908,7 +908,7 @@ erDiagram
        as fontes com um único hash; CNPJ como vem. Generalizar a função de hash do IBAMA para `dwlib` antes da segunda fonte usá-la.
     5. **Quilombolas:** continua dependendo do INCRA voltar (item 11). Paliativo a decidir: imóveis do tipo PCT do SICAR (`ind_tipo`), que
        têm outra metodologia e não substituem o INCRA. Registrar a lacuna em qualquer resultado até lá.
-    6. **Atualização agendada:** decidir se ICMBio, SEMA-MT e MTE entram no `atualizar_fontes.ps1` (as três são fontes vivas) e na retenção.
+    6. ~~**Atualização agendada:**~~ ✅ decidido em 2026-10-28: ICMBio, SEMA-MT e MTE (as três são fontes vivas) entram no `atualizar_fontes.ps1` e na retenção.
 
     **16.3 Próximos passos: decisões de metodologia (antes de escrever a verificação)**
     - **Corte de 31/12/2020 no PRODES:** o ano PRODES cobre agosto a julho; decidir se vale `image_date > 2020-12-31` ou os anos PRODES

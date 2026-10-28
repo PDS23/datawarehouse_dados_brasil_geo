@@ -42,3 +42,6 @@ Hoje 15 CPFs da lista também têm embargo no IBAMA e 2 na SEMA-MT; 3 CNPJs apar
 ## Licença
 
 Dados abertos do MTE; confirmar os termos de uso e a citação exigida antes de redistribuir.
+
+## Atualização agendada
+Entra na atualização agendada (domingos alternados, 00:10) desde 2026-10-28; a lista é semestral, então a maioria das execuções não encontra mudança. A retenção de 30 dias já cobre a tabela.

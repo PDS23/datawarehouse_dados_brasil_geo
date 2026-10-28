@@ -21,10 +21,10 @@
 # Uso:
 #   .\infra\scripts\atualizar_fontes.ps1                 # tudo, de verdade (e o que a tarefa agendada roda)
 #   .\infra\scripts\atualizar_fontes.ps1 -Simular        # pipelines com --simular e retencao so em relatorio
-#   .\infra\scripts\atualizar_fontes.ps1 -Fontes prodes,mapbiomas   # so algumas (prodes, mapbiomas, funai, deter, ibama, icmbio, sicar, retencao)
+#   .\infra\scripts\atualizar_fontes.ps1 -Fontes prodes,mapbiomas   # so algumas (prodes, mapbiomas, funai, deter, ibama, icmbio, sema, mte, sicar, retencao)
 # Log: infra\logs\atualizacao_AAAAMMDD-HHMMSS.log
 param(
-    [string[]]$Fontes = @("prodes", "mapbiomas", "funai", "deter", "ibama", "icmbio", "sicar", "retencao"),
+    [string[]]$Fontes = @("prodes", "mapbiomas", "funai", "deter", "ibama", "icmbio", "sema", "mte", "sicar", "retencao"),
     [switch]$Simular,
     [switch]$SemBackup,         # para testes: nao faz os backups
     [switch]$SemDrive           # para testes: o backup de depois nao copia para o Drive
@@ -112,6 +112,8 @@ try {
     if ($Fontes -contains "deter")     { Passo "DETER (alertas)" (@("etl", "deter/alertas/scripts/deter_alertas.py") + $sim) }
     if ($Fontes -contains "ibama")     { Passo "IBAMA (embargos)" (@("etl", "ibama/embargos/scripts/embargos.py") + $sim) }
     if ($Fontes -contains "icmbio")    { Passo "ICMBio (areas embargadas)" (@("etl", "icmbio/areas_embargadas/scripts/areas_embargadas.py") + $sim) }
+    if ($Fontes -contains "sema")      { Passo "SEMA-MT (areas embargadas e desembargadas)" (@("etl", "sema_mt/areas_embargadas/scripts/areas_embargadas.py") + $sim) }
+    if ($Fontes -contains "mte")       { Passo "MTE (cadastro de empregadores)" (@("etl", "mte/cadastro_empregadores/scripts/cadastro_empregadores.py") + $sim) }
     if ($Fontes -contains "sicar")     { Passo "SICAR"             (@("etl", "sicar/imoveis/scripts/atualizar_imoveis_sicar.py", "--ufs", $UFs) + $sim) }
     if ($Fontes -contains "retencao") {
         $apagar = if ($Simular) { @() } else { @("--apagar") }
