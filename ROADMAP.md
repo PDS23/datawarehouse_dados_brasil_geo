@@ -911,6 +911,7 @@ erDiagram
     6. ~~**Atualização agendada:**~~ ✅ decidido em 2026-10-28: ICMBio, SEMA-MT e MTE (as três são fontes vivas) entram no `atualizar_fontes.ps1` e na retenção.
 
     **16.3 Próximos passos: decisões de metodologia (antes de escrever a verificação)**
+    *(2026-10-28: levantadas 44 perguntas por camada em [`analises/verificacao_legalidade/PERGUNTAS_METODOLOGIA.md`](analises/verificacao_legalidade/PERGUNTAS_METODOLOGIA.md); responder lá.)*
     - **Corte de 31/12/2020 no PRODES:** o ano PRODES cobre agosto a julho; decidir se vale `image_date > 2020-12-31` ou os anos PRODES
       2021 em diante (que incluem agosto a dezembro de 2020).
     - **Tolerância de sobreposição:** área ou percentual mínimo para não acusar ruído de borda entre bases de escalas diferentes (o relatório
