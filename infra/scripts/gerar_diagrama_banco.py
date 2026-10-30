@@ -365,6 +365,19 @@ caixa.addEventListener('pointermove', e => {{
 }});
 const fimPan = () => {{ pan = null; caixa.classList.remove('arrastando'); }};
 caixa.addEventListener('pointerup', fimPan); caixa.addEventListener('pointercancel', fimPan);
+// Ctrl + rolagem (ou o gesto de pinca do touchpad) aumenta e diminui o zoom, mantendo o ponto sob o cursor no lugar.
+const svgEl = fig.querySelector('svg'), largura0 = svgEl.viewBox.baseVal.width;
+let zoom = 1;
+caixa.addEventListener('wheel', e => {{
+  if (!e.ctrlKey) return;
+  e.preventDefault();
+  const r = svgEl.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+  zoom = Math.min(3, Math.max(0.2, zoom * Math.exp(-e.deltaY * 0.002)));
+  svgEl.style.width = (largura0 * zoom) + 'px';
+  const n = svgEl.getBoundingClientRect();
+  caixa.scrollLeft += (n.left + fx * n.width) - e.clientX; caixa.scrollTop += (n.top + fy * n.height) - e.clientY;
+  tip.hidden = true;
+}}, {{ passive: false }});
 fig.addEventListener('mousemove', e => {{ if (!pan) dica(e); }});
 fig.addEventListener('mouseleave', () => {{ tip.hidden = true; }});
 fig.querySelectorAll('.tab').forEach(g => {{
