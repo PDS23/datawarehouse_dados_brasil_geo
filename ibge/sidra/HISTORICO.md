@@ -16,3 +16,7 @@
   Conferência: Laranja 2017 junta Censo (55.912 estabelecimentos com 50 pés ou mais) e PAM (632.939 ha colhidos) pelo `id_cultura`.
 - **Pendências do desenho:** retenção das versões fechadas de `tabular.sidra_valor` (a chave é composta e o `limpar_versoes_fechadas.py` só aceita chave simples); LSPA direto na camada.
 - **2026-10-23** — retenção das versões fechadas reduzida de 365 para **30 dias** (ambos os prazos), e atualização das fontes vivas decidida a cada 15 dias (ROADMAP item 13).
+- **2026-10-27** — primeiras tabelas do **Censo Demográfico** (13 tabelas: 202, 9923, 9515, 10295, 10268, 10299, 10261, 9542, 9543, 10061, 6804, 6805, 6806),
+  sob demanda para o diagnóstico do Baixo Tocantins (`projetos/baixo_tocantins`); cada uma em município, UF e Brasil. `sidra.py` passou a aceitar tabela **sem**
+  classificação "pedido" sem `--cat` (caso da 9515, que não tem classificações): o recorte inteiro já está fixado no `config.yaml`. Tabelas com classificação
+  "pedido" continuam exigindo `--cat`.

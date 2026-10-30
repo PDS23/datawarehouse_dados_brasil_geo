@@ -20,3 +20,167 @@ tabelas:
       - {codigo: "227", filtro: pedido, excluir: ["113864"]}            # produtos da lavoura permanente (Total fora)
       - {codigo: "220", filtro: todas, excluir: ["110085"], faixas: true}  # grupos de área total (Total fora)
       - {codigo: "829", filtro: fixa, categorias: ["46302"]}            # tipologia: sempre Total (sem separar agricultura familiar/Pronaf/Pronamp)
+
+  # ---------------------------------------------------------------- Censo Demográfico (pedido de 2026-10-27: diagnóstico do Baixo Tocantins, PA)
+  # Eixos que o diagnóstico não usa ficam FIXOS no "Total". Onde a variável é taxa, razão, média ou mediana, o "Total" fica DENTRO do recorte:
+  # esses valores não se somam, e a conferência "soma dos municípios = Brasil" avisa divergência nessas células (esperado).
+  "202":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "População residente, por sexo e situação do domicílio"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2010"]
+    variaveis: ["93"]                     # população residente
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "1", filtro: pedido, excluir: ["0"]}           # situação do domicílio (urbana, rural)
+      - {codigo: "2", filtro: fixa, categorias: ["0"]}          # sexo: Total
+
+  "9923":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "População residente, por situação do domicílio"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["93"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "1", filtro: pedido, excluir: ["6795"]}        # situação do domicílio (urbana, rural)
+
+  "9515":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Índice de envelhecimento, idade mediana e razão de sexo da população"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["8845"]                   # razão de sexo (homens por 100 mulheres)
+    guardar_simbolos: false
+    classificacoes: []                    # a tabela não tem classificações: carrega sem --cat
+
+  "10295":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Moradores em domicílios particulares permanentes ocupados e rendimento nominal mensal domiciliar per capita"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["13604", "13431", "13534"]   # moradores; RDPC médio; RDPC mediano
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "2", filtro: pedido}                          # sexo (Total, homens, mulheres)
+      - {codigo: "86", filtro: fixa, categorias: ["95251"]}     # cor ou raça: Total
+      - {codigo: "58", filtro: fixa, categorias: ["95253"]}     # grupo de idade: Total
+
+  "10268":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Pessoas de 10 anos ou mais de idade, total e ocupadas na semana de referência, e nível da ocupação"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["140", "696", "675"]       # pessoas 10+; ocupadas; nível da ocupação (%)
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "2", filtro: pedido}                          # sexo (Total, homens, mulheres)
+      - {codigo: "86", filtro: fixa, categorias: ["95251"]}
+      - {codigo: "58", filtro: fixa, categorias: ["95253"]}
+
+  "10299":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Pessoas de 14 anos ou mais de idade e rendimento nominal mensal médio e mediano, por sexo e condição na força de trabalho"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["1641", "13502", "13503"]  # pessoas 14+; rendimento médio; rendimento mediano
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "2", filtro: pedido}                          # sexo (Total, homens, mulheres)
+      - {codigo: "629", filtro: fixa, categorias: ["32385", "32387"]}   # condição: Total e ocupadas
+      - {codigo: "58", filtro: fixa, categorias: ["95253"]}
+
+  "10261":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Pessoas de 14 anos ou mais de idade ocupadas, por posição na ocupação e categoria do emprego no trabalho principal"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["4090"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "11913", filtro: pedido}                      # posição na ocupação (ver --listar; os subtotais se sobrepõem)
+      - {codigo: "2", filtro: fixa, categorias: ["6794", "4", "5"]}   # sexo: Total, homens, mulheres
+      - {codigo: "86", filtro: fixa, categorias: ["95251"]}
+
+  "9542":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Pessoas de 15 anos ou mais de idade, total e as alfabetizadas"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["950"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "59", filtro: pedido}                         # alfabetização (Total, alfabetizadas, não alfabetizadas)
+      - {codigo: "2", filtro: fixa, categorias: ["6794", "4", "5"]}
+      - {codigo: "86", filtro: fixa, categorias: ["95251"]}
+      - {codigo: "287", filtro: fixa, categorias: ["100362"]}  # idade: Total
+
+  "9543":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Taxa de alfabetização das pessoas de 15 anos ou mais de idade"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["2513"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "2", filtro: pedido}                          # sexo (Total, homens, mulheres)
+      - {codigo: "86", filtro: fixa, categorias: ["95251"]}
+      - {codigo: "287", filtro: fixa, categorias: ["100362"]}
+
+  "10061":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Pessoas de 18 anos ou mais de idade, por nível de instrução"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["2667"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "1568", filtro: pedido}                       # nível de instrução (Total e os 4 níveis)
+      - {codigo: "58", filtro: fixa, categorias: ["95253"]}
+      - {codigo: "2", filtro: fixa, categorias: ["6794"]}
+      - {codigo: "86", filtro: fixa, categorias: ["95251"]}
+
+  "6804":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Domicílios particulares permanentes ocupados, por existência de canalização de água e principal forma de abastecimento de água"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["381"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "301", filtro: pedido}                        # principal forma de abastecimento
+      - {codigo: "1817", filtro: fixa, categorias: ["72125"]}   # canalização: Total
+
+  "6805":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Domicílios particulares permanentes ocupados, por tipo de esgotamento sanitário"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["381"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "11558", filtro: pedido}                      # tipo de esgotamento sanitário
+
+  "6806":
+    pesquisa: {codigo: censo_demografico, nome: "Censo Demográfico"}
+    nome: "Domicílios particulares permanentes ocupados, por existência de banheiro ou sanitário e número de banheiros de uso exclusivo"
+    periodicidade: decenal
+    nivel_padrao: n6
+    periodos: ["2022"]
+    variaveis: ["381"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "458", filtro: pedido}                        # existência de banheiro ou sanitário
+      - {codigo: "11558", filtro: fixa, categorias: ["46292"]}  # esgotamento: Total

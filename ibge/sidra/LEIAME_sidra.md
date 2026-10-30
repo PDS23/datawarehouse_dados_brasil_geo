@@ -77,5 +77,15 @@ Se a tabela precisar de mais de 6 classificações ou de um nível além de Bras
 | Tabela SIDRA | Conteúdo | Estado |
 |---|---|---|
 | 6956 | Censo Agropecuário 2017: estabelecimentos com lavoura permanente (municípios) | em uso: `tabular.ibge_censoagro2017_estab_lavoura_perm` é a visão tipada (sql/02); ver HISTORICO.md |
+| 202, 9923 | Censo Demográfico 2010 e 2022: população residente por situação do domicílio | carregadas em 2026-10-27 (municípios, UF e Brasil) para o diagnóstico do Baixo Tocantins |
+| 9515 | Censo 2022: razão de sexo (tabela sem classificações: carrega sem `--cat`) | idem |
+| 10268, 10299, 10261 | Censo 2022: ocupação 10+, rendimento 14+ por sexo, posição na ocupação (formal/informal) | idem |
+| 10295 | Censo 2022: rendimento domiciliar per capita (RDPC) | idem |
+| 9542, 9543, 10061 | Censo 2022: alfabetização 15+ (contagem e taxa), nível de instrução 18+ | idem |
+| 6804, 6805, 6806 | Censo 2022: abastecimento de água, esgotamento sanitário, banheiro | idem |
 
-Detalhes do Censo (universo de 1.407 tabelas, armadilhas): `../censo_agropecuario/LEIAME_censo_agropecuario.md`.
+Nas tabelas do Censo Demográfico, os eixos que não foram pedidos ficam fixos no "Total" (`config.yaml`). Onde a variável é taxa, razão, média ou mediana,
+a conferência "soma dos municípios = Brasil" sempre acusa divergência (esses valores não se somam): é esperado. Nas tabelas da amostra (emprego, rendimento,
+instrução) a soma das contagens municipais também difere um pouco do total do IBGE.
+
+Detalhes do Censo Agropecuário (universo de 1.407 tabelas, armadilhas): `../censo_agropecuario/LEIAME_censo_agropecuario.md`.

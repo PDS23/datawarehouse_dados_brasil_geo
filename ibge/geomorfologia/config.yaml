@@ -1,0 +1,41 @@
+# Pipeline de Geomorfologia (BDiA, IBGE, 1:250.000). Configuracao versionada.
+# Fonte: servidor de arquivos do IBGE (geoftp). A pasta `geomorfologia/vetores/escala_250_mil/` tem uma subpasta por edicao (versao_AAAA/); o pipeline descobre a mais recente pela listagem do diretorio
+# e baixa `geom_area.zip` (shapefile de poligonos), sem arquivo manual. A mecanica e comum aos 4 temas do BDiA: scripts_comuns/dwlib/bdia.py.
+fonte: IBGE                        # nome exato em dim.fontes
+titulo: Geomorfologia
+pasta: ibge/geomorfologia
+url_base: "https://geoftp.ibge.gov.br/informacoes_ambientais/geomorfologia/vetores/escala_250_mil/"
+arquivo: geom_area.zip
+destino_padrao: vetorial.ibge_geomorfologia
+chave: id1                         # id da feicao no shapefile (unico em cada edicao)
+srid_gravado: 4674                 # o shapefile ja vem em SIRGAS 2000
+tamanho_minimo_bytes: 150000000  # o zip tem 350 a 500 MB; menos que isto = download truncado ou arquivo errado
+linhas_minimas: 90000
+lote_leitura: 10000                # feicoes por leitura (o .shp tem mais de 1 GB descompactado)
+max_queda: 0.10
+caixa_brasil: {lon_min: -75.0, lon_max: -25.0, lat_min: -36.0, lat_max: 7.0}
+licenca: "Dados abertos do IBGE (BDiA); confirmar os termos de uso e a citacao exigida antes de redistribuir"
+colunas:                           # coluna do banco (= campo do shapefile em minusculas) -> tipo
+  id1: bigint
+  cd_fcim: text
+  leg_carga: text
+  nm_dominio: text
+  nm_regiao: text
+  id_unidade: integer
+  nm_unidade: text
+  letra_simb: text
+  categoria: text
+  natureza: text
+  caract: text
+  forma: text
+  dens_dren: text
+  aprof_inci: text
+  niv_alt: text
+  leg_sup: text
+  cd_leg_sup: text
+  legenda: text
+  ar_poli_km: numeric
+  compartime: text
+  cd_comp_id: integer
+  cd_dominio: integer
+  cd_unid_id: integer

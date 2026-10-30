@@ -5,7 +5,7 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 149,
+   "linhas": 154,
    "bytes": 114688,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
@@ -100,7 +100,7 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 98,
+   "linhas": 103,
    "bytes": 114688,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 25,
+   "linhas": 29,
    "bytes": 65536,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,8 +448,8 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 425,
-   "bytes": 139264,
+   "linhas": 564,
+   "bytes": 163840,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
     {
@@ -4986,6 +4986,760 @@
    ]
   },
   {
+   "id": "vetorial.ibge_geologia",
+   "sch": "vetorial",
+   "nome": "ibge_geologia",
+   "view": false,
+   "linhas": 131547,
+   "bytes": 595025920,
+   "coment": "Geologia do BDiA (IBGE), escala 1:250.000: Mapa geológico do Brasil (litoestratigrafia) do BDiA, 1:250.000: uma feição por unidade geológica mapeada. Espelho versionado; uma edição por pasta versao_AAAA do IBGE. Ver ibge/geologia/LEIAME_geologia.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "id1",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": "ID da feição no shapefile do IBGE (a chave; único dentro da edição)."
+    },
+    {
+     "n": "ordem",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Número de ordem da unidade na legenda."
+    },
+    {
+     "n": "cd_fcim",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da folha da Carta Internacional do Mundo ao Milionésimo (CIM) em que a feição está."
+    },
+    {
+     "n": "leg_carga",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da unidade na legenda da carga original."
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador da unidade geológica."
+    },
+    {
+     "n": "nm_unidade",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da unidade geológica."
+    },
+    {
+     "n": "letra_simb",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sigla (letra-símbolo) da unidade."
+    },
+    {
+     "n": "nm_lito1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Litotipo 1 (rocha predominante da unidade)."
+    },
+    {
+     "n": "nm_lito2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Litotipo 2."
+    },
+    {
+     "n": "nm_lito3",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Litotipo 3."
+    },
+    {
+     "n": "nm_lito4",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Litotipo 4."
+    },
+    {
+     "n": "ar_poli_km",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área do polígono em km² segundo o IBGE."
+    },
+    {
+     "n": "nm_tempo_g",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Tempo geológico (era e período) da unidade."
+    },
+    {
+     "n": "nm_provinc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Província geológica."
+    },
+    {
+     "n": "nm_sub_pro",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Subprovíncia geológica."
+    },
+    {
+     "n": "cd_prov_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código da província geológica."
+    },
+    {
+     "n": "cd_sub_pro",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código da subprovíncia geológica."
+    },
+    {
+     "n": "nm_tp_roc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Tipo de rocha (sedimentar, ígnea, metamórfica...)."
+    },
+    {
+     "n": "nm_stp_roc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Subtipo de rocha (ex.: sedimentar clástica)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono da feição (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: edição do BDiA (ano da pasta versao_AAAA) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.ibge_geomorfologia",
+   "sch": "vetorial",
+   "nome": "ibge_geomorfologia",
+   "view": false,
+   "linhas": 120218,
+   "bytes": 792592384,
+   "coment": "Geomorfologia do BDiA (IBGE), escala 1:250.000: Mapa geomorfológico do Brasil (unidades do relevo) do BDiA, 1:250.000. Espelho versionado; uma edição por pasta versao_AAAA do IBGE. Ver ibge/geomorfologia/LEIAME_geomorfologia.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "id1",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": "ID da feição no shapefile do IBGE (a chave; único dentro da edição)."
+    },
+    {
+     "n": "cd_fcim",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da folha da Carta Internacional do Mundo ao Milionésimo (CIM) em que a feição está."
+    },
+    {
+     "n": "leg_carga",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da unidade na legenda da carga original."
+    },
+    {
+     "n": "nm_dominio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Domínio morfoestrutural."
+    },
+    {
+     "n": "nm_regiao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Região geomorfológica."
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador da unidade geomorfológica."
+    },
+    {
+     "n": "nm_unidade",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da unidade geomorfológica."
+    },
+    {
+     "n": "letra_simb",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sigla (letra-símbolo) do padrão de relevo."
+    },
+    {
+     "n": "categoria",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Categoria do padrão de relevo (ex.: homogênea convexa)."
+    },
+    {
+     "n": "natureza",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Natureza do processo (dissecação, agradação, aplanamento...)."
+    },
+    {
+     "n": "caract",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Características do relevo."
+    },
+    {
+     "n": "forma",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Forma do topo ou do modelado (ex.: topo convexo)."
+    },
+    {
+     "n": "dens_dren",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Densidade de drenagem."
+    },
+    {
+     "n": "aprof_inci",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Aprofundamento da incisão (entalhe dos vales)."
+    },
+    {
+     "n": "niv_alt",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nível altimétrico."
+    },
+    {
+     "n": "leg_sup",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Legenda da unidade superior (região)."
+    },
+    {
+     "n": "cd_leg_sup",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da legenda superior."
+    },
+    {
+     "n": "legenda",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Legenda completa da unidade."
+    },
+    {
+     "n": "ar_poli_km",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área do polígono em km² segundo o IBGE."
+    },
+    {
+     "n": "compartime",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Compartimento do relevo (planaltos, planícies, depressões...)."
+    },
+    {
+     "n": "cd_comp_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código do compartimento."
+    },
+    {
+     "n": "cd_dominio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código do domínio morfoestrutural."
+    },
+    {
+     "n": "cd_unid_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código da unidade geomorfológica."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono da feição (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: edição do BDiA (ano da pasta versao_AAAA) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.ibge_pedologia",
+   "sch": "vetorial",
+   "nome": "ibge_pedologia",
+   "view": false,
+   "linhas": 114658,
+   "bytes": 726958080,
+   "coment": "Pedologia do BDiA (IBGE), escala 1:250.000: Mapa de solos do Brasil (pedologia) do BDiA, 1:250.000: associações de solos por polígono. Espelho versionado; uma edição por pasta versao_AAAA do IBGE. Ver ibge/pedologia/LEIAME_pedologia.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "id1",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": "ID da feição no shapefile do IBGE (a chave; único dentro da edição)."
+    },
+    {
+     "n": "cd_fcim",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da folha da Carta Internacional do Mundo ao Milionésimo (CIM) em que a feição está."
+    },
+    {
+     "n": "nom_unidad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome (símbolo) da unidade de mapeamento de solos."
+    },
+    {
+     "n": "cod_simbol",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código-símbolo da classe de solo dominante."
+    },
+    {
+     "n": "val_ncompo",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Número de componentes (solos) da associação."
+    },
+    {
+     "n": "legenda",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Legenda do solo dominante (símbolo e classe)."
+    },
+    {
+     "n": "ordem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Ordem do solo (SiBCS: Neossolo, Latossolo, Argissolo...)."
+    },
+    {
+     "n": "subordem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Subordem do solo."
+    },
+    {
+     "n": "grande_gru",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Grande grupo do solo."
+    },
+    {
+     "n": "subgrupos",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Subgrupo do solo."
+    },
+    {
+     "n": "textura",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Textura."
+    },
+    {
+     "n": "horizonte",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Horizonte superficial."
+    },
+    {
+     "n": "erosao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Fase de erosão."
+    },
+    {
+     "n": "pedregosid",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Fase de pedregosidade."
+    },
+    {
+     "n": "rochosidad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Fase de rochosidade."
+    },
+    {
+     "n": "relevo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Fase de relevo."
+    },
+    {
+     "n": "componente",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Componente principal da unidade (classe completa)."
+    },
+    {
+     "n": "component1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Segundo componente da associação."
+    },
+    {
+     "n": "component2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Terceiro componente da associação."
+    },
+    {
+     "n": "component3",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Quarto componente da associação."
+    },
+    {
+     "n": "inclu_p1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Inclusão 1 (solo que ocorre em pequena parte da unidade)."
+    },
+    {
+     "n": "inclu_p2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Inclusão 2."
+    },
+    {
+     "n": "inclu_p3",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Inclusão 3."
+    },
+    {
+     "n": "ar_poli_km",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área do polígono em km² segundo o IBGE."
+    },
+    {
+     "n": "leg_ordem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Ordem do solo da legenda."
+    },
+    {
+     "n": "legenda_2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Legenda do segundo nível (ordem e subordem)."
+    },
+    {
+     "n": "cd_ord_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código da ordem do solo."
+    },
+    {
+     "n": "cd_leg2_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código da legenda de segundo nível."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono da feição (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: edição do BDiA (ano da pasta versao_AAAA) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.ibge_regioes_naturais",
    "sch": "vetorial",
    "nome": "ibge_regioes_naturais",
@@ -5105,6 +5859,269 @@
      "nn": false,
      "pk": false,
      "c": "Data em que a linha foi gravada pelo pipeline."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.ibge_vegetacao",
+   "sch": "vetorial",
+   "nome": "ibge_vegetacao",
+   "view": false,
+   "linhas": 145458,
+   "bytes": 552419328,
+   "coment": "Vegetação do BDiA (IBGE), escala 1:250.000: Mapa de vegetação do Brasil (cobertura vegetal natural e usos antrópicos) do BDiA, 1:250.000. Espelho versionado; uma edição por pasta versao_AAAA do IBGE. Ver ibge/vegetacao/LEIAME_vegetacao.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "id1",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": "ID da feição no shapefile do IBGE (a chave; único dentro da edição)."
+    },
+    {
+     "n": "cd_fcim",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da folha da Carta Internacional do Mundo ao Milionésimo (CIM) em que a feição está."
+    },
+    {
+     "n": "leg_carga",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da unidade na legenda da carga original."
+    },
+    {
+     "n": "cd_fito",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da região fitoecológica."
+    },
+    {
+     "n": "cd_leg_2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da legenda de segundo nível."
+    },
+    {
+     "n": "clas_domi",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Classe dominante (código da vegetação dominante)."
+    },
+    {
+     "n": "leg_uveg",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da unidade de vegetação natural."
+    },
+    {
+     "n": "nm_uveg",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da unidade de vegetação natural."
+    },
+    {
+     "n": "leg_uantr",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da unidade antrópica (uso da terra)."
+    },
+    {
+     "n": "nm_uantr",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da unidade antrópica (ex.: agropecuária)."
+    },
+    {
+     "n": "leg_contat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código do contato entre tipos de vegetação."
+    },
+    {
+     "n": "nm_contat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome do contato (ex.: ecótono, encrave)."
+    },
+    {
+     "n": "veg_pretet",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da vegetação pretérita (original, antes do uso)."
+    },
+    {
+     "n": "nm_pretet",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da vegetação pretérita."
+    },
+    {
+     "n": "leg_sec1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da vegetação secundária 1."
+    },
+    {
+     "n": "nm_sec1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da vegetação secundária 1."
+    },
+    {
+     "n": "leg_sec2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da vegetação secundária 2."
+    },
+    {
+     "n": "nm_sec2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da vegetação secundária 2."
+    },
+    {
+     "n": "leg_sup",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Legenda superior (ex.: Vegetação Natural Dominante)."
+    },
+    {
+     "n": "legenda_1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Legenda de primeiro nível (formação)."
+    },
+    {
+     "n": "legenda_2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Legenda de segundo nível."
+    },
+    {
+     "n": "legenda",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Legenda completa da feição."
+    },
+    {
+     "n": "ar_poli_km",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área do polígono em km² segundo o IBGE."
+    },
+    {
+     "n": "leg1_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código da legenda de primeiro nível."
+    },
+    {
+     "n": "leg2_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código da legenda de segundo nível."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono da feição (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: edição do BDiA (ano da pasta versao_AAAA) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
     }
    ]
   },
@@ -8035,6 +9052,827 @@
    ]
   },
   {
+   "id": "vetorial.v_ibge_geologia",
+   "sch": "vetorial",
+   "nome": "v_ibge_geologia",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id1",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ordem",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_fcim",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_carga",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_unidade",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "letra_simb",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_lito1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_lito2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_lito3",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_lito4",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ar_poli_km",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_tempo_g",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_provinc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_sub_pro",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_prov_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_sub_pro",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_tp_roc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_stp_roc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ibge_geomorfologia",
+   "sch": "vetorial",
+   "nome": "v_ibge_geomorfologia",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id1",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_fcim",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_carga",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_dominio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_regiao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_unidade",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "letra_simb",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "categoria",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "natureza",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "caract",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "forma",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dens_dren",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "aprof_inci",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "niv_alt",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_sup",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_leg_sup",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "legenda",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ar_poli_km",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "compartime",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_comp_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_dominio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_unid_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ibge_pedologia",
+   "sch": "vetorial",
+   "nome": "v_ibge_pedologia",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id1",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_fcim",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nom_unidad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cod_simbol",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "val_ncompo",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "legenda",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ordem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "subordem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "grande_gru",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "subgrupos",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "textura",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "horizonte",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "erosao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "pedregosid",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "rochosidad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "relevo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "componente",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "component1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "component2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "component3",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "inclu_p1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "inclu_p2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "inclu_p3",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ar_poli_km",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_ordem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "legenda_2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_ord_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_leg2_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ibge_vegetacao",
+   "sch": "vetorial",
+   "nome": "v_ibge_vegetacao",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id1",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_fcim",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_carga",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_fito",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_leg_2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "clas_domi",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_uveg",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_uveg",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_uantr",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_uantr",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_contat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_contat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "veg_pretet",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_pretet",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_sec1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_sec1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_sec2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_sec2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg_sup",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "legenda_1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "legenda_2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "legenda",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ar_poli_km",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg1_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "leg2_id",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
    "id": "vetorial.v_icmbio_areas_embargadas",
    "sch": "vetorial",
    "nome": "v_icmbio_areas_embargadas",
@@ -8350,7 +10188,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "camada_origem",
@@ -8427,21 +10265,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiPolygon,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -10506,6 +12344,30 @@
   },
   {
    "de": "vetorial.mma_areas_prioritarias",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ibge_geologia",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ibge_geomorfologia",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ibge_pedologia",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ibge_vegetacao",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"

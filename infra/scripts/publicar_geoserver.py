@@ -57,6 +57,7 @@ ESTILOS = [
     ("embargo", "embargo.sld"),
     ("embargo_ponto", "embargo_ponto.sld"),
     ("embargo_encerrado", "embargo_encerrado.sld"),
+    ("mapa_tematico_ibge", "mapa_tematico_ibge.sld"),
 ]
 
 # (nome do store, schema do PostgreSQL). Um store por schema.
@@ -108,6 +109,18 @@ VETORIAIS = [
      "resumo": "2.081 áreas prioritárias do MMA (2ª atualização, 2022) em 7 camadas de origem (camada_origem): Amazônia, Caatinga, Cerrado e Pantanal, Mata Atlântica, Pampa, Zona Costeira e Marinha e Áreas Híbridas. "
                "A capitalização de prioridade_acao varia: use lower(). Pode haver sobreposição entre camadas.",
      "estilo": "unidade_conservacao"},
+    {"store": "dw_vetorial", "nome": "v_ibge_geologia", "titulo": "IBGE - Geologia (BDiA, 1:250.000)",
+     "resumo": "Mapa geológico do Brasil (litoestratigrafia) do BDiA, 1:250.000: uma feição por unidade geológica mapeada. Edicao mais recente do IBGE, versao vigente. Muitos poligonos (mais de 100 mil): desenha so em escala maior que 1:1.000.000; para consultas filtre por atributo.",
+     "estilo": "mapa_tematico_ibge"},
+    {"store": "dw_vetorial", "nome": "v_ibge_geomorfologia", "titulo": "IBGE - Geomorfologia (BDiA, 1:250.000)",
+     "resumo": "Mapa geomorfológico do Brasil (unidades do relevo) do BDiA, 1:250.000. Edicao mais recente do IBGE, versao vigente. Muitos poligonos (mais de 100 mil): desenha so em escala maior que 1:1.000.000; para consultas filtre por atributo.",
+     "estilo": "mapa_tematico_ibge"},
+    {"store": "dw_vetorial", "nome": "v_ibge_pedologia", "titulo": "IBGE - Pedologia (BDiA, 1:250.000)",
+     "resumo": "Mapa de solos do Brasil (pedologia) do BDiA, 1:250.000: associações de solos por polígono. Edicao mais recente do IBGE, versao vigente. Muitos poligonos (mais de 100 mil): desenha so em escala maior que 1:1.000.000; para consultas filtre por atributo.",
+     "estilo": "mapa_tematico_ibge"},
+    {"store": "dw_vetorial", "nome": "v_ibge_vegetacao", "titulo": "IBGE - Vegetação (BDiA, 1:250.000)",
+     "resumo": "Mapa de vegetação do Brasil (cobertura vegetal natural e usos antrópicos) do BDiA, 1:250.000. Edicao mais recente do IBGE, versao vigente. Muitos poligonos (mais de 100 mil): desenha so em escala maior que 1:1.000.000; para consultas filtre por atributo.",
+     "estilo": "mapa_tematico_ibge"},
     {"store": "dw_vetorial", "nome": "v_sfb_florestas_publicas", "titulo": "SFB - Florestas públicas (CNFP)",
      "resumo": "Cadastro Nacional de Florestas Públicas (SFB), edição 2025: assentamentos, UCs, terras indígenas, glebas e áreas militares. Há sobreposição entre registros "
                "(sobreposic = SIM): não some área sem filtrar. Desenha só em escala maior que 1:5.000.000.",

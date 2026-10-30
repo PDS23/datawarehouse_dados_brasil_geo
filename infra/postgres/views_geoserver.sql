@@ -61,10 +61,28 @@ CREATE OR REPLACE VIEW vetorial.v_sema_mt_areas_desembargadas AS   -- embargo EN
 SELECT id, t_embargo, n_processo, a_infrac, propriedad, dano, ano_desmat, dat_lavrat, data_lavratura, fonte, area_ha, vigente_desde, geom
 FROM vetorial.sema_mt_areas_desembargadas WHERE vigente_ate IS NULL AND geom IS NOT NULL;
 
+
+-- BDiA do IBGE (geologia, geomorfologia, pedologia, vegetacao): sem dado pessoal; so a versao vigente
+CREATE OR REPLACE VIEW vetorial.v_ibge_geologia AS
+SELECT id, id1, ordem, cd_fcim, leg_carga, id_unidade, nm_unidade, letra_simb, nm_lito1, nm_lito2, nm_lito3, nm_lito4, ar_poli_km, nm_tempo_g, nm_provinc, nm_sub_pro, cd_prov_id, cd_sub_pro, nm_tp_roc, nm_stp_roc, edicao, vigente_desde, geom
+FROM vetorial.ibge_geologia WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
+CREATE OR REPLACE VIEW vetorial.v_ibge_geomorfologia AS
+SELECT id, id1, cd_fcim, leg_carga, nm_dominio, nm_regiao, id_unidade, nm_unidade, letra_simb, categoria, natureza, caract, forma, dens_dren, aprof_inci, niv_alt, leg_sup, cd_leg_sup, legenda, ar_poli_km, compartime, cd_comp_id, cd_dominio, cd_unid_id, edicao, vigente_desde, geom
+FROM vetorial.ibge_geomorfologia WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
+CREATE OR REPLACE VIEW vetorial.v_ibge_pedologia AS
+SELECT id, id1, cd_fcim, nom_unidad, cod_simbol, val_ncompo, legenda, ordem, subordem, grande_gru, subgrupos, textura, horizonte, erosao, pedregosid, rochosidad, relevo, componente, component1, component2, component3, inclu_p1, inclu_p2, inclu_p3, ar_poli_km, leg_ordem, legenda_2, cd_ord_id, cd_leg2_id, edicao, vigente_desde, geom
+FROM vetorial.ibge_pedologia WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
+CREATE OR REPLACE VIEW vetorial.v_ibge_vegetacao AS
+SELECT id, id1, cd_fcim, leg_carga, cd_fito, cd_leg_2, clas_domi, leg_uveg, nm_uveg, leg_uantr, nm_uantr, leg_contat, nm_contat, veg_pretet, nm_pretet, leg_sec1, nm_sec1, leg_sec2, nm_sec2, leg_sup, legenda_1, legenda_2, legenda, ar_poli_km, leg1_id, leg2_id, edicao, vigente_desde, geom
+FROM vetorial.ibge_vegetacao WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
 DO $$
 DECLARE v text;
 BEGIN
-  FOREACH v IN ARRAY ARRAY['v_funai_terras_indigenas','v_mma_unidades_conservacao','v_mma_areas_prioritarias','v_sfb_florestas_publicas','v_deter_alertas','v_mapbiomas_alerta','v_ibama_embargos_poligonos',
+  FOREACH v IN ARRAY ARRAY['v_funai_terras_indigenas','v_mma_unidades_conservacao','v_ibge_geologia','v_ibge_geomorfologia','v_ibge_pedologia','v_ibge_vegetacao','v_mma_areas_prioritarias','v_sfb_florestas_publicas','v_deter_alertas','v_mapbiomas_alerta','v_ibama_embargos_poligonos',
                            'v_ibama_embargos_pontos','v_icmbio_areas_embargadas','v_sema_mt_areas_embargadas','v_sema_mt_areas_desembargadas'] LOOP
     EXECUTE format('GRANT SELECT ON vetorial.%I TO leitura, geoserver, analistas', v);
     EXECUTE format('COMMENT ON VIEW vetorial.%I IS %L', v, 'Publicada no GeoServer: so a versao vigente' ||

@@ -9,6 +9,7 @@ Uso (a partir da raiz do repositório):
     --listar                      mostra as categorias da classificação "pedido" e o que já está carregado (não grava nada)
     --cat 227=4961,laranja        carrega estas categorias da classificação 227 (código SIDRA ou slug); repita --cat se a tabela
                                   tiver mais de uma classificação "pedido"
+    (nenhum dos dois)             só em tabela SEM classificação "pedido": carrega o recorte fixado no config.yaml
   OPÇÕES: --periodos 2017 | --nivel n6|n3|n1 | --simular | --sem-bruto | --aceitar-queda
 
 Regras de gravação (ver ibge/sidra/LEIAME_sidra.md):
@@ -320,9 +321,13 @@ def main():
     args = ap.parse_args()
     if args.tabela not in CFG["tabelas"]:
         raise SystemExit(f"tabela {args.tabela} não consta em ibge/sidra/config.yaml (tabelas: {sorted(CFG['tabelas'])})")
-    if bool(args.cat) == args.listar:
-        ap.error("informe exatamente um entre --cat e --listar (nada é carregado por padrão)")
     tab = dict(CFG["tabelas"][args.tabela], id=int(args.tabela))
+    tem_pedido = any(c["filtro"] == "pedido" for c in tab["classificacoes"])
+    if args.listar and args.cat:
+        ap.error("informe --cat ou --listar, não os dois")
+    if not args.listar and tem_pedido and not args.cat:
+        ap.error("informe --cat (ou --listar): nada é carregado por padrão")
+    # tabela sem classificação "pedido" (ex.: 9515, sem classificações): o recorte inteiro já está fixado no config.yaml
     if args.periodos:
         tab["periodos"] = [p.strip() for p in args.periodos.split(",")]
     nivel_n = args.nivel or tab["nivel_padrao"]
