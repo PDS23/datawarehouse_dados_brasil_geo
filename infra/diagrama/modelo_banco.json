@@ -5,7 +5,7 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 145,
+   "linhas": 149,
    "bytes": 114688,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
@@ -100,8 +100,8 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 94,
-   "bytes": 106496,
+   "linhas": 98,
+   "bytes": 114688,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
     {
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 24,
+   "linhas": 25,
    "bytes": 65536,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,7 +448,7 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 403,
+   "linhas": 425,
    "bytes": 139264,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
@@ -5839,6 +5839,171 @@
    ]
   },
   {
+   "id": "vetorial.mma_areas_prioritarias",
+   "sch": "vetorial",
+   "nome": "mma_areas_prioritarias",
+   "view": false,
+   "linhas": 2082,
+   "bytes": 62611456,
+   "coment": "Áreas Prioritárias para a Conservação da Biodiversidade (MMA), 2ª atualização (2022): 2.081 áreas em 7 shapefiles com esquemas diferentes, colunas comuns harmonizadas e todos os campos em atributos_originais. Espelho versionado. Ver mma/areas_prioritarias/LEIAME_areas_prioritarias.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "camada_origem",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: arquivo do MMA de onde a área veio (amazonia, caatinga, cerrado_pantanal, mata_atlantica, pampa, zona_costeira_marinha, areas_hibridas). A chave é camada_origem + cod_area."
+    },
+    {
+     "n": "cod_area",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Código da área na camada (COD_area; ID_AP na zona costeira e marinha)."
+    },
+    {
+     "n": "nome_area",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da área, só nas camadas que o trazem."
+    },
+    {
+     "n": "importancia_biologica",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Importância biológica (extremamente alta, muito alta, alta...); a capitalização varia, compare com lower()."
+    },
+    {
+     "n": "prioridade_acao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Prioridade de ação (extremamente alta, muito alta, alta...); a capitalização varia."
+    },
+    {
+     "n": "acao_principal_codigo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da ação principal; o texto está na lista de ações do MMA (não carregada). Mata Atlântica e Pampa só trazem o código."
+    },
+    {
+     "n": "acao_principal",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Texto da ação principal, nas camadas que o trazem."
+    },
+    {
+     "n": "acoes_complementares",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Demais ações recomendadas, separadas por ' | '."
+    },
+    {
+     "n": "estados",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "UFs da área (só Cerrado e Pantanal)."
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": "Área em hectares segundo a fonte."
+    },
+    {
+     "n": "atributos_originais",
+     "t": "jsonb",
+     "nn": true,
+     "pk": false,
+     "c": "Todos os campos do shapefile como publicados (jsonb), menos OBJECTID e Shape_*."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono da área (SIRGAS 2000; o Z da fonte é descartado)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa de conferência (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: edição do MMA (do nome do arquivo, ex.: 2a atualizacao)."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.mma_unidades_conservacao",
    "sch": "vetorial",
    "nome": "mma_unidades_conservacao",
@@ -7291,6 +7456,1091 @@
    ]
   },
   {
+   "id": "vetorial.v_deter_alertas",
+   "sch": "vetorial",
+   "nome": "v_deter_alertas",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "id_bioma",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "Bioma: aponta para dim.biomas."
+    },
+    {
+     "n": "gid",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "classname",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "view_date",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "publish_month",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sensor",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "satellite",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "areatotalkm",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "areamunkm",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "uc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "municipality",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "mun_geocod",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Município: aponta para dim.municipios (código IBGE de 7 dígitos)."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_funai_terras_indigenas",
+   "sch": "vetorial",
+   "nome": "v_funai_terras_indigenas",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "terrai_codigo",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "terrai_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "etnia_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "municipio_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "uf_sigla",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."
+    },
+    {
+     "n": "superficie_perimetro_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "fase_ti",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "modalidade_ti",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reestudo_ti",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "faixa_fronteira",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "undadm_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "undadm_sigla",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dominio_uniao",
+     "t": "boolean",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "data_atualizacao",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ibama_embargos_poligonos",
+   "sch": "vetorial",
+   "nome": "v_ibama_embargos_poligonos",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente, SEM nome nem documento do embargado (use infra/scripts/consultar_embargo.py). Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ser_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "seq_tad",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dat_embargo",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_auto_infracao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Município: aponta para dim.municipios (código IBGE de 7 dígitos)."
+    },
+    {
+     "n": "qtd_area_embargada",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nome_imovel",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "tipo_area",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "deter_prodes",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sit_cancelado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sit_desembargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "tipo_desembargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dat_desembargo",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "unid_controle",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "operacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "data_embargo_suspeita",
+     "t": "boolean",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ibama_embargos_pontos",
+   "sch": "vetorial",
+   "nome": "v_ibama_embargos_pontos",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente, SEM nome nem documento do embargado (use infra/scripts/consultar_embargo.py). Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ser_tad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "seq_tad",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dat_embargo",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_auto_infracao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Município: aponta para dim.municipios (código IBGE de 7 dígitos)."
+    },
+    {
+     "n": "qtd_area_embargada",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nome_imovel",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "tipo_area",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "deter_prodes",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sit_cancelado",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sit_desembargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "tipo_desembargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dat_desembargo",
+     "t": "timestamp without time zone",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "unid_controle",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "operacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "data_embargo_suspeita",
+     "t": "boolean",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(Point,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_icmbio_areas_embargadas",
+   "sch": "vetorial",
+   "nome": "v_icmbio_areas_embargadas",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente, SEM nome nem documento do embargado (use infra/scripts/consultar_embargo.py). Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "numero_emb",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "serie",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "origem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "numero_ai",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "tipo_infra",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "desc_infra",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "desc_sanc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "artigo_1",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "artigo_2",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nome_uc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cnuc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."
+    },
+    {
+     "n": "data_embargo",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ano",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "julgamento",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_informada_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "gr_nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_mapbiomas_alerta",
+   "sch": "vetorial",
+   "nome": "v_mapbiomas_alerta",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "alert_code",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sources",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "biomes",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "states",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cities",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "detected_at",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "year_detected_at",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "published_at",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "deforestation_driver",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "status_name",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "crossed_special_territories",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "crossed_rural_properties_total",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_mma_unidades_conservacao",
+   "sch": "vetorial",
+   "nome": "v_mma_unidades_conservacao",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "cd_cnuc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nome_uc",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "categoria",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "grupo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "esfera",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "org_gestor",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cria_ato",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ano_criacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ha_total",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "quali_pol",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "pl_manejo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "co_gestor",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
    "id": "vetorial.v_prodes_municipio",
    "sch": "vetorial",
    "nome": "v_prodes_municipio",
@@ -7375,6 +8625,368 @@
      "nn": false,
      "pk": false,
      "c": "Geometria do polígono do PRODES."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_sema_mt_areas_desembargadas",
+   "sch": "vetorial",
+   "nome": "v_sema_mt_areas_desembargadas",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente, SEM nome nem documento do embargado (use infra/scripts/consultar_embargo.py). Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "t_embargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "n_processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "a_infrac",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "propriedad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dano",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ano_desmat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dat_lavrat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "data_lavratura",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "fonte",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_sema_mt_areas_embargadas",
+   "sch": "vetorial",
+   "nome": "v_sema_mt_areas_embargadas",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente, SEM nome nem documento do embargado (use infra/scripts/consultar_embargo.py). Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "t_embargo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "n_processo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "a_infrac",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "propriedad",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dano",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ano_desmat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dat_lavrat",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "data_lavratura",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "fonte",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_sfb_florestas_publicas",
+   "sch": "vetorial",
+   "nome": "v_sfb_florestas_publicas",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "nome",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome como a fonte escreve."
+    },
+    {
+     "n": "categoria",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "protecao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "tipo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "governo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "comunitari",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "classe",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "orgao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sobreposic",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "atolegal",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "ano_criacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "estagio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."
+    },
+    {
+     "n": "bioma",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   }
@@ -8846,6 +10458,12 @@
   },
   {
    "de": "tabular.mte_cadastro_empregadores",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.mma_areas_prioritarias",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"

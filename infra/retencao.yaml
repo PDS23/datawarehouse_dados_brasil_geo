@@ -42,6 +42,8 @@ tabelas:
     chave: [chave_linha]
   - tabela: vetorial.icmbio_areas_embargadas
     chave: [chave_linha]
+  - tabela: vetorial.mma_areas_prioritarias
+    chave: [camada_origem, cod_area]
   - tabela: vetorial.sema_mt_areas_embargadas
     chave: [chave_linha]
   - tabela: vetorial.sema_mt_areas_desembargadas

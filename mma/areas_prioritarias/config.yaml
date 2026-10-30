@@ -1,0 +1,40 @@
+# Pipeline das Areas Prioritarias para a Conservacao da Biodiversidade (MMA). Configuracao versionada.
+# Fonte: portal de dados abertos do MMA (CKAN). O pacote tem um shapefile em zip por bioma/regiao (links diretos, sem login) e um CSV de listas de acoes (referencia, nao espacial,
+# nao carregado). E uma EDICAO ESTATICA (a "2a atualizacao", publicada em 2022): hoje nao muda, mas o espelho versionado detecta uma edicao nova.
+fonte: MMA                         # nome exato em dim.fontes
+url_ckan_pacote: "https://dados.mma.gov.br/api/3/action/package_show?id=f0dde837-8db0-4221-989f-45944c1f09ee"
+url_pagina: "https://dados.mma.gov.br/dataset/f0dde837-8db0-4221-989f-45944c1f09ee"
+destino_padrao: vetorial.mma_areas_prioritarias
+srid_gravado: 4674                 # os shapefiles ja vem em SIRGAS 2000 (Polygon Z; o Z e descartado)
+linhas_minimas: 1500               # a edicao de 2022 tem 2.081 poligonos nos 7 arquivos
+max_queda: 0.10
+caixa_brasil: {lon_min: -75.0, lon_max: -25.0, lat_min: -40.0, lat_max: 10.0}   # larga o bastante para a zona costeira e marinha (ate a ZEE)
+# arquivo no CKAN (nome do zip) -> camada_origem. Cada shapefile tem esquema proprio; `campos` diz de qual campo vem cada coluna comum (None = a camada nao traz).
+# Tudo que a fonte publica e guardado em atributos_originais (menos OBJECTID, Shape_Leng, Shape_Le_1 e Shape_Area, artefatos do ArcGIS).
+camadas:
+  shape_amazonia.zip:
+    camada_origem: amazonia
+    campos: {cod_area: COD_area, nome_area: Nome_area, importancia_biologica: Import_bio, prioridade_acao: Prior_acao, acao_principal_codigo: Acao_princ,
+             acao_principal: Acao_Prin, acoes_complementares: [Acao_2, Acao_3], area_ha: Area_ha}
+  shape_caatinga.zip:
+    camada_origem: caatinga
+    campos: {cod_area: COD_area, nome_area: Nome_area, importancia_biologica: Import_bio, prioridade_acao: Prior_acao, acao_principal: Acao_princ, area_ha: Area_ha}
+  shape_cerrado_pantanal.zip:
+    camada_origem: cerrado_pantanal
+    campos: {cod_area: COD_area, nome_area: NOME, importancia_biologica: Import_bio, prioridade_acao: Prior_acao, acao_principal: Acao1,
+             acoes_complementares: [Acao2, Acao3, Acao4], estados: Estados, area_ha: Area_ha}
+  shape_mataatlantica.zip:
+    camada_origem: mata_atlantica
+    campos: {cod_area: COD_area, importancia_biologica: ImportBio_, prioridade_acao: Prioridade, acao_principal_codigo: AcaoPriori, area_ha: Area_ha}
+  shape_pampa.zip:
+    camada_origem: pampa
+    campos: {cod_area: COD_area, nome_area: Nome_AP, importancia_biologica: Import_bio, prioridade_acao: Prior_acao, acao_principal_codigo: AcaoPrinci, area_ha: Area_ha}
+  shape_zcm.zip:
+    camada_origem: zona_costeira_marinha
+    campos: {cod_area: ID_AP, nome_area: NOME_AP, importancia_biologica: IMP, prioridade_acao: PRIO, acao_principal_codigo: AcPrinc, acao_principal: AcPrincNom,
+             acoes_complementares: [Acao2, Acao3], area_ha: Area_ha}
+  shape_areas_hibridas.zip:
+    camada_origem: areas_hibridas
+    campos: {cod_area: COD_area, importancia_biologica: IB_pos, prioridade_acao: PA_pos, acao_principal: AçãoP_p, area_ha: Area_ha}
+ignorar_campos: [OBJECTID, OBJECTID_1, OBJECTID_2, FID_1, Shape_Leng, Shape_Le_1, Shape_Area]
+licenca: "Creative Commons Atribuicao (portal de dados abertos do MMA); citar o MMA como fonte"

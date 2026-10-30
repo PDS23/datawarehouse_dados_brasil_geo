@@ -14,6 +14,7 @@ Um data warehouse geoespacial em **PostgreSQL 18 + PostGIS 3.6**, alimentado por
 | PRODES (INPE) | `vetorial.prodes_desmatamento` | 6,9 milhões de polígonos, 6 biomas | espelho versionado, por edição publicada no TerraBrasilis |
 | MapBiomas Alerta | `vetorial.mapbiomas_alerta` | 543 mil alertas de desmatamento (2018 a 2026) | espelho versionado, WFS aberto do MapBiomas |
 | DETER (INPE) | `vetorial.deter_alertas` | 600 mil alertas de desmatamento, Amazônia e Cerrado (2016 a 2026) | espelho versionado, WFS aberto do TerraBrasilis |
+| MMA (áreas prioritárias para a conservação) | `vetorial.mma_areas_prioritarias` | 2.081 áreas em 7 shapefiles, 2ª atualização (2022) | espelho versionado, CKAN do MMA, 100% automático |
 | MMA (unidades de conservação, CNUC) | `vetorial.mma_unidades_conservacao` | 3.576 UCs (3.406 com polígono), edição 2026_07 | espelho versionado; **carga manual autorizada** (shapefile recente só em SharePoint) |
 | SEMA-MT (áreas embargadas e desembargadas) | `vetorial.sema_mt_areas_embargadas`, `vetorial.sema_mt_areas_desembargadas` | 8.357 e 4.729 polígonos (Mato Grosso) | espelho versionado, WFS do Geoportal; CPF só como hash |
 | MTE (Cadastro de Empregadores, lista suja) | `tabular.mte_cadastro_empregadores` | 508 empregadores | espelho versionado, CSV oficial; CPF só como hash |

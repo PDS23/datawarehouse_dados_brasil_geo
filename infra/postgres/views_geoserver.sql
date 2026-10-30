@@ -20,6 +20,10 @@ CREATE OR REPLACE VIEW vetorial.v_mma_unidades_conservacao AS
 SELECT id, cd_cnuc, nome_uc, categoria, grupo, esfera, uf, municipio, org_gestor, cria_ato, ano_criacao, ha_total, quali_pol, pl_manejo, co_gestor, edicao, vigente_desde, geom
 FROM vetorial.mma_unidades_conservacao WHERE vigente_ate IS NULL AND geom IS NOT NULL;
 
+CREATE OR REPLACE VIEW vetorial.v_mma_areas_prioritarias AS
+SELECT id, camada_origem, cod_area, nome_area, importancia_biologica, prioridade_acao, acao_principal_codigo, acao_principal, acoes_complementares, estados, area_ha, edicao, vigente_desde, geom
+FROM vetorial.mma_areas_prioritarias WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
 CREATE OR REPLACE VIEW vetorial.v_sfb_florestas_publicas AS
 SELECT id, nome, categoria, protecao, tipo, governo, comunitari, classe, orgao, sobreposic, atolegal, ano_criacao, estagio, uf, id_estado, bioma, municipio, area_ha, edicao, vigente_desde, geom
 FROM vetorial.sfb_florestas_publicas WHERE vigente_ate IS NULL AND geom IS NOT NULL;
@@ -60,7 +64,7 @@ FROM vetorial.sema_mt_areas_desembargadas WHERE vigente_ate IS NULL AND geom IS 
 DO $$
 DECLARE v text;
 BEGIN
-  FOREACH v IN ARRAY ARRAY['v_funai_terras_indigenas','v_mma_unidades_conservacao','v_sfb_florestas_publicas','v_deter_alertas','v_mapbiomas_alerta','v_ibama_embargos_poligonos',
+  FOREACH v IN ARRAY ARRAY['v_funai_terras_indigenas','v_mma_unidades_conservacao','v_mma_areas_prioritarias','v_sfb_florestas_publicas','v_deter_alertas','v_mapbiomas_alerta','v_ibama_embargos_poligonos',
                            'v_ibama_embargos_pontos','v_icmbio_areas_embargadas','v_sema_mt_areas_embargadas','v_sema_mt_areas_desembargadas'] LOOP
     EXECUTE format('GRANT SELECT ON vetorial.%I TO leitura, geoserver, analistas', v);
     EXECUTE format('COMMENT ON VIEW vetorial.%I IS %L', v, 'Publicada no GeoServer: so a versao vigente' ||

@@ -104,6 +104,10 @@ VETORIAIS = [
      "resumo": "3.406 unidades de conservação com polígono (CNUC, MMA), edição 2026_07, versão vigente. As 170 UCs que só têm ponto esquemático não estão nesta camada. "
                "esfera varia a capitalização (Federal/federal): use lower().",
      "estilo": "unidade_conservacao"},
+    {"store": "dw_vetorial", "nome": "v_mma_areas_prioritarias", "titulo": "MMA - Áreas prioritárias para a conservação da biodiversidade",
+     "resumo": "2.081 áreas prioritárias do MMA (2ª atualização, 2022) em 7 camadas de origem (camada_origem): Amazônia, Caatinga, Cerrado e Pantanal, Mata Atlântica, Pampa, Zona Costeira e Marinha e Áreas Híbridas. "
+               "A capitalização de prioridade_acao varia: use lower(). Pode haver sobreposição entre camadas.",
+     "estilo": "unidade_conservacao"},
     {"store": "dw_vetorial", "nome": "v_sfb_florestas_publicas", "titulo": "SFB - Florestas públicas (CNFP)",
      "resumo": "Cadastro Nacional de Florestas Públicas (SFB), edição 2025: assentamentos, UCs, terras indígenas, glebas e áreas militares. Há sobreposição entre registros "
                "(sobreposic = SIM): não some área sem filtrar. Desenha só em escala maior que 1:5.000.000.",
