@@ -28,10 +28,10 @@ ibge/
 | estados (hoje em `municipios/`) | ✅ Importado; malha 2025 aplicada em 2026-10-20 | `dim.estados` (27 UF) |
 | biomas | ✅ Importado (2026-09-27); carga feita à mão, sem pasta/pipeline neste repositório | `vetorial.ibge_dominios_naturais`, `vetorial.ibge_regioes_naturais`, `dim.biomas` (dissolvido) |
 | `municipios/` | ✅ Pipeline; malha 2025 (5.573) aplicada em 2026-10-20 | `dim.municipios` (`id_municipio` = código IBGE) |
-| `geol_area/` (geologia) | ⏳ Baixado, não importado (131.547 feições) | — |
-| `geom_area/` (geomorfologia) | ⏳ Baixado, não importado (120.218 feições) | — |
-| `pedo_area/` (pedologia) | ⏳ Baixado, não importado (114.658 feições) | — |
-| `vege_area/` (vegetação) | ⏳ Baixado, não importado (145.458 feições) | — |
+| `geol_area/` (geologia) | ✅ Pipeline automático, edição 2026 (2026-10-30), [`geologia/`](geologia/LEIAME_geologia.md) | `vetorial.ibge_geologia` (131.547) |
+| `geom_area/` (geomorfologia) | ✅ Pipeline automático, edição 2026 (2026-10-30), [`geomorfologia/`](geomorfologia/LEIAME_geomorfologia.md) | `vetorial.ibge_geomorfologia` (120.218) |
+| `pedo_area/` (pedologia) | ✅ Pipeline automático, edição 2026 (2026-10-30), [`pedologia/`](pedologia/LEIAME_pedologia.md) | `vetorial.ibge_pedologia` (114.658) |
+| `vege_area/` (vegetação) | ✅ Pipeline automático, edição 2026 (2026-10-30), [`vegetacao/`](vegetacao/LEIAME_vegetacao.md) | `vetorial.ibge_vegetacao` (145.458) |
 | `PAM/` (produção agrícola) | ✅ Pipeline sob demanda (por produto) | `tabular.ibge_pam` |
 | `censo_agropecuario/` | ✅ Pipeline sob demanda (por produto; hoje laranja) | `tabular.ibge_censoagro2017_estab_lavoura_perm` |
 | `Clima_5000mil/` | ⏳ Baixado, nunca investigado | — |
