@@ -31,8 +31,8 @@ Pipeline `scripts/localidades.py` (ver `scripts_comuns/LEIAME_pipelines.md`): ma
 
 ## Atualizar a malha inteira (`--atualizar-geometria`) — criado e APLICADO em 2026-10-20
 
-**Aplicado em 20/10/2026** (depois do backup `pre-malha-2025`): 2.429 geometrias substituídas e arquivadas em
-`dim.malha_anterior`; os 5.573 municípios e as 27 UFs passaram a ter `ano_malha = 2025`; 0 geometrias inválidas.
+**Aplicado em 20/10/2026** (depois do backup `pre-malha-2025`): 2.429 geometrias substituídas (as antigas foram arquivadas em
+`dim.malha_anterior`, **tabela retirada em 30/10/2026** por decisão do usuário; cópia em `D:\backups\data_warehouse\malha_anterior_2026-10-30.dump`, fora do Drive e do git); os 5.573 municípios e as 27 UFs passaram a ter `ano_malha = 2025`; 0 geometrias inválidas.
 A ponte PRODES foi refeita inteira em seguida (`analises/ponte_prodes_municipio/scripts/refazer_ponte_municipio.ps1`): 7.027.719 pares (eram
 7.028.540); a antiga ficou guardada em `resultados.prodes_municipio_malha_antiga` até o usuário decidir apagá-la.
 `vetorial.sicar_imoveis.id_municipio` **não** foi recalculado: numa amostra de ~100 mil imóveis, 1,7% têm o município
@@ -41,13 +41,13 @@ não derivado da nossa geometria.
 
 Com `--geometria --atualizar-geometria [--ano-malha 2025]`, o script **substitui** as geometrias de municípios e UFs
 que mudaram na malha nova. Salvaguardas:
-- a geometria antiga vai para `dim.malha_anterior` antes da troca (nada se perde; dá para voltar pelo `id_territorio`);
+- a geometria antiga **não é mais arquivada** (a tabela `dim.malha_anterior` foi retirada em 30/10/2026): **faça um backup do banco antes de aplicar** uma malha nova;
 - `dim.municipios.ano_malha` e `dim.estados.ano_malha` registram de que malha vem cada geometria;
 - geometria nova inválida não entra; malha com menos de 5.500 municípios (ou 27 UFs) aborta;
 - mede a mudança pela **área da diferença simétrica** entre a antiga e a nova, em fração da área antiga: até 1e-6 =
   igual (só ganha o `ano_malha`), até 0,1% = pequena, acima disso = grande. (O Hausdorff foi testado e é quadrático:
   passou de 9 min no primeiro passo.)
-- DDL por administrador: `sql/01_malha_versionada.sql` (coluna `ano_malha` e a tabela `dim.malha_anterior`).
+- DDL por administrador: `sql/01_malha_versionada.sql` (a coluna `ano_malha`).
 
 **Simulação de 2026-10-20 (malha 2025 contra o que está na dimensão):**
 - UFs: **27 de 27 idênticas** (a dimensão de UFs já era a de 2025).

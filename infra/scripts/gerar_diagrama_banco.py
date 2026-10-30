@@ -26,7 +26,7 @@ MAX_LINHAS = 9
 LARGURA_CATALOGO = 2500
 # colunas do layout: x e as tabelas de cima para baixo
 LAYOUT = [
-    (40, ["dim.cultura", "dim.cultura_equivalencia", "dim.malha_anterior"]),
+    (40, ["dim.cultura", "dim.cultura_equivalencia"]),
     (400, ["tabular.ibge_pam", "tabular.ibge_censoagro2017_estab_lavoura_perm", "tabular.sidra_valor", "tabular.mte_cadastro_empregadores"]),
     (760, ["dim.fontes", "dim.estados", "dim.municipios", "dim.biomas"]),
     (1120, ["vetorial.prodes_desmatamento", "vetorial.sicar_imoveis", "vetorial.incra_assentamentos", "vetorial.mapbiomas_alerta", "vetorial.funai_terras_indigenas", "vetorial.deter_alertas", "vetorial.ibama_embargos", "vetorial.mma_unidades_conservacao", "vetorial.mma_areas_prioritarias", "vetorial.sfb_florestas_publicas"]),

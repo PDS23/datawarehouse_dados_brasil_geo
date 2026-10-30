@@ -116,7 +116,8 @@ TOL_GRANDE = 1e-3       # fracao da area (0,1%): acima disso a mudanca e relevan
 def atualizar_malha(conn, tipo, malha, ano, fonte, simular, carga):
     """Compara a malha do IBGE com a geometria da dimensao e, se nao for --simular, SUBSTITUI as que mudaram.
 
-    A geometria antiga vai para dim.malha_anterior antes de ser trocada. Geometria nova invalida nao entra.
+    A geometria antiga NAO e arquivada: a tabela dim.malha_anterior foi retirada em 2026-10-30 (decisao do usuario; copia em D:\backups\data_warehouse\malha_anterior_2026-10-30.dump).
+    Faca um backup do banco antes de aplicar. Geometria nova invalida nao entra.
     Retorna um resumo (dict) para o relatorio."""
     tabela, col_id = ("municipios", "id_municipio") if tipo == "municipio" else ("estados", "id_estado")
     minimo = 5500 if tipo == "municipio" else 27
@@ -158,27 +159,22 @@ def atualizar_malha(conn, tipo, malha, ano, fonte, simular, carga):
         if resumo.get("invalida"):
             carga.avisos.append(f"{resumo['invalida']} geometria(s) nova(s) invalida(s) de {tipo} NAO aplicadas")
 
-        # --- aplicacao: arquiva e troca so o que mudou (pequena/grande); igual so ganha o ano da malha ---
-        cur.execute(f"""INSERT INTO dim.malha_anterior (tipo, id_territorio, ano_malha, area_km2, geom, motivo)
-                        SELECT %s, c.id, c.ano_antigo, c.area_antiga, c.g_ant,
-                               'substituida pela malha ' || %s || ' (diferenca ' || round((c.dif_rel * 100)::numeric, 4) || '%% da area)'
-                        FROM _cmp c WHERE c.classe IN ('pequena', 'grande')""", (tipo, ano))
-        arquivadas = cur.rowcount
+        # --- aplicacao: troca so o que mudou (pequena/grande); igual so ganha o ano da malha ---
         cur.execute(f"""UPDATE dim.{tabela} d SET geom = c.g_nov, area_km2 = c.area_nova, ano_malha = %s, id_fonte = %s, importado_em = current_date
                         FROM _cmp c WHERE c.id = d.{col_id} AND c.classe IN ('pequena', 'grande')""", (ano, fonte))
         trocadas = cur.rowcount
         cur.execute(f"UPDATE dim.{tabela} d SET ano_malha = %s FROM _cmp c WHERE c.id = d.{col_id} AND c.classe = 'igual' AND d.ano_malha IS DISTINCT FROM %s", (ano, ano))
         carimbadas = cur.rowcount
         carga.atualizadas += trocadas
-        log(f"  {tipo}: {trocadas} geometria(s) substituida(s) ({arquivadas} arquivada(s) em dim.malha_anterior), "
+        log(f"  {tipo}: {trocadas} geometria(s) substituida(s), "
             f"{carimbadas} identica(s) so com ano_malha={ano}" + (" [SIMULACAO: sera desfeito]" if simular else ""))
-        return {"resumo": resumo, "trocadas": trocadas, "arquivadas": arquivadas}
+        return {"resumo": resumo, "trocadas": trocadas}
 
 
 def main():
     ap = argparse.ArgumentParser(description="Atualiza dim.estados e dim.municipios direto do IBGE.")
     ap.add_argument("--atualizar-geometria", action="store_true",
-                    help="com --geometria: SUBSTITUI as geometrias de municipios e UFs que mudaram na malha nova (a antiga vai para dim.malha_anterior)")
+                    help="com --geometria: SUBSTITUI as geometrias de municipios e UFs que mudaram na malha nova (a antiga NAO e arquivada: faca backup antes)")
     ap.add_argument("--geometria", action="store_true", help="baixa as malhas do IBGE e preenche a geometria de quem está sem")
     ap.add_argument("--ano-malha", type=int, help="ano da malha (padrão: o mais recente publicado)")
     ap.add_argument("--forcar-download", action="store_true")
@@ -256,7 +252,7 @@ def main():
             log(f"  geometria preenchida em {len(a_preencher)} município(s): {a_preencher}")
 
             if args.atualizar_geometria:
-                log(f"== 2b) substituir geometrias pela malha {ano} (o que mudou; a antiga vai para dim.malha_anterior)")
+                log(f"== 2b) substituir geometrias pela malha {ano} (o que mudou; a antiga NAO e arquivada: faca backup antes)")
                 r_mun = atualizar_malha(conn, "municipio", malha, ano, fonte, args.simular, carga)
                 r_uf = atualizar_malha(conn, "estado", malha_uf, ano, fonte, args.simular, carga)
                 if r_mun["trocadas"] or r_uf["trocadas"]:

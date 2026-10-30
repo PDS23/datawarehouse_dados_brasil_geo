@@ -103,42 +103,6 @@
 <text class="tp" x="280" y="75" text-anchor="end">integer</text>
 <rect class="hit" data-c="id_cultura" y="62" width="290" height="18"/>
 </g>
-<g class="tab dim" data-t="dim.malha_anterior" transform="translate(40,394)" tabindex="0" role="button" aria-label="dim.malha_anterior">
-<rect class="corpo" width="290" height="196" rx="6"/>
-<path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
-<text class="nome" x="12" y="18">malha_anterior</text>
-<text class="sub" x="12" y="35">dim · 2.429 linhas · 103 MB</text>
-<text class="m PK" x="10" y="57">PK</text>
-<text class="col pk" x="44" y="57">id</text>
-<text class="tp" x="280" y="57" text-anchor="end">bigint</text>
-<rect class="hit" data-c="id" y="44" width="290" height="18"/>
-<rect class="zebra" y="62" width="290" height="18"/>
-<text class="col" x="44" y="75">tipo</text>
-<text class="tp" x="280" y="75" text-anchor="end">text</text>
-<rect class="hit" data-c="tipo" y="62" width="290" height="18"/>
-<text class="col" x="44" y="93">id_territorio</text>
-<text class="tp" x="280" y="93" text-anchor="end">integer</text>
-<rect class="hit" data-c="id_territorio" y="80" width="290" height="18"/>
-<rect class="zebra" y="98" width="290" height="18"/>
-<text class="col" x="44" y="111">ano_malha</text>
-<text class="tp" x="280" y="111" text-anchor="end">smallint</text>
-<rect class="hit" data-c="ano_malha" y="98" width="290" height="18"/>
-<text class="col" x="44" y="129">area_km2</text>
-<text class="tp" x="280" y="129" text-anchor="end">numeric</text>
-<rect class="hit" data-c="area_km2" y="116" width="290" height="18"/>
-<rect class="zebra" y="134" width="290" height="18"/>
-<text class="m geo" x="10" y="147">geo</text>
-<text class="col" x="44" y="147">geom</text>
-<text class="tp" x="280" y="147" text-anchor="end">MultiPolygon 4674</text>
-<rect class="hit" data-c="geom" y="134" width="290" height="18"/>
-<text class="col" x="44" y="165">arquivado_em</text>
-<text class="tp" x="280" y="165" text-anchor="end">date</text>
-<rect class="hit" data-c="arquivado_em" y="152" width="290" height="18"/>
-<rect class="zebra" y="170" width="290" height="18"/>
-<text class="col" x="44" y="183">motivo</text>
-<text class="tp" x="280" y="183" text-anchor="end">text</text>
-<rect class="hit" data-c="motivo" y="170" width="290" height="18"/>
-</g>
 <g class="tab tabular" data-t="tabular.ibge_pam" transform="translate(400,70)" tabindex="0" role="button" aria-label="tabular.ibge_pam">
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
