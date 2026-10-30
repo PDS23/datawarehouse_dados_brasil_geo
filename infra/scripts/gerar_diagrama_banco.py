@@ -267,7 +267,8 @@ def pagina(svg, dados):
 body{{background:var(--bg);color:var(--fg);font-family:var(--sans);margin:0;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));line-height:1.5}}
 main{{max-width:1900px;margin:0 auto;display:flex;flex-direction:column;gap:20px}}
 h1{{font-size:28px;line-height:1.15;margin:0;text-wrap:balance}} .sub{{color:var(--suave);margin:4px 0 0;max-width:80ch}}
-.fig{{overflow-x:auto;background:var(--bg);border:1px solid var(--linha);border-radius:8px;padding:8px}}
+.fig{{overflow:auto;max-height:82vh;cursor:grab;background:var(--bg);border:1px solid var(--linha);border-radius:8px;padding:8px}}
+.fig.arrastando{{cursor:grabbing;user-select:none}}
 .fig svg{{display:block;height:auto}}
 {CSS_SVG}
 .legenda{{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--suave);align-items:center}}
@@ -349,7 +350,22 @@ function dica(e) {{
   if (y + hh > window.innerHeight - 8) y = Math.max(8, e.clientY - hh - 14);
   tip.style.left = x + 'px'; tip.style.top = y + 'px';
 }}
-fig.addEventListener('mousemove', dica);
+// Arrastar o fundo move o quadro (o mouse so; no toque a rolagem nativa ja faz isso). Clicar numa tabela continua selecionando.
+const caixa = fig.parentElement;                                   // o <figure class="fig">: e ele que rola
+let pan = null;
+caixa.addEventListener('pointerdown', e => {{
+  if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('.tab')) return;
+  pan = {{ x: e.clientX, y: e.clientY, l: caixa.scrollLeft, t: caixa.scrollTop }};
+  try {{ caixa.setPointerCapture(e.pointerId); }} catch (_) {{}}
+  caixa.classList.add('arrastando'); tip.hidden = true;
+}});
+caixa.addEventListener('pointermove', e => {{
+  if (!pan) return;
+  caixa.scrollLeft = pan.l - (e.clientX - pan.x); caixa.scrollTop = pan.t - (e.clientY - pan.y);
+}});
+const fimPan = () => {{ pan = null; caixa.classList.remove('arrastando'); }};
+caixa.addEventListener('pointerup', fimPan); caixa.addEventListener('pointercancel', fimPan);
+fig.addEventListener('mousemove', e => {{ if (!pan) dica(e); }});
 fig.addEventListener('mouseleave', () => {{ tip.hidden = true; }});
 fig.querySelectorAll('.tab').forEach(g => {{
   g.addEventListener('click', () => mostrar(g.dataset.t));

@@ -8404,6 +8404,115 @@
    ]
   },
   {
+   "id": "vetorial.v_mma_areas_prioritarias",
+   "sch": "vetorial",
+   "nome": "v_mma_areas_prioritarias",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "camada_origem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cod_area",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nome_area",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "importancia_biologica",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "prioridade_acao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "acao_principal_codigo",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "acao_principal",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "acoes_complementares",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "estados",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
    "id": "vetorial.v_mma_unidades_conservacao",
    "sch": "vetorial",
    "nome": "v_mma_unidades_conservacao",
