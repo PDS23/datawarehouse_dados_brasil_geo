@@ -937,3 +937,23 @@ erDiagram
 
 17. **Guia de uso do banco** — ✅ feito 2026-10-27: [GUIA_DE_USO.md](GUIA_DE_USO.md) (versão vigente, geometrias inválidas e `ST_MakeValid`, áreas em `geography`/EPSG 5880, ids e `dim.*`,
     armadilhas por tabela, como conectar). Manter atualizado a cada fonte nova com cuidado próprio. **A fazer, se o usuário quiser:** pasta de consultas prontas e testadas por tema.
+
+18. **Levantamento do catálogo da INDE (Infraestrutura Nacional de Dados Espaciais, 2026-10-30)** — só leitura. O catálogo (`https://inde.gov.br/api/catalogo/get`) é um índice de **71 servidores OGC**
+    (42 nacionais, 15 estaduais, 12 municipais, 3 de universidades; 64 com WFS), com os endereços de WMS, WFS e WCS de cada um. Lendo o `GetCapabilities` de cada WFS (certificado TLS verificado):
+    **25.486 camadas**; 2 servidores deram erro (INPE, 502; SEPLAN-TO, tempo esgotado) e 7 não têm WFS. **Achados que mexem no que temos ou no que falta:**
+    | Achado | Onde | O que muda |
+    |---|---|---|
+    | **Território quilombola em polígono (IBGE, 2022)** | `geoservicos.ibge.gov.br/geoserver/ows`, camada `CGMAT:qg_2022_620_territorioquilombola__v02` | **fecha em parte a lacuna do critério 12** (o INCRA segue bloqueado): é a base do IBGE, não a do INCRA; conferir cobertura e atualização antes de usar como substituto |
+    | **CNUC 07/2026 por WFS** | `geoservicos.inde.gov.br/geoserver/MMA/ows`, camada `MMA:cnuc_26_07_31` (também 03/2026, 08/2025, 04/2024) | **pode acabar com a carga manual autorizada do CNUC** (regra 8): pipeline automático lendo o WFS |
+    | **Autos de infração, termos de apreensão e de suspensão, embargos, desembargos e embargos cancelados do IBAMA** | `pamgia.ibama.gov.br/server/services/SISCOM/publico` (WFS do ArcGIS): `ibama_autos_de_infracao_p` (pontos), `ibama_termos_de_apreensao_p`, `ibama_termos_de_suspensao_p`, `ibama_embargos_a`, `ibama_desembargos_a`, `ibama_embargos_cancelados_a` | **autos de infração** (pergunta 36 da legalidade) e desembargos; conferir se traz o CPF/CNPJ e como se compara ao CSV que já carregamos |
+    | **Áreas embargadas e autos de infração do ICMBio** | `geoservicos.inde.gov.br/geoserver/ICMBio/ows`: `ICMBio:embargos_icmbio`, `ICMBio:autos_infracao_icmbio`, `ICMBio:limiteucsfederais_a` (ago/2026) | autos de infração do ICMBio; o embargo já vem do ArcGIS Online (outro canal da mesma fonte) |
+    | **Terras da União (SPU)** | `geoservicos.inde.gov.br/geoserver/SPU/ows`: terreno de marinha, terreno marginal, acrescidos, faixa de segurança, espelho d'água, ilha, manguezal e praia federais, LPM/LTM/LMEO/LLTM, imóveis da SPU (transparência ativa) | **terras da União** do item 16.5 |
+    | **Florestas públicas (SFB) por WFS** | `sistemas.florestal.gov.br/geoserver/ows`: `snif:cnfp_2009` a `cnfp_2025` | outro canal do CNFP (hoje usamos o zip do portal ArcGIS); dá todos os anos como camadas |
+    | **Hidrografia (ANA) por WFS** | `snirh.gov.br/arcgis/services/INDE/Camadas/MapServer`: BHO 2017 (trechos e áreas de drenagem 5K e 50K, bacias), balanço hídrico, cursos d'água em terra da União | alternativa ao GPKG de 3 GB para a BHO |
+    | **FUNAI** | `geoserver.funai.gov.br/geoserver/ows`: `tis_poligonais`, `aldeias_pontos`, terras em estudo (pontos), portarias | aldeias e terras em estudo (pontos) além do que já carregamos |
+    | **IBGE** | `geoservicos.ibge.gov.br/geoserver/ows`: 10.127 camadas (terra indígena 2022, unidade de conservação 2022, biomas 2019 e 2025, faixa de fronteira, favelas) | base de comparação e faixa de fronteira |
+    | **Embrapa** | `geoinfo.dados.embrapa.br/geoserver/ows` (1.136 camadas; CAR e áreas preservadas por município, aptidão agrícola) | agregados do CAR por município (não o imóvel) |
+    | **Estaduais** | MG (Sisema: 1.420 camadas, APP hídrica e uso restrito do CAR por URFBio), SP, ES, RJ (INEA: 4.249), CE | fora do escopo até decidirmos os estados (pergunta 35) |
+    **Sem camadas:** **ANM (mineração) responde `GetCapabilities` vazio** na INDE (0 camadas): a mineração não vem por aqui; ANP, ANTT, DNIT, EPE e Marinha são de outros temas.
+    **Próximos passos sugeridos (a decidir):** (1) CNUC automático pelo WFS da INDE; (2) quilombolas do IBGE (verificar); (3) autos de infração do IBAMA e do ICMBio; (4) terras da União (SPU).
+
