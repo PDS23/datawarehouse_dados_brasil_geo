@@ -58,6 +58,8 @@ ESTILOS = [
     ("embargo_ponto", "embargo_ponto.sld"),
     ("embargo_encerrado", "embargo_encerrado.sld"),
     ("mapa_tematico_ibge", "mapa_tematico_ibge.sld"),
+    ("hidrografia_linha", "hidrografia_linha.sld"),
+    ("bacia_hidrografica", "bacia_hidrografica.sld"),
 ]
 
 # (nome do store, schema do PostgreSQL). Um store por schema.
@@ -121,6 +123,18 @@ VETORIAIS = [
     {"store": "dw_vetorial", "nome": "v_ibge_vegetacao", "titulo": "IBGE - Vegetação (BDiA, 1:250.000)",
      "resumo": "Mapa de vegetação do Brasil (cobertura vegetal natural e usos antrópicos) do BDiA, 1:250.000. Edicao mais recente do IBGE, versao vigente. Muitos poligonos (mais de 100 mil): desenha so em escala maior que 1:1.000.000; para consultas filtre por atributo.",
      "estilo": "mapa_tematico_ibge"},
+    {"store": "dw_vetorial", "nome": "v_ana_bho_trechos_drenagem", "titulo": "ANA - BHO 1:250.000, trechos de drenagem",
+     "resumo": "Trechos de drenagem da Base Hidrográfica Ottocodificada 1:250.000: a rede de rios em linhas, cada trecho com o código da ottobacia e do curso d'água. Versão 02_03 (dez/2023), versão vigente. Rede de rios em linhas (1,6 milhão de trechos de drenagem). Desenha só em escala maior que 1:1.000.000; filtre por bacia ou caixa antes de pedir feições (o WFS corta em 100.000, em silêncio).",
+     "estilo": "hidrografia_linha"},
+    {"store": "dw_vetorial", "nome": "v_ana_bho_cursos_dagua", "titulo": "ANA - BHO 1:250.000, cursos d'água",
+     "resumo": "Cursos d'água da Base Hidrográfica Ottocodificada 1:250.000: cada rio inteiro como uma linha (vários trechos de drenagem formam um curso d'água). Versão 02_03 (dez/2023), versão vigente. Cada rio inteiro como uma linha (807 mil cursos d'água). Desenha só em escala maior que 1:1.000.000; filtre antes de pedir feições (o WFS corta em 100.000, em silêncio).",
+     "estilo": "hidrografia_linha"},
+    {"store": "dw_vetorial", "nome": "v_ana_bho_linha_costa", "titulo": "ANA - BHO 1:250.000, linha de costa",
+     "resumo": "Linha de costa usada pela Base Hidrográfica Ottocodificada 1:250.000. Versão 02_03 (dez/2023), versão vigente. Linha de costa da BHO.",
+     "estilo": "hidrografia_linha"},
+    {"store": "dw_vetorial", "nome": "v_ana_bho_bacias_otto", "titulo": "ANA - BHO 1:250.000, bacias hidrográficas otto (níveis 1 a 6)",
+     "resumo": "Bacias hidrográficas ottocodificadas (Pfafstetter) agregadas por nível de 1 a 6 da Base Hidrográfica 1:250.000, numa tabela só (o nível está em wts_cd_pfafstetterbasincodelevel). Versão 02_03 (dez/2023), versão vigente. Bacias ottocodificadas de nível 1 a 6 (23,6 mil): filtre por wts_cd_pfafstetterbasincodelevel para ver um nível por vez. Desenha só em escala maior que 1:5.000.000.",
+     "estilo": "bacia_hidrografica"},
     {"store": "dw_vetorial", "nome": "v_sfb_florestas_publicas", "titulo": "SFB - Florestas públicas (CNFP)",
      "resumo": "Cadastro Nacional de Florestas Públicas (SFB), edição 2025: assentamentos, UCs, terras indígenas, glebas e áreas militares. Há sobreposição entre registros "
                "(sobreposic = SIM): não some área sem filtrar. Desenha só em escala maior que 1:5.000.000.",

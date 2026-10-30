@@ -17,6 +17,7 @@
 | ICMBio, áreas embargadas | `vetorial.icmbio_areas_embargadas` | 14.779 | agendada (desde 27/10); CPF só como hash |
 | SEMA-MT, áreas embargadas e desembargadas | `vetorial.sema_mt_areas_embargadas`, `vetorial.sema_mt_areas_desembargadas` | 8.357 e 4.729 | agendada (desde 28/10); CPF só como hash |
 | MTE, Cadastro de Empregadores (lista suja) | `tabular.mte_cadastro_empregadores` | 508 | agendada (desde 28/10); CPF só como hash |
+| ANA, BHO 250 (hidrografia) | `vetorial.ana_bho_trechos_drenagem`, `ana_bho_cursos_dagua`, `ana_bho_linha_costa`, `ana_bho_bacias_otto` | 1.614.231, 807.103, 25 e 23.608 | automática, versão 02_03; fora da agenda |
 | IBGE, BDiA (geologia, geomorfologia, pedologia, vegetação) | `vetorial.ibge_geologia`, `ibge_geomorfologia`, `ibge_pedologia`, `ibge_vegetacao` | 131.547, 120.218, 114.658 e 145.458 | automática, edição 2026; fora da agenda |
 | MMA, áreas prioritárias para a conservação | `vetorial.mma_areas_prioritarias` | 2.081 | automática, edição estática (2ª atualização, 2022); fora da agenda |
 | MMA, unidades de conservação (CNUC) | `vetorial.mma_unidades_conservacao` | 3.576 | **manual autorizada** (zip em `bruto/`); `--verificar` |
@@ -32,7 +33,7 @@ Rasters (fora do banco, em arquivo/COG, servidos pelo GeoServer): MapBiomas uso 
 diagrama do banco publicado como artefato (versão 10); repositório público no GitHub sincronizado; guia de uso em [GUIA_DE_USO.md](GUIA_DE_USO.md).
 
 **Pendências principais:** (1) pré-análise de legalidade EUDR (item 16): **as fontes estão todas no banco** (11 de 12 critérios; falta o quilombola, preso ao INCRA); falta decidir a metodologia (16.3) e escrever a verificação (16.4); (2) INCRA (assentamentos, quilombolas, SIGEF) depende do servidor voltar (item 11);
-(3) MinIO e catálogo de rasters (ver "Caminho 1"); (4) monitor de fontes (item 14); (5) política do Tailscale e acesso dos analistas ao PostGIS (seção "Migração"); (5b) GeoServer: ✅ as fontes novas foram publicadas em 2026-10-27 por view sem dado pessoal (`infra/LEIAME_infra.md`); (6) fontes novas do item 15 ainda não carregadas (ANA BHO e MapBiomas rasters automatizados; as áreas prioritárias do MMA e o BDiA do IBGE entraram em 30/10).
+(3) MinIO e catálogo de rasters (ver "Caminho 1"); (4) monitor de fontes (item 14); (5) política do Tailscale e acesso dos analistas ao PostGIS (seção "Migração"); (5b) GeoServer: ✅ as fontes novas foram publicadas em 2026-10-27 por view sem dado pessoal (`infra/LEIAME_infra.md`); (6) fontes novas do item 15 ainda não carregadas (MapBiomas rasters automatizados; as áreas prioritárias do MMA, o BDiA do IBGE e a hidrografia da ANA entraram em 30/10).
 
 ## Objetivo
 
@@ -275,7 +276,7 @@ Isso é trabalho real, não só documentação — o que falta:
       PostgreSQL/PostGIS nativo pra Docker também (ver conversa de
       2026-10-01 — não migrar só por migrar, migrar quando for mesmo pro
       desktop)
-- [~] Scripts de download: **feitos** para PRODES, SICAR, MapBiomas Alerta, FUNAI, DETER, IBAMA, SFB (CNFP), IBGE/SIDRA e TOPODATA; o CNUC é carga manual autorizada. **Faltam** ANA, MapBiomas rasters e INCRA (fora do ar); o BDiA do IBGE e as áreas prioritárias do MMA entraram em 30/10
+- [~] Scripts de download: **feitos** para PRODES, SICAR, MapBiomas Alerta, FUNAI, DETER, IBAMA, SFB (CNFP), IBGE/SIDRA e TOPODATA; o CNUC é carga manual autorizada. **Faltam** MapBiomas rasters e INCRA (fora do ar); o BDiA do IBGE e as áreas prioritárias do MMA entraram em 30/10
 - [ ] Completar scripts de import que faltam — hoje têm script reexecutável o SICAR
       (`sicar/imoveis/scripts/atualizar_imoveis_sicar.py`, baixando do CAR), o PAM,
       o Censo Agropecuário, os assentamentos do INCRA e `dim.estados`/`dim.municipios`
@@ -662,7 +663,7 @@ portfólio (banco relacional + formato cloud-native).
    - Caminho equipe SIG: instalar GeoServer e publicar WFS (vetor) +
      WMS/WCS (raster)
 9. Ir incorporando as demais camadas conforme a demanda de processamento pedir, seguindo a convenção do ARQUITETURA.md. **Em andamento** pelos itens 15 e 16
-   (já entraram FUNAI, DETER, IBAMA, CNUC e CNFP; entraram também ICMBio, SEMA-MT, MTE, áreas prioritárias do MMA e o BDiA do IBGE; seguem ANA e rasters do MapBiomas)
+   (já entraram FUNAI, DETER, IBAMA, CNUC e CNFP; entraram também ICMBio, SEMA-MT, MTE, áreas prioritárias do MMA, o BDiA do IBGE e a hidrografia da ANA; seguem os rasters do MapBiomas)
 10. Avaliar estrutura de schema pra reduzir o tamanho do banco (levantado em
     2026-10-01, com o banco em ~19GB e o SICAR ainda carregando) — avaliar
     quando tiver mais dado real carregado (SICAR completo + mais camadas do
@@ -862,7 +863,7 @@ erDiagram
     | **MMA, áreas prioritárias para conservação** | ✅ **feito 2026-10-30** (`vetorial.mma_areas_prioritarias`, 2.081 áreas em 7 shapefiles; `mma/areas_prioritarias/`; automático, edição estática, fora da agenda) | CKAN `dados.mma.gov.br`: 7 zips de shapefile por bioma (edição 2022) | base estática, carga única automatizada |
     | **MMA, unidades de conservação (CNUC)** | ✅ **feito 2026-10-27** | zip do shapefile **baixado à mão pelo usuário** (SharePoint do MMA; CKAN só tem link direto até `2025_08`); `vetorial.mma_unidades_conservacao`, 3.576 UCs (edição 2026_07), `mma/unidades_conservacao/` | **carga manual autorizada**; `--verificar` avisa quando o CKAN publicar link direto |
     | **SFB, Cadastro Nacional de Florestas Públicas** | ✅ **feito 2026-10-27** (`vetorial.sfb_florestas_publicas`, 12.874 polígonos, edição 2025; `sfb/florestas_publicas/`; automático CKAN → zip do portal ArcGIS; fora da atualização agendada até o usuário decidir) | item público do portal ArcGIS (`mapas.florestal.gov.br`, Shapefile 2025, zip público) + CSV no CKAN `dados.florestal.gov.br` | edições anuais (2025 publicada em 07/2026) |
-    | **ANA, Base Hidrográfica (BHO 2017)** | ✅ | geonetwork do SNIRH: GPKG direto por camada (`metadados.snirh.gov.br/files/<id>/...gpkg`), uns 3 GB | base estática (2017) |
+    | **ANA, Base Hidrográfica Ottocodificada** | ✅ **feito 2026-10-30** com a **BHO 250 (1:250.000, versão 02_03)**: `vetorial.ana_bho_trechos_drenagem`, `ana_bho_cursos_dagua`, `ana_bho_linha_costa`, `ana_bho_bacias_otto`; `ana/bho/`; automático; fora da agenda | catálogo de metadados da ANA: GeoPackage por camada em link direto | **a BHO 2017 que constava aqui está marcada "Desatualizada" pela ANA**; a base não tem "uns 3 GB": são 6 GB (BHO 250) a mais de 40 GB (BHO multiescalas 6); áreas de contribuição (3,7 GB) e pontos de drenagem não foram carregados |
     | **IBGE, geologia, geomorfologia, pedologia, vegetação** | ✅ **feito 2026-10-30** (`vetorial.ibge_geologia`, `ibge_geomorfologia`, `ibge_pedologia`, `ibge_vegetacao`; `ibge/<tema>/` sobre `scripts_comuns/dwlib/bdia.py`; edição 2026; automático; fora da agenda) | `geoftp.ibge.gov.br/informacoes_ambientais/` (listagem de diretórios) | edições estáticas; carga única |
     | **IBGE, base de indígenas e quilombolas (2019)** | ✅ | `geoftp.ibge.gov.br/organizacao_do_territorio/tipologias_do_territorio/...` | é a base do IBGE, **não a do INCRA**: não substitui o INCRA |
     | **MapBiomas, uso do solo (rasters)** | ✅ | bucket público do Google Cloud `mapbiomas-public` (`initiatives/brasil/collection11/lulc/coverage` e `transition`) | cobre a lacuna "sem script" dos rasters |

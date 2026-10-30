@@ -50,6 +50,14 @@ tabelas:
     chave: [id1]
   - tabela: vetorial.ibge_vegetacao
     chave: [id1]
+  - tabela: vetorial.ana_bho_trechos_drenagem
+    chave: [cotrecho]
+  - tabela: vetorial.ana_bho_cursos_dagua
+    chave: [idcda]
+  - tabela: vetorial.ana_bho_linha_costa
+    chave: [colinhacosta]
+  - tabela: vetorial.ana_bho_bacias_otto
+    chave: [wts_cd_pfafstetterbasincodelevel, wts_pk]
   - tabela: vetorial.mma_areas_prioritarias
     chave: [camada_origem, cod_area]
   - tabela: vetorial.sema_mt_areas_embargadas

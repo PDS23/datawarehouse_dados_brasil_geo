@@ -1,0 +1,101 @@
+# Pipeline da Base Hidrografica Ottocodificada 1:250.000 (BHO250, ANA). Configuracao versionada.
+# Fonte: catalogo de metadados da ANA (GeoNetwork do SNIRH). O registro 0f57c8a0-6a0f-4283-8ce3-114ba904b9fe traz os arquivos GeoPackage por camada, em links diretos (sem login). A versao
+# vem do nome do arquivo da "Base de Dados Completa" (ex.: bho_250k_v_02_03.gpkg). E uma edicao ESTATICA (dez/2023): o espelho versionado detecta uma edicao nova.
+# Escolha de volume: a BHO tem tambem as areas de contribuicao (1,6 milhao de poligonos, 3,7 GB) e os pontos de drenagem (1,6 milhao): NAO carregados (sob demanda).
+# A BHO 2017 (que o ROADMAP citava) esta marcada pela ANA como "Desatualizada"; a BHO multiescalas 6 tem mais de 40 GB (so as areas, 20 GB).
+fonte: ANA                         # nome exato em dim.fontes
+uuid_registro: "0f57c8a0-6a0f-4283-8ce3-114ba904b9fe"
+url_busca: "https://metadados.snirh.gov.br/geonetwork/srv/eng/q"
+url_arquivos: "https://metadados.snirh.gov.br/files/0f57c8a0-6a0f-4283-8ce3-114ba904b9fe/"
+url_pagina: "https://metadados.snirh.gov.br/geonetwork/srv/eng/catalog.search#/metadata/0f57c8a0-6a0f-4283-8ce3-114ba904b9fe"
+padrao_versao: 'bho_250k_v_(\d+_\d+)\.gpkg'
+srid_gravado: 4674
+lote_leitura: 50000
+max_queda: 0.10
+caixa_brasil: {lon_min: -82.0, lon_max: -25.0, lat_min: -56.0, lat_max: 14.0}   # America do Sul: a BHO inclui os rios das bacias transfronteiricas (Peru, Colombia, Paraguai, Uruguai...)
+licenca: "Dados abertos da ANA (SNIRH); confirmar os termos de uso e a citacao exigida antes de redistribuir"
+camadas:
+  trechos_drenagem:
+    arquivo: geoft_bho_trecho_drenagem.gpkg
+    layer: "pgh_output.geoft_bho_trecho_drenagem"
+    destino: vetorial.ana_bho_trechos_drenagem
+    geometria: MultiLineString
+    chave: [chave_linha]
+    chave_campos: [cotrecho]
+    tamanho_minimo_bytes: 500000000
+    linhas_minimas: 1000000
+    colunas:
+      drn_pk: integer
+      cotrecho: integer
+      noorigem: integer
+      nodestino: integer
+      cocursodag: text
+      cobacia: text
+      nucomptrec: double
+      nudistbact: double
+      nudistcdag: double
+      nuareacont: double
+      nuareamont: double
+      nogenerico: text
+      noligacao: text
+      noespecif: text
+      noriocomp: text
+      nooriginal: text
+      cocdadesag: text
+      nutrjus: integer
+      nudistbacc: double
+      nuareabacc: double
+      nuordemcda: integer
+      nucompcda: double
+      nunivotto: integer
+      nunivotcda: integer
+      nustrahler: integer
+      dedominial: text
+      dsversao: text
+  cursos_dagua:
+    arquivo: geoft_bho_curso_dagua.gpkg
+    layer: "pgh_output.geoft_bho_curso_dagua"
+    destino: vetorial.ana_bho_cursos_dagua
+    geometria: MultiLineString
+    chave: [chave_linha]
+    chave_campos: [idcda]
+    tamanho_minimo_bytes: 300000000
+    linhas_minimas: 500000
+    colunas:
+      wtc_pk: integer
+      idcda: integer
+      cocursodag: text
+      nudistbacc: double
+      nucompcda: double
+      nuareabacc: double
+      cocdadesag: text
+      nunivotcda: integer
+      nuordemcda: integer
+      dedominial: text
+      dsversao: text
+  linha_costa:
+    arquivo: geoft_bho_linha_costa.gpkg
+    layer: "pgh_output.geoft_bho_linha_costa"
+    destino: vetorial.ana_bho_linha_costa
+    geometria: MultiLineString
+    chave: [chave_linha]
+    chave_campos: [colinhacosta]
+    tamanho_minimo_bytes: 500000
+    linhas_minimas: 10
+    colunas:
+      colinhacosta: integer
+      nooriginal: text
+  bacias_otto:
+    arquivo: geoft_bho_ach_otto_nivel.gpkg
+    layer: null                    # as 6 camadas geoft_bho_ach_otto_nivel_01..06 do arquivo viram uma tabela so
+    destino: vetorial.ana_bho_bacias_otto
+    geometria: MultiPolygon
+    chave: [chave_linha]
+    chave_campos: [wts_cd_pfafstetterbasincodelevel, wts_pk]
+    tamanho_minimo_bytes: 100000000
+    linhas_minimas: 15000
+    colunas:
+      wts_pk: integer
+      wts_cd_pfafstetterbasin: text
+      wts_cd_pfafstetterbasincodelevel: integer
+      wts_gm_area: double

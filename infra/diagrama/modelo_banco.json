@@ -5,8 +5,8 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 154,
-   "bytes": 114688,
+   "linhas": 168,
+   "bytes": 122880,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
     {
@@ -100,8 +100,8 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 103,
-   "bytes": 114688,
+   "linhas": 112,
+   "bytes": 131072,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
     {
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 29,
+   "linhas": 33,
    "bytes": 65536,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,8 +448,8 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 564,
-   "bytes": 163840,
+   "linhas": 656,
+   "bytes": 196608,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
     {
@@ -903,7 +903,7 @@
    "sch": "dim",
    "nome": "fontes",
    "view": false,
-   "linhas": 12,
+   "linhas": 13,
    "bytes": 49152,
    "coment": "Órgãos e sistemas de onde vêm os dados. Quase toda tabela aponta para cá por id_fonte.",
    "cols": [
@@ -4007,6 +4007,694 @@
      "nn": false,
      "pk": false,
      "c": null
+    }
+   ]
+  },
+  {
+   "id": "vetorial.ana_bho_bacias_otto",
+   "sch": "vetorial",
+   "nome": "ana_bho_bacias_otto",
+   "view": false,
+   "linhas": 23901,
+   "bytes": 754728960,
+   "coment": "Bacias hidrográficas Otto (níveis 1 a 6) da Base Hidrográfica Ottocodificada 1:250.000 (ANA). Bacias hidrográficas ottocodificadas (Pfafstetter) agregadas por nível de 1 a 6 da Base Hidrográfica 1:250.000, numa tabela só (o nível está em wts_cd_pfafstetterbasincodelevel). Espelho versionado. Ver ana/bho/LEIAME_bho.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: chave da feição (campos da chave separados por |); '#2', '#3' nas repetições que a própria fonte traz."
+    },
+    {
+     "n": "wts_pk",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador do registro no banco da ANA (único só dentro do nível)."
+    },
+    {
+     "n": "wts_cd_pfafstetterbasin",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da bacia (Otto Pfafstetter)."
+    },
+    {
+     "n": "wts_cd_pfafstetterbasincodelevel",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Nível de codificação da bacia (1 a 6). A chave é nível + código."
+    },
+    {
+     "n": "wts_gm_area",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Área da bacia, em km²."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria da feição (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: versão da BHO (ex.: 02_03) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.ana_bho_cursos_dagua",
+   "sch": "vetorial",
+   "nome": "ana_bho_cursos_dagua",
+   "view": false,
+   "linhas": 813893,
+   "bytes": 819757056,
+   "coment": "Cursos d'água da Base Hidrográfica Ottocodificada 1:250.000 (ANA). Cursos d'água da Base Hidrográfica Ottocodificada 1:250.000: cada rio inteiro como uma linha (vários trechos de drenagem formam um curso d'água). Espelho versionado. Ver ana/bho/LEIAME_bho.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: chave da feição (campos da chave separados por |); '#2', '#3' nas repetições que a própria fonte traz."
+    },
+    {
+     "n": "wtc_pk",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador do registro no banco da ANA."
+    },
+    {
+     "n": "idcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador do curso d'água (chave)."
+    },
+    {
+     "n": "cocursodag",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código do curso d'água (Otto Pfafstetter)."
+    },
+    {
+     "n": "nudistbacc",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Distância do curso d'água até a foz da bacia, em km."
+    },
+    {
+     "n": "nucompcda",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Comprimento do curso d'água, em km."
+    },
+    {
+     "n": "nuareabacc",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Área da bacia do curso d'água, em km²."
+    },
+    {
+     "n": "cocdadesag",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código do curso d'água em que este desagua."
+    },
+    {
+     "n": "nunivotcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Nível de codificação Otto do curso d'água."
+    },
+    {
+     "n": "nuordemcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Ordem do curso d'água."
+    },
+    {
+     "n": "dedominial",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Dominialidade (federal, estadual...)."
+    },
+    {
+     "n": "dsversao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Versão da base hidrográfica."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiLineString,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria da feição (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: versão da BHO (ex.: 02_03) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.ana_bho_linha_costa",
+   "sch": "vetorial",
+   "nome": "ana_bho_linha_costa",
+   "view": false,
+   "linhas": 26,
+   "bytes": 2703360,
+   "coment": "Linha de costa da Base Hidrográfica Ottocodificada 1:250.000 (ANA). Linha de costa usada pela Base Hidrográfica Ottocodificada 1:250.000. Espelho versionado. Ver ana/bho/LEIAME_bho.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: chave da feição (campos da chave separados por |); '#2', '#3' nas repetições que a própria fonte traz."
+    },
+    {
+     "n": "colinhacosta",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código do segmento da linha de costa (chave)."
+    },
+    {
+     "n": "nooriginal",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome original na base cartográfica."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiLineString,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria da feição (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: versão da BHO (ex.: 02_03) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.ana_bho_trechos_drenagem",
+   "sch": "vetorial",
+   "nome": "ana_bho_trechos_drenagem",
+   "view": false,
+   "linhas": 1627683,
+   "bytes": 1229905920,
+   "coment": "Trechos de drenagem da Base Hidrográfica Ottocodificada 1:250.000 (ANA). Trechos de drenagem da Base Hidrográfica Ottocodificada 1:250.000: a rede de rios em linhas, cada trecho com o código da ottobacia e do curso d'água. Espelho versionado. Ver ana/bho/LEIAME_bho.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "chave_linha",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: chave da feição (campos da chave separados por |); '#2', '#3' nas repetições que a própria fonte traz."
+    },
+    {
+     "n": "drn_pk",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador do registro no banco da ANA."
+    },
+    {
+     "n": "cotrecho",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código do trecho de drenagem (chave)."
+    },
+    {
+     "n": "noorigem",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Nó de origem (montante) do trecho."
+    },
+    {
+     "n": "nodestino",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Nó de destino (jusante) do trecho."
+    },
+    {
+     "n": "cocursodag",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código do curso d'água (codificação de Otto Pfafstetter)."
+    },
+    {
+     "n": "cobacia",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código da ottobacia do trecho."
+    },
+    {
+     "n": "nucomptrec",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Comprimento do trecho, em km."
+    },
+    {
+     "n": "nudistbact",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Distância do trecho até a foz da bacia, em km."
+    },
+    {
+     "n": "nudistcdag",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Distância do trecho até o fim do curso d'água, em km."
+    },
+    {
+     "n": "nuareacont",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Área de contribuição do trecho, em km²."
+    },
+    {
+     "n": "nuareamont",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Área a montante do trecho, em km²."
+    },
+    {
+     "n": "nogenerico",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome genérico do curso d'água (rio, riacho, córrego...)."
+    },
+    {
+     "n": "noligacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome de ligação."
+    },
+    {
+     "n": "noespecif",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome específico do curso d'água."
+    },
+    {
+     "n": "noriocomp",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome completo do rio."
+    },
+    {
+     "n": "nooriginal",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome original na base cartográfica."
+    },
+    {
+     "n": "cocdadesag",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código do curso d'água em que este desagua."
+    },
+    {
+     "n": "nutrjus",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Código do trecho a jusante."
+    },
+    {
+     "n": "nudistbacc",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Distância do curso d'água até a foz da bacia, em km."
+    },
+    {
+     "n": "nuareabacc",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Área da bacia do curso d'água, em km²."
+    },
+    {
+     "n": "nuordemcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Ordem do curso d'água na codificação de Otto."
+    },
+    {
+     "n": "nucompcda",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": "Comprimento do curso d'água, em km."
+    },
+    {
+     "n": "nunivotto",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Nível de codificação Otto do trecho."
+    },
+    {
+     "n": "nunivotcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Nível de codificação Otto do curso d'água."
+    },
+    {
+     "n": "nustrahler",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": "Ordem de Strahler do trecho."
+    },
+    {
+     "n": "dedominial",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Dominialidade do curso d'água (federal, estadual...)."
+    },
+    {
+     "n": "dsversao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Versão da base hidrográfica."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiLineString,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria da feição (SIRGAS 2000)."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Controle: geometria original em texto quando anômala."
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Derivado: versão da BHO (ex.: 02_03) em que esta versão entrou."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
     }
    ]
   },
@@ -8406,6 +9094,470 @@
    ]
   },
   {
+   "id": "vetorial.v_ana_bho_bacias_otto",
+   "sch": "vetorial",
+   "nome": "v_ana_bho_bacias_otto",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "wts_pk",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "wts_cd_pfafstetterbasin",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "wts_cd_pfafstetterbasincodelevel",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "wts_gm_area",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ana_bho_cursos_dagua",
+   "sch": "vetorial",
+   "nome": "v_ana_bho_cursos_dagua",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "wtc_pk",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "idcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cocursodag",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nudistbacc",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nucompcda",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nuareabacc",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cocdadesag",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nunivotcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nuordemcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dedominial",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dsversao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiLineString,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ana_bho_linha_costa",
+   "sch": "vetorial",
+   "nome": "v_ana_bho_linha_costa",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "colinhacosta",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nooriginal",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiLineString,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ana_bho_trechos_drenagem",
+   "sch": "vetorial",
+   "nome": "v_ana_bho_trechos_drenagem",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": "Publicada no GeoServer: so a versao vigente. Ver infra/postgres/views_geoserver.sql.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "drn_pk",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cotrecho",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "noorigem",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nodestino",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cocursodag",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cobacia",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nucomptrec",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nudistbact",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nudistcdag",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nuareacont",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nuareamont",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nogenerico",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "noligacao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "noespecif",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "noriocomp",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nooriginal",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cocdadesag",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nutrjus",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nudistbacc",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nuareabacc",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nuordemcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nucompcda",
+     "t": "double precision",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nunivotto",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nunivotcda",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nustrahler",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dedominial",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "dsversao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "edicao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiLineString,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
    "id": "vetorial.v_deter_alertas",
    "sch": "vetorial",
    "nome": "v_deter_alertas",
@@ -9065,7 +10217,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "id1",
@@ -9205,21 +10357,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiPolygon,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -9237,7 +10389,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "id1",
@@ -9405,21 +10557,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiPolygon,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -9437,7 +10589,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "id1",
@@ -9640,21 +10792,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiPolygon,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -9672,7 +10824,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "id1",
@@ -9854,21 +11006,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiPolygon,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -12368,6 +13520,30 @@
   },
   {
    "de": "vetorial.ibge_vegetacao",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ana_bho_trechos_drenagem",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ana_bho_cursos_dagua",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ana_bho_linha_costa",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "vetorial.ana_bho_bacias_otto",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"

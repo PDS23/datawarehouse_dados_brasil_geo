@@ -79,10 +79,28 @@ CREATE OR REPLACE VIEW vetorial.v_ibge_vegetacao AS
 SELECT id, id1, cd_fcim, leg_carga, cd_fito, cd_leg_2, clas_domi, leg_uveg, nm_uveg, leg_uantr, nm_uantr, leg_contat, nm_contat, veg_pretet, nm_pretet, leg_sec1, nm_sec1, leg_sec2, nm_sec2, leg_sup, legenda_1, legenda_2, legenda, ar_poli_km, leg1_id, leg2_id, edicao, vigente_desde, geom
 FROM vetorial.ibge_vegetacao WHERE vigente_ate IS NULL AND geom IS NOT NULL;
 
+
+-- BHO 1:250.000 da ANA (hidrografia): sem dado pessoal; so a versao vigente
+CREATE OR REPLACE VIEW vetorial.v_ana_bho_trechos_drenagem AS
+SELECT id, drn_pk, cotrecho, noorigem, nodestino, cocursodag, cobacia, nucomptrec, nudistbact, nudistcdag, nuareacont, nuareamont, nogenerico, noligacao, noespecif, noriocomp, nooriginal, cocdadesag, nutrjus, nudistbacc, nuareabacc, nuordemcda, nucompcda, nunivotto, nunivotcda, nustrahler, dedominial, dsversao, edicao, vigente_desde, geom
+FROM vetorial.ana_bho_trechos_drenagem WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
+CREATE OR REPLACE VIEW vetorial.v_ana_bho_cursos_dagua AS
+SELECT id, wtc_pk, idcda, cocursodag, nudistbacc, nucompcda, nuareabacc, cocdadesag, nunivotcda, nuordemcda, dedominial, dsversao, edicao, vigente_desde, geom
+FROM vetorial.ana_bho_cursos_dagua WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
+CREATE OR REPLACE VIEW vetorial.v_ana_bho_linha_costa AS
+SELECT id, colinhacosta, nooriginal, edicao, vigente_desde, geom
+FROM vetorial.ana_bho_linha_costa WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
+CREATE OR REPLACE VIEW vetorial.v_ana_bho_bacias_otto AS
+SELECT id, wts_pk, wts_cd_pfafstetterbasin, wts_cd_pfafstetterbasincodelevel, wts_gm_area, edicao, vigente_desde, geom
+FROM vetorial.ana_bho_bacias_otto WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
 DO $$
 DECLARE v text;
 BEGIN
-  FOREACH v IN ARRAY ARRAY['v_funai_terras_indigenas','v_mma_unidades_conservacao','v_ibge_geologia','v_ibge_geomorfologia','v_ibge_pedologia','v_ibge_vegetacao','v_mma_areas_prioritarias','v_sfb_florestas_publicas','v_deter_alertas','v_mapbiomas_alerta','v_ibama_embargos_poligonos',
+  FOREACH v IN ARRAY ARRAY['v_funai_terras_indigenas','v_mma_unidades_conservacao','v_ana_bho_trechos_drenagem','v_ana_bho_cursos_dagua','v_ana_bho_linha_costa','v_ana_bho_bacias_otto','v_ibge_geologia','v_ibge_geomorfologia','v_ibge_pedologia','v_ibge_vegetacao','v_mma_areas_prioritarias','v_sfb_florestas_publicas','v_deter_alertas','v_mapbiomas_alerta','v_ibama_embargos_poligonos',
                            'v_ibama_embargos_pontos','v_icmbio_areas_embargadas','v_sema_mt_areas_embargadas','v_sema_mt_areas_desembargadas'] LOOP
     EXECUTE format('GRANT SELECT ON vetorial.%I TO leitura, geoserver, analistas', v);
     EXECUTE format('COMMENT ON VIEW vetorial.%I IS %L', v, 'Publicada no GeoServer: so a versao vigente' ||
