@@ -59,7 +59,8 @@ class Carga:
         return False
 
     def _analisar(self):
-        tabelas = list(dict.fromkeys(([self.dataset] if self.dataset else []) + self.analisar))
+        # dataset pode listar várias tabelas separadas por vírgula (ex.: a limpeza de versões fechadas)
+        tabelas = list(dict.fromkeys((self.dataset.split(",") if self.dataset else []) + self.analisar))
         for t in tabelas:
             schema, _, tabela = t.partition(".")
             try:

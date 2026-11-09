@@ -109,7 +109,7 @@ try {
     if ($Fontes -contains "prodes")    { Passo "PRODES"            (@("etl", "prodes/desmatamento/scripts/prodes_desmatamento.py") + $sim) }
     if ($Fontes -contains "mapbiomas") { Passo "MapBiomas Alerta" (@("etl", "mapbiomas/alerta/scripts/mapbiomas_alerta.py") + $sim) }
     if ($Fontes -contains "funai")     { Passo "FUNAI (terras indigenas)" (@("etl", "funai/terras_indigenas/scripts/terras_indigenas.py") + $sim) }
-    if ($Fontes -contains "deter")     { Passo "DETER (alertas)" (@("etl", "deter/alertas/scripts/deter_alertas.py") + $sim) }
+    if ($Fontes -contains "deter")     { Passo "DETER (alertas)" (@("etl", "deter/alertas/scripts/deter_alertas.py", "--paralelo", "2") + $sim) }   # 2 (nao 4): o INPE devolve 429 a 4 ao mesmo tempo (09/11/2026)
     if ($Fontes -contains "ibama")     { Passo "IBAMA (embargos)" (@("etl", "ibama/embargos/scripts/embargos.py") + $sim) }
     if ($Fontes -contains "icmbio")    { Passo "ICMBio (areas embargadas)" (@("etl", "icmbio/areas_embargadas/scripts/areas_embargadas.py") + $sim) }
     if ($Fontes -contains "sema")      { Passo "SEMA-MT (areas embargadas e desembargadas)" (@("etl", "sema_mt/areas_embargadas/scripts/areas_embargadas.py") + $sim) }
