@@ -943,6 +943,25 @@ erDiagram
     Candidatos já no banco: **florestas públicas não destinadas** (SFB, `vetorial.sfb_florestas_publicas`) e **assentamentos** (INCRA,
     bloqueado). A pesquisar: embargos de outros órgãos estaduais (Pará e demais estados da Amazônia Legal), autos de infração do IBAMA,
     áreas de mineração (ANM), terras da União (SPU) e a lista de empregadores em ajustamento de conduta (MTE).
+    *(2026-11-12: pela metodologia, autos de infração, ANM, SPU e TAC ficaram fora; ver `PERGUNTAS_METODOLOGIA.md`.)*
+
+    **16.6 Fontes que faltam: embargos estaduais e áreas militares (levantamento de 2026-11-12, só leitura)**
+    Pela metodologia, cada camada estadual só roda no próprio estado (pergunta 10), e o escopo de estados é MG, MS, BA, SP, ES, RJ e RO (pergunta 35); área militar
+    reprova (pergunta 25). Busca feita nos WFS estaduais do catálogo da INDE (item 18), nos servidores conhecidos de cada órgão e no ArcGIS Online:
+    | Estado / tema | Órgão | Situação | Canal e observação |
+    |---|---|---|---|
+    | **MG** | Sisema (SEMAD/IEF/FEAM) | ✅ automatizável | WFS `geoserver.meioambiente.mg.gov.br/ows`, camada `IDE:ide_2304_mg_areas_embargadas_sisema_pol` ("Áreas embargadas pelo Sisema"), **11.470 polígonos**; campos de auto de infração, fiscalizado, documento, data, enquadramento legal e penalidade (dado pessoal: mesma regra do IBAMA) |
+    | **ES** | IDAF e IEMA | ⚠️ parcial | WFS `ide.geobases.es.gov.br/geoserver/ows`: `geonode:idaf_gelcof_fiscalizacao_area` (14.896 áreas fiscalizadas; o campo `n_iuf_embg` traz o número do termo de embargo, então o embargo é um filtro desta camada) e `geonode:iema_fiscalizacao_ambiental_utf8_epsg_31984` (10.031); conferir com os órgãos se o filtro equivale à lista de embargos |
+    | **SP** | SEMIL/CETESB | ⚠️ sem camada de embargo | o DataGEO (`datageo.ambiente.sp.gov.br`) só publica médias de infração por bacia; os autos de infração da Polícia Militar Ambiental saem por ano no DataGEO/SIGAM (a confirmar), mas auto de infração ficou fora (pergunta 36) |
+    | **RJ** | INEA | ⚠️ sistema novo, camada não localizada | o INEA criou o Sistema Estadual de Áreas Embargadas (NOP-INEA-62, Resolução INEA nº 326, publicada em 30/10/2025); o WFS do INEA na INDE (4.249 camadas) e o ArcGIS Online não mostram a camada ainda |
+    | **MS** | IMASUL | ❌ não encontrada | o GeoServer do SISLA responde, mas sem camadas públicas; nada no ArcGIS Online |
+    | **BA** | INEMA | ❌ não encontrada | o servidor do GeoBahia/SEIA não respondeu; nada publicado sobre embargo em WFS |
+    | **RO** | SEDAM | ❌ não encontrada | nada publicado; o TCE-RO, único servidor de RO na INDE, recusa acesso (403) |
+    | *(fora da lista)* **CE** | SEMACE | ✅ automatizável | WFS da SEMACE na INDE: `termo_embargo_poligono_20122023` (polígonos de embargo 2012 a 2023), achado no caminho |
+    | **Áreas militares** | Ministério da Defesa / IBGE | ❌ sem fonte oficial completa | o IBGE publica só 5 polígonos de "Área Pública Militar" (`CCAR:area_pub_militar`) e 26 edificações militares em área (BCIM); a camada do ArcGIS Online com "áreas de uso militar" é de terceiro (TNC), não serve como fonte (regra 8); pistas: base contínua 1:250.000 do IBGE (BC250) e o cadastro de imóveis da União da SPU (`SPU:qualificageo_..._rips_publico`), a conferir |
+    **Próximos passos:** (1) MG automatizável já (conversa de busca de fontes); (2) ES: confirmar o filtro de embargo com IDAF/IEMA; (3) RJ: acompanhar a publicação do
+    sistema de áreas embargadas do INEA; (4) MS, BA e RO: pedir os dados aos órgãos (e-mail ou Lei de Acesso à Informação), porque não há canal público;
+    (5) áreas militares: conferir BC250 e SPU; se nenhuma servir, decidir se o critério fica como lacuna registrada nas limitações.
 
 17. **Guia de uso do banco** — ✅ feito 2026-10-27: [GUIA_DE_USO.md](GUIA_DE_USO.md) (versão vigente, geometrias inválidas e `ST_MakeValid`, áreas em `geography`/EPSG 5880, ids e `dim.*`,
     armadilhas por tabela, como conectar). Manter atualizado a cada fonte nova com cuidado próprio. **A fazer, se o usuário quiser:** pasta de consultas prontas e testadas por tema.
@@ -968,6 +987,9 @@ erDiagram
 
 
 19. **Versão por fonte e versão do banco, para reproduzir uma análise antiga (proposta do usuário, 2026-11-12)** — ✅ desenho aprovado em 2026-11-12 (decisões no fim do item); a implementar.
+    **Escopo: o data warehouse inteiro** (decidido em 2026-11-12), não só as fontes da pré-análise de legalidade. Toda fonte, viva ou estática, ganha versão e
+    arquivo próprio, e toda análise derivada (desmatamento por imóvel, convergência de evidência, legalidade) grava a versão do banco que usou. É a base
+    para um banco auditável; vem **antes** da verificação de legalidade (item 16.4), que depende dela.
     **Pedido:** rodar a pré-análise de novo no futuro (auditoria externa) e obter o mesmo resultado. Hoje isso não é possível depois de 30 dias: a retenção apaga
     as versões fechadas (`infra/retencao.yaml`) e o backup é do banco inteiro.
     **Ideia do usuário:** cada fonte tem a **sua versão**; a **versão do banco** é o conjunto das versões das fontes naquele momento; o **backup é só das fontes que
