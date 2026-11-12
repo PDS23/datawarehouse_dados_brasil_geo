@@ -18,6 +18,7 @@
 | SEMA-MT, áreas embargadas e desembargadas | `vetorial.sema_mt_areas_embargadas`, `vetorial.sema_mt_areas_desembargadas` | 8.357 e 4.729 | agendada (desde 28/10); CPF só como hash |
 | MTE, Cadastro de Empregadores (lista suja) | `tabular.mte_cadastro_empregadores` | 508 | agendada (desde 28/10); CPF só como hash |
 | ANA, BHO 250 (hidrografia) | `vetorial.ana_bho_trechos_drenagem`, `ana_bho_cursos_dagua`, `ana_bho_linha_costa`, `ana_bho_bacias_otto` | 1.614.231, 807.103, 25 e 23.608 | automática, versão 02_03; fora da agenda |
+| IBGE, territórios quilombolas (edição 2022) | `vetorial.ibge_territorios_quilombolas` | 495 | automática (descobre a camada mais recente); fora da agenda; escape até o INCRA voltar |
 | IBGE, BDiA (geologia, geomorfologia, pedologia, vegetação) | `vetorial.ibge_geologia`, `ibge_geomorfologia`, `ibge_pedologia`, `ibge_vegetacao` | 131.547, 120.218, 114.658 e 145.458 | automática, edição 2026; fora da agenda |
 | MMA, áreas prioritárias para a conservação | `vetorial.mma_areas_prioritarias` | 2.081 | automática, edição estática (2ª atualização, 2022); fora da agenda |
 | MMA, unidades de conservação (CNUC) | `vetorial.mma_unidades_conservacao` | 3.576 | **manual autorizada** (zip em `bruto/`); `--verificar` |
@@ -32,7 +33,7 @@ Rasters (fora do banco, em arquivo/COG, servidos pelo GeoServer): MapBiomas uso 
 **Operação:** atualização agendada (domingos alternados, 00:10) com backup antes (reaproveitado se tiver menos de 24 h) e depois, retenção de 30 dias; backup semanal de domingo 03:00;
 diagrama do banco publicado como artefato (versão 10); repositório público no GitHub sincronizado; guia de uso em [GUIA_DE_USO.md](GUIA_DE_USO.md).
 
-**Pendências principais:** (1) pré-análise de legalidade EUDR (item 16): **as fontes estão todas no banco** (11 de 12 critérios; falta o quilombola, preso ao INCRA); falta decidir a metodologia (16.3) e escrever a verificação (16.4); (2) INCRA (assentamentos, quilombolas, SIGEF) depende do servidor voltar (item 11);
+**Pendências principais:** (1) pré-análise de legalidade EUDR (item 16): **as fontes estão todas no banco** (12 de 12 critérios; o quilombola entrou em 12/11 pela base do IBGE 2022, escape enquanto o INCRA está fora do ar); falta decidir a metodologia (16.3) e escrever a verificação (16.4); (2) INCRA (assentamentos, quilombolas, SIGEF) depende do servidor voltar (item 11);
 (3) MinIO e catálogo de rasters (ver "Caminho 1"); (4) monitor de fontes (item 14); (5) política do Tailscale e acesso dos analistas ao PostGIS (seção "Migração"); (5b) GeoServer: ✅ as fontes novas foram publicadas em 2026-10-27 por view sem dado pessoal (`infra/LEIAME_infra.md`); (6) fontes novas do item 15 ainda não carregadas (MapBiomas rasters automatizados; as áreas prioritárias do MMA, o BDiA do IBGE e a hidrografia da ANA entraram em 30/10).
 
 ## Objetivo
@@ -72,7 +73,7 @@ Camadas já previstas pra entrar (lista não-exaustiva, vai crescer). Situação
 
 - **Geologia, geomorfologia, pedologia, vegetação** (fonte: IBGE) — domínios e regiões naturais já no banco; o resto aguarda import
   (fonte automatizável em `geoftp.ibge.gov.br`, item 15). Ver [LEIAME_ibge.md](ibge/LEIAME_ibge.md).
-- **Assentamentos rurais** (INCRA) — ✅ no banco (carga antiga); **territórios quilombolas** — ⛔ dependem do INCRA voltar (item 11).
+- **Assentamentos rurais** (INCRA) — ✅ no banco (carga antiga); **territórios quilombolas** — ✅ escape pela base do IBGE 2022 (`vetorial.ibge_territorios_quilombolas`, 495 territórios); a base do INCRA depende do servidor voltar (item 11).
   Os assentamentos também aparecem no CNFP do SFB. Ver [LEIAME_assentamentos.md](incra/assentamentos/LEIAME_assentamentos.md).
 - **Imóveis certificados — SIGEF e SNCI** (INCRA) — ⛔ bloqueado (item 11).
 - **Terras indígenas** (FUNAI) — ✅ pipeline automatizado e na atualização agendada
@@ -867,14 +868,14 @@ erDiagram
     | **IBGE, geologia, geomorfologia, pedologia, vegetação** | ✅ **feito 2026-10-30** (`vetorial.ibge_geologia`, `ibge_geomorfologia`, `ibge_pedologia`, `ibge_vegetacao`; `ibge/<tema>/` sobre `scripts_comuns/dwlib/bdia.py`; edição 2026; automático; fora da agenda) | `geoftp.ibge.gov.br/informacoes_ambientais/` (listagem de diretórios) | edições estáticas; carga única |
     | **IBGE, base de indígenas e quilombolas (2019)** | ✅ | `geoftp.ibge.gov.br/organizacao_do_territorio/tipologias_do_territorio/...` | é a base do IBGE, **não a do INCRA**: não substitui o INCRA |
     | **MapBiomas, uso do solo (rasters)** | ✅ | bucket público do Google Cloud `mapbiomas-public` (`initiatives/brasil/collection11/lulc/coverage` e `transition`) | cobre a lacuna "sem script" dos rasters |
-    | **INCRA (assentamentos, quilombolas, SIGEF/SNCI)** | ❌ **bloqueado** | `acervofundiario.incra.gov.br` segue fora do DNS; SIGEF exige gov.br prata/ouro | ver item 11; alternativa parcial para quilombolas: base do IBGE |
+    | **INCRA (assentamentos, quilombolas, SIGEF/SNCI)** | ❌ **bloqueado** | `acervofundiario.incra.gov.br` segue fora do DNS (INCRA e SERPRO confirmaram em 12/11: manutenção do código PHP, sem previsão, com volta garantida); SIGEF exige gov.br prata/ouro | ver item 11; para quilombolas, escape: base do IBGE 2022 (carregada em 12/11) |
     | **ICMBio, áreas embargadas** (pesquisado 2026-10-27) | ✅ | FeatureServer público `services3.arcgis.com/KYEMegXJrTiWSYWk/.../areas_embargadas_icmbio` (mesma conta do painel linkado em `gov.br/icmbio/.../areas-embargadas`); 14.779 polígonos, editado em 06/10/2026; `maxRecordCount` 2000 (paginar) | traz `cpf_cnpj` e `autuado` (dado pessoal: mesma decisão do IBAMA), `numero_ai`, `nome_uc`, `cnuc` |
     | **SEMA-MT, áreas embargadas e desembargadas** (pesquisado 2026-10-27) | ✅ | WFS `geo.sema.mt.gov.br/geoserver/Geoportal` (`AREAS_EMBARGADAS_SEMA`, 8.357; `AREAS_DESEMBARGADAS_SEMA`), SHAPE-ZIP/CSV; a `authkey` é a pública publicada no GeoNetwork da SEMA (`geonetwork.sema.mt.gov.br`): ler do catálogo a cada execução, não fixar | traz `NOME` e `CPF_CNPJ`; o WFS sem `authkey` não lista camadas |
     | **MTE, Cadastro de Empregadores (lista suja do trabalho escravo)** (pesquisado 2026-10-27) | ✅ | CSV estável `gov.br/trabalho-e-emprego/.../areas-de-atuacao/cadastro_de_empregadores.csv` (latin1, `;`); `HEAD` dá 403, `GET` funciona | tabular, sem geometria; chave `CNPJ/CPF`; atualização semestral; há também o cadastro de empregadores em ajustamento de conduta (TAC) |
     Ainda **não pesquisados**: ANM (mineração), SPU, ZEE estaduais.
     *(2026-10-27: SFB/CNFP, CNUC, IBAMA e DETER já carregados; os demais ✅ "automatizáveis" seguem a fazer. ICMBio, SEMA-MT e MTE, abaixo, entram pelo item 16.)*
 
-16. **Preparar o banco para uma pré-análise de legalidade EUDR no Brasil (levantamento de 2026-10-27; a executar)** — 📐 desenho a aprovar. **Situação (2026-10-27):** 11 dos 12 critérios já têm a fonte no banco (itens 1 a 11); falta só o quilombola (12, bloqueado pelo INCRA).
+16. **Preparar o banco para uma pré-análise de legalidade EUDR no Brasil (levantamento de 2026-10-27; a executar)** — 📐 desenho a aprovar. **Situação (2026-10-27):** 11 dos 12 critérios já têm a fonte no banco (itens 1 a 11); o quilombola (12) entrou em 12/11 pela base do IBGE 2022, escape enquanto o INCRA está fora do ar.
     **Objetivo:** o banco ter todas as fontes públicas que uma checagem prévia de imóveis contra o Regulamento Europeu de Desmatamento
     (EUDR, Reg. UE 2023/1115) usa, para barrar **antes do envio** os imóveis que seriam negados. **Regra do usuário:** as fontes entram como
     qualquer outra, no padrão `<grupo>/<fonte>/` e com **nome pela fonte**; nada no banco (schema, tabela, coluna, LEIAME de fonte) cita
@@ -898,7 +899,7 @@ erDiagram
     | 9 | CPF/CNPJ fora da lista de embargos do ICMBio | ICMBio | ✅ mesma tabela | `cpf_cnpj` (CNPJ) e `cpf_autuado_hash` (CPF, mesma chave do IBAMA) |
     | 10 | Sem sobreposição com embargo da SEMA-MT | SEMA-MT | ✅ `vetorial.sema_mt_areas_embargadas` (+ `..._desembargadas`, embargo encerrado) | 8.357 e 4.729 polígonos; só vale para Mato Grosso |
     | 11 | CPF/CNPJ fora da lista suja do trabalho escravo | MTE, Cadastro de Empregadores | ✅ `tabular.mte_cadastro_empregadores` | 508 empregadores; vigente = consta hoje; `cpf_cnpj` (CNPJ) e `cpf_empregador_hash` (CPF); o cadastro em ajustamento de conduta (TAC) não achou link de dados |
-    | 12 | Sem sobreposição com território quilombola | INCRA | ⛔ bloqueado | acervo fundiário exige login (item 11); IBGE só tem localidades em ponto |
+    | 12 | Sem sobreposição com território quilombola | IBGE 2022 (escape; INCRA fora do ar) | ✅ `vetorial.ibge_territorios_quilombolas` (495 territórios, carga de 12/11) | não é a base do INCRA e está na edição 2022; só `TITULADO` e `DECRETO` têm direito já reconhecido, qual fase pesa é decisão da metodologia (16.3); quando o INCRA voltar, entra em tabela própria |
 
     **16.2 Próximos passos: fontes (coleta automatizada, conversa do item 15)**
     1. ~~**ICMBio, áreas embargadas**~~ — ✅ feito 2026-10-27 (`icmbio/areas_embargadas/`, `vetorial.icmbio_areas_embargadas`, 14.779 polígonos; espelho SCD2, paginado de 2.000 em 2.000).
@@ -956,5 +957,5 @@ erDiagram
     | **Embrapa** | `geoinfo.dados.embrapa.br/geoserver/ows` (1.136 camadas; CAR e áreas preservadas por município, aptidão agrícola) | agregados do CAR por município (não o imóvel) |
     | **Estaduais** | MG (Sisema: 1.420 camadas, APP hídrica e uso restrito do CAR por URFBio), SP, ES, RJ (INEA: 4.249), CE | fora do escopo até decidirmos os estados (pergunta 35) |
     **Sem camadas:** **ANM (mineração) responde `GetCapabilities` vazio** na INDE (0 camadas): a mineração não vem por aqui; ANP, ANTT, DNIT, EPE e Marinha são de outros temas.
-    **Próximos passos sugeridos (a decidir):** (1) CNUC automático pelo WFS da INDE; (2) quilombolas do IBGE (verificar); (3) autos de infração do IBAMA e do ICMBio; (4) terras da União (SPU).
+    **Próximos passos sugeridos (a decidir):** (1) CNUC automático pelo WFS da INDE; (2) ~~quilombolas do IBGE~~ ✅ carregados em 12/11 (`ibge/territorios_quilombolas/`); (3) autos de infração do IBAMA e do ICMBio; (4) terras da União (SPU).
 

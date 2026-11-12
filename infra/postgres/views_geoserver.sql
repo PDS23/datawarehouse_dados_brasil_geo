@@ -16,6 +16,10 @@ SELECT id, terrai_codigo, terrai_nome, etnia_nome, municipio_nome, uf_sigla, id_
        undadm_nome, undadm_sigla, dominio_uniao, data_atualizacao, vigente_desde, geom
 FROM vetorial.funai_terras_indigenas WHERE vigente_ate IS NULL AND geom IS NOT NULL;
 
+CREATE OR REPLACE VIEW vetorial.v_ibge_territorios_quilombolas AS
+SELECT id, cd_recorte, cd_tq, nm_tq, status, sg_uf, id_estado, camada_origem, vigente_desde, geom
+FROM vetorial.ibge_territorios_quilombolas WHERE vigente_ate IS NULL AND geom IS NOT NULL;
+
 CREATE OR REPLACE VIEW vetorial.v_mma_unidades_conservacao AS
 SELECT id, cd_cnuc, nome_uc, categoria, grupo, esfera, uf, municipio, org_gestor, cria_ato, ano_criacao, ha_total, quali_pol, pl_manejo, co_gestor, edicao, vigente_desde, geom
 FROM vetorial.mma_unidades_conservacao WHERE vigente_ate IS NULL AND geom IS NOT NULL;

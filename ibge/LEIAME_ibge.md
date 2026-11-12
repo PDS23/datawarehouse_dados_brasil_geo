@@ -28,6 +28,7 @@ ibge/
 | estados (hoje em `municipios/`) | ✅ Importado; malha 2025 aplicada em 2026-10-20 | `dim.estados` (27 UF) |
 | biomas | ✅ Importado (2026-09-27); carga feita à mão, sem pasta/pipeline neste repositório | `vetorial.ibge_dominios_naturais`, `vetorial.ibge_regioes_naturais`, `dim.biomas` (dissolvido) |
 | `municipios/` | ✅ Pipeline; malha 2025 (5.573) aplicada em 2026-10-20 | `dim.municipios` (`id_municipio` = código IBGE) |
+| territórios quilombolas (polígonos, edição 2022) | ✅ Pipeline automático (2026-11-12), [`territorios_quilombolas/`](territorios_quilombolas/LEIAME_territorios_quilombolas.md) | `vetorial.ibge_territorios_quilombolas` (495) |
 | `geol_area/` (geologia) | ✅ Pipeline automático, edição 2026 (2026-10-30), [`geologia/`](geologia/LEIAME_geologia.md) | `vetorial.ibge_geologia` (131.547) |
 | `geom_area/` (geomorfologia) | ✅ Pipeline automático, edição 2026 (2026-10-30), [`geomorfologia/`](geomorfologia/LEIAME_geomorfologia.md) | `vetorial.ibge_geomorfologia` (120.218) |
 | `pedo_area/` (pedologia) | ✅ Pipeline automático, edição 2026 (2026-10-30), [`pedologia/`](pedologia/LEIAME_pedologia.md) | `vetorial.ibge_pedologia` (114.658) |

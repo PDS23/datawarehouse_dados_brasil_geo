@@ -5,8 +5,8 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 168,
-   "bytes": 122880,
+   "linhas": 191,
+   "bytes": 131072,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
     {
@@ -100,8 +100,8 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 112,
-   "bytes": 131072,
+   "linhas": 148,
+   "bytes": 155648,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
     {
@@ -230,7 +230,7 @@
    "sch": "catalogo",
    "nome": "coletas_duplicados",
    "view": false,
-   "linhas": 40,
+   "linhas": 43,
    "bytes": 90112,
    "coment": "cod_imovel repetido no WFS do CAR: a feicao mantida e a descartada de cada coleta, com a regra aplicada.",
    "cols": [
@@ -360,7 +360,7 @@
    "sch": "catalogo",
    "nome": "datasets",
    "view": false,
-   "linhas": 33,
+   "linhas": 34,
    "bytes": 65536,
    "coment": "Catálogo dos conjuntos de dados do banco: o que é, de onde veio e a que tabela ou arquivo corresponde.",
    "cols": [
@@ -448,7 +448,7 @@
    "sch": "catalogo",
    "nome": "mapa_colunas",
    "view": false,
-   "linhas": 656,
+   "linhas": 672,
    "bytes": 196608,
    "coment": "Rastreabilidade: nome do campo na fonte x nome da coluna no banco.",
    "cols": [
@@ -494,8 +494,8 @@
    "sch": "catalogo",
    "nome": "sidra_recorte",
    "view": false,
-   "linhas": 41,
-   "bytes": 81920,
+   "linhas": 50,
+   "bytes": 90112,
    "coment": "O que exatamente foi carregado de cada tabela do SIDRA (a coleta e sempre sob demanda, por recorte).",
    "cols": [
     {
@@ -1023,8 +1023,8 @@
    "sch": "dim",
    "nome": "sidra_categoria",
    "view": false,
-   "linhas": 246,
-   "bytes": 90112,
+   "linhas": 356,
+   "bytes": 114688,
    "coment": "Categorias de cada classificacao (produtos, faixas de area...). id nosso; codigo_sidra e o codigo oficial.",
    "cols": [
     {
@@ -1097,7 +1097,7 @@
    "sch": "dim",
    "nome": "sidra_classificacao",
    "view": false,
-   "linhas": 17,
+   "linhas": 20,
    "bytes": 32768,
    "coment": "Classificacoes do SIDRA (eixos de cruzamento: produto, grupo de area, tipologia...).",
    "cols": [
@@ -1122,7 +1122,7 @@
    "sch": "dim",
    "nome": "sidra_pesquisa",
    "view": false,
-   "linhas": 2,
+   "linhas": 3,
    "bytes": 49152,
    "coment": "Pesquisas do IBGE que alimentam o SIDRA (Censo Agropecuario, PAM, LSPA...).",
    "cols": [
@@ -1193,7 +1193,7 @@
    "sch": "dim",
    "nome": "sidra_tabela",
    "view": false,
-   "linhas": 14,
+   "linhas": 17,
    "bytes": 32768,
    "coment": "Tabelas do SIDRA ja coletadas (id = numero oficial da tabela). So entram as pedidas.",
    "cols": [
@@ -1246,7 +1246,7 @@
    "sch": "dim",
    "nome": "sidra_tabela_eixo",
    "view": false,
-   "linhas": 34,
+   "linhas": 37,
    "bytes": 24576,
    "coment": "Diz que classificacao cada id_catN de tabular.sidra_valor representa em cada tabela.",
    "cols": [
@@ -1278,7 +1278,7 @@
    "sch": "dim",
    "nome": "sidra_variavel",
    "view": false,
-   "linhas": 18,
+   "linhas": 23,
    "bytes": 32768,
    "coment": "Variaveis do SIDRA (id = codigo oficial).",
    "cols": [
@@ -1310,7 +1310,7 @@
    "sch": "dim",
    "nome": "unidade",
    "view": false,
-   "linhas": 5,
+   "linhas": 10,
    "bytes": 32768,
    "coment": "Unidades de medida do SIDRA (id = codigo MC do SIDRA).",
    "cols": [
@@ -1750,7 +1750,7 @@
    "sch": "tabular",
    "nome": "sidra_valor",
    "view": false,
-   "linhas": 637049,
+   "linhas": 1387602,
    "bytes": 0,
    "coment": "Valores de tabelas do SIDRA (IBGE), uma particao por tabela. Ids em vez de texto: ver dim.sidra_*. id_catN = categoria da classificacao que dim.sidra_tabela_eixo indica na posicao N. Sem linha = zero ou nao se aplica.",
    "cols": [
@@ -2658,6 +2658,459 @@
    "view": false,
    "linhas": 11118,
    "bytes": 2834432,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t289",
+   "sch": "tabular",
+   "nome": "sidra_valor_t289",
+   "view": false,
+   "linhas": 299997,
+   "bytes": 72720384,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t291",
+   "sch": "tabular",
+   "nome": "sidra_valor_t291",
+   "view": false,
+   "linhas": 361641,
+   "bytes": 88113152,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id_tabela",
+     "t": "integer",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": null
+    },
+    {
+     "n": "periodo",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nivel",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_municipio",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_variavel",
+     "t": "integer",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat1",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat2",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat3",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat4",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat5",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_cat6",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "valor",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_situacao",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_unidade",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_carga",
+     "t": "bigint",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    }
+   ]
+  },
+  {
+   "id": "tabular.sidra_valor_t5930",
+   "sch": "tabular",
+   "nome": "sidra_valor_t5930",
+   "view": false,
+   "linhas": 88915,
+   "bytes": 22347776,
    "coment": null,
    "cols": [
     {
@@ -5124,8 +5577,8 @@
    "sch": "vetorial",
    "nome": "ibama_embargos",
    "view": false,
-   "linhas": 116944,
-   "bytes": 221675520,
+   "linhas": 117636,
+   "bytes": 224886784,
    "coment": "Termos de embargo do IBAMA, do CSV dos dados abertos (regerado todo dia). Espelho versionado: vigente = vigente_ate IS NULL. Traz o nome do embargado e o CNPJ como o IBAMA publica; o CPF de pessoa física só como hash. Ver ibama/embargos/LEIAME_embargos.md.",
    "cols": [
     {
@@ -6551,6 +7004,150 @@
    ]
   },
   {
+   "id": "vetorial.ibge_territorios_quilombolas",
+   "sch": "vetorial",
+   "nome": "ibge_territorios_quilombolas",
+   "view": false,
+   "linhas": 495,
+   "bytes": 3325952,
+   "coment": "Territórios quilombolas oficialmente delimitados, em polígono, do IBGE (camada CGMAT qg_AAAA_620_territorioquilombola do servidor de mapas do IBGE; edição 2022). Não é a base do INCRA. Espelho versionado: vigente = vigente_ate IS NULL. Ver ibge/territorios_quilombolas/LEIAME_territorios_quilombolas.md.",
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": true,
+     "pk": true,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "cd_recorte",
+     "t": "text",
+     "nn": true,
+     "pk": false,
+     "c": "Código do recorte no IBGE (quadro + código do território, ex.: 6200055). Chave estável; uma versão vigente por território."
+    },
+    {
+     "n": "cd_tq",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código do território quilombola no IBGE."
+    },
+    {
+     "n": "nm_tq",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome do território quilombola."
+    },
+    {
+     "n": "status",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Fase do processo de regularização do território, como o IBGE escreve (TITULADO, RTID, DECRETO, PORTARIA, DELIMITADO, ESTUDO TÉCNICO)."
+    },
+    {
+     "n": "quadro",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código do quadro temático do IBGE a que a camada pertence (620)."
+    },
+    {
+     "n": "cd_uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Código IBGE da UF do território."
+    },
+    {
+     "n": "sg_uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Sigla da UF do território."
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "Id da UF em dim.estados, derivado de sg_uf."
+    },
+    {
+     "n": "camada_origem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Nome da camada do IBGE usada na coleta; traz o ano e a versão (ex.: qg_2022_620_territorioquilombola__v02)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Polígono do território (MultiPolygon, SIRGAS 2000, EPSG:4674). NULL se a geometria era anômala."
+    },
+    {
+     "n": "geom_anomala",
+     "t": "boolean",
+     "nn": true,
+     "pk": false,
+     "c": "Verdadeiro se a geometria veio fora da caixa do Brasil ou ausente; nesse caso geom fica NULL."
+    },
+    {
+     "n": "geom_origem_texto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria original em EWKT, só quando geom_anomala."
+    },
+    {
+     "n": "id_fonte",
+     "t": "smallint",
+     "nn": true,
+     "pk": false,
+     "c": "Fonte do dado: aponta para dim.fontes (rastreabilidade)."
+    },
+    {
+     "n": "importado_em",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que a linha foi gravada pelo pipeline."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": true,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "vigente_ate",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão deixou de valer. NULL = versão vigente."
+    },
+    {
+     "n": "coletado_em",
+     "t": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "c": "Momento (UTC) da coleta em que esta versão entrou."
+    },
+    {
+     "n": "reaberto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que a fonte republicou a linha idêntica a esta versão e ela voltou a vigorar. NULL = nunca reaberta."
+    }
+   ]
+  },
+  {
    "id": "vetorial.ibge_vegetacao",
    "sch": "vetorial",
    "nome": "ibge_vegetacao",
@@ -6818,8 +7415,8 @@
    "sch": "vetorial",
    "nome": "icmbio_areas_embargadas",
    "view": false,
-   "linhas": 14779,
-   "bytes": 39690240,
+   "linhas": 14886,
+   "bytes": 39903232,
    "coment": "Áreas embargadas do ICMBio (camada pública do ArcGIS Online do ICMBio): uma linha por polígono; 14.779 na carga de 27/10/2026. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome do autuado como a fonte publica. Ver icmbio/areas_embargadas/LEIAME_areas_embargadas.md.",
    "cols": [
     {
@@ -7281,8 +7878,8 @@
    "sch": "vetorial",
    "nome": "mapbiomas_alerta",
    "view": false,
-   "linhas": 543378,
-   "bytes": 907304960,
+   "linhas": 546536,
+   "bytes": 917315584,
    "coment": "MapBiomas Alerta: poligonos de alertas de desmatamento (camada dashboard-alert-shapefile do servidor de mapas do MapBiomas Alerta), espelho versionado: vigente = vigente_ate IS NULL. Inclui alertas cancelados (status_name). Ver mapbiomas/alerta/LEIAME_mapbiomas_alerta.md.",
    "cols": [
     {
@@ -8242,8 +8839,8 @@
    "sch": "vetorial",
    "nome": "sema_mt_areas_desembargadas",
    "view": false,
-   "linhas": 4729,
-   "bytes": 12861440,
+   "linhas": 4751,
+   "bytes": 12902400,
    "coment": "Áreas desembargadas da SEMA-MT (Secretaria de Estado de Meio Ambiente de Mato Grosso): uma linha por polígono, WFS do Geoportal da SEMA. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome como a fonte publica. Embargo ENCERRADO: não conta como embargo vigente. Ver sema_mt/areas_embargadas/LEIAME_areas_embargadas.md.",
    "cols": [
     {
@@ -8463,8 +9060,8 @@
    "sch": "vetorial",
    "nome": "sema_mt_areas_embargadas",
    "view": false,
-   "linhas": 8357,
-   "bytes": 20463616,
+   "linhas": 8372,
+   "bytes": 20529152,
    "coment": "Áreas embargadas da SEMA-MT (Secretaria de Estado de Meio Ambiente de Mato Grosso): uma linha por polígono, WFS do Geoportal da SEMA. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome como a fonte publica. Embargo vigente. Ver sema_mt/areas_embargadas/LEIAME_areas_embargadas.md.",
    "cols": [
     {
@@ -8926,8 +9523,8 @@
    "sch": "vetorial",
    "nome": "sicar_imoveis",
    "view": false,
-   "linhas": 8775363,
-   "bytes": 8652595200,
+   "linhas": 8840034,
+   "bytes": 8761155584,
    "coment": "Imóveis do SICAR (CAR), coletados do WFS público do CAR, cancelados inclusive. Espelho versionado: vigente = vigente_ate IS NULL. Ver sicar/imoveis/LEIAME_sicar_imoveis.md.",
    "cols": [
     {
@@ -9107,7 +9704,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "wts_pk",
@@ -9142,21 +9739,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiPolygon,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -9174,7 +9771,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "wtc_pk",
@@ -9258,21 +9855,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiLineString,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -9290,7 +9887,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "colinhacosta",
@@ -9311,21 +9908,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiLineString,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -9343,7 +9940,7 @@
      "t": "bigint",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Identificador interno da linha (gerado pelo banco)."
     },
     {
      "n": "drn_pk",
@@ -9539,21 +10136,21 @@
      "t": "text",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
     },
     {
      "n": "vigente_desde",
      "t": "date",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
     },
     {
      "n": "geom",
      "t": "geometry(MultiLineString,4674)",
      "nn": false,
      "pk": false,
-     "c": null
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
     }
    ]
   },
@@ -10793,6 +11390,87 @@
      "nn": false,
      "pk": false,
      "c": "Edição publicada pela fonte (vAAAAMMDD) em que esta versão entrou."
+    },
+    {
+     "n": "vigente_desde",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": "Data em que esta versão da linha passou a valer (espelho versionado)."
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_ibge_territorios_quilombolas",
+   "sch": "vetorial",
+   "nome": "v_ibge_territorios_quilombolas",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": "Identificador interno da linha (gerado pelo banco)."
+    },
+    {
+     "n": "cd_recorte",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_tq",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nm_tq",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "status",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "sg_uf",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": "UF: aponta para dim.estados (código IBGE de 2 dígitos)."
+    },
+    {
+     "n": "camada_origem",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
     },
     {
      "n": "vigente_desde",
@@ -13544,6 +14222,252 @@
   },
   {
    "de": "vetorial.ana_bho_bacias_otto",
+   "col": "id_fonte",
+   "para": "dim.fontes",
+   "colpara": "id_fonte"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t5930",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t291",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_carga",
+   "para": "catalogo.cargas",
+   "colpara": "id"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_cat1",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_cat2",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_cat3",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_cat4",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_cat5",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_cat6",
+   "para": "dim.sidra_categoria",
+   "colpara": "id_categoria"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_municipio",
+   "para": "dim.municipios",
+   "colpara": "id_municipio"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_situacao",
+   "para": "dim.sidra_situacao",
+   "colpara": "id_situacao"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_tabela",
+   "para": "dim.sidra_tabela",
+   "colpara": "id_tabela"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_unidade",
+   "para": "dim.unidade",
+   "colpara": "id_unidade"
+  },
+  {
+   "de": "tabular.sidra_valor_t289",
+   "col": "id_variavel",
+   "para": "dim.sidra_variavel",
+   "colpara": "id_variavel"
+  },
+  {
+   "de": "vetorial.ibge_territorios_quilombolas",
+   "col": "id_estado",
+   "para": "dim.estados",
+   "colpara": "id_estado"
+  },
+  {
+   "de": "vetorial.ibge_territorios_quilombolas",
    "col": "id_fonte",
    "para": "dim.fontes",
    "colpara": "id_fonte"

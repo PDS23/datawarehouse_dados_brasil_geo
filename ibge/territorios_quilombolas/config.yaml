@@ -1,0 +1,14 @@
+# Pipeline dos territorios quilombolas oficialmente delimitados (IBGE). Configuracao versionada.
+# Fonte: servidor de mapas do IBGE (geoservicos.ibge.gov.br, workspace CGMAT, WFS aberto, sem login). A camada tem o ano e a versao no nome
+# (`qg_AAAA_620_territorioquilombola__vNN`); o pipeline le o GetCapabilities do workspace e usa a MAIS RECENTE, sem ajuste manual.
+# O IBGE organiza a camada a partir da base do INCRA sempre que possivel; ela NAO e a base do INCRA (ver LEIAME).
+fonte: IBGE                        # nome exato em dim.fontes
+url_wfs: "https://geoservicos.ibge.gov.br/geoserver/CGMAT/ows"
+padrao_camada: 'CGMAT:qg_(\d{4})_620_territorioquilombola__v(\d+)'   # ano e versao; vale o maior (ano, versao)
+destino_padrao: vetorial.ibge_territorios_quilombolas
+srid_gravado: 4674                 # srsName=EPSG:4674 (SIRGAS 2000)
+count: 10000                       # a camada tem ~500 feicoes
+territorios_minimos: 400           # menos que isto = camada errada ou truncada: nada e gravado
+max_queda: 0.10                    # mais que isso de territorios vigentes ausentes numa coleta: nao grava (--aceitar-queda libera)
+caixa_brasil: {lon_min: -75.0, lon_max: -25.0, lat_min: -36.0, lat_max: 7.0}
+licenca: "Dados abertos do IBGE; confirmar os termos de uso e a citacao exigida antes de redistribuir"

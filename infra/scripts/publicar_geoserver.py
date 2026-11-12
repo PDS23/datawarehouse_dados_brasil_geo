@@ -51,6 +51,7 @@ ESTILOS = [
     ("prodes_desmatamento", "prodes_desmatamento.sld"),
     ("sicar_imoveis", "sicar_imoveis.sld"),
     ("terra_indigena", "terra_indigena.sld"),
+    ("territorio_quilombola", "territorio_quilombola.sld"),
     ("unidade_conservacao", "unidade_conservacao.sld"),
     ("floresta_publica", "floresta_publica.sld"),
     ("alerta_desmatamento", "alerta_desmatamento.sld"),
@@ -103,6 +104,9 @@ VETORIAIS = [
     {"store": "dw_vetorial", "nome": "v_funai_terras_indigenas", "titulo": "FUNAI - Terras indígenas",
      "resumo": "665 terras indígenas da FUNAI (WFS da FUNAI), versão vigente. fase_ti diz a fase do processo (declarada, homologada, regularizada...).",
      "estilo": "terra_indigena"},
+    {"store": "dw_vetorial", "nome": "v_ibge_territorios_quilombolas", "titulo": "IBGE - Territórios quilombolas",
+     "resumo": "495 territórios quilombolas oficialmente delimitados (IBGE, edição 2022; não é a base do INCRA), versão vigente. status diz a fase do processo (titulado, RTID, decreto...).",
+     "estilo": "territorio_quilombola"},
     {"store": "dw_vetorial", "nome": "v_mma_unidades_conservacao", "titulo": "MMA - Unidades de conservação (CNUC)",
      "resumo": "3.406 unidades de conservação com polígono (CNUC, MMA), edição 2026_07, versão vigente. As 170 UCs que só têm ponto esquemático não estão nesta camada. "
                "esfera varia a capitalização (Federal/federal): use lower().",
