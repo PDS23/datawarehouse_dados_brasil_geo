@@ -910,12 +910,18 @@ erDiagram
     4. **LGPD, igual ao IBAMA** (e como buscar por CPF: o banco guarda só o HMAC-SHA256 do CPF de 11 dígitos, com chave fora do banco e do git; quem tem a chave calcula o
        HMAC do CPF consultado e compara com `cpf_embargado_hash`; quem não tem a chave não consegue nem testar um CPF. **Feito em 2026-10-27:** `dwlib/documento.py` (limpeza do documento, HMAC com a mesma chave) e `infra/scripts/consultar_documento.py` (busca por CPF/CNPJ no IBAMA e no ICMBio sem expor chave nem documento; 586 CPFs casam entre as duas fontes). Falta usá-lo no notebook do lote de imóveis): CPF de pessoa física só como HMAC, **com a mesma chave** do IBAMA, para que um CPF consultado case em todas
        as fontes com um único hash; CNPJ como vem. Generalizar a função de hash do IBAMA para `dwlib` antes da segunda fonte usá-la.
-    5. **Quilombolas:** continua dependendo do INCRA voltar (item 11). Paliativo a decidir: imóveis do tipo PCT do SICAR (`ind_tipo`), que
-       têm outra metodologia e não substituem o INCRA. Registrar a lacuna em qualquer resultado até lá.
+    5. ~~**Quilombolas:**~~ ✅ decidido em 2026-11-12: enquanto o INCRA estiver fora do ar (item 11), vale a base do **IBGE 2022** (`ibge/territorios_quilombolas/`,
+       495 territórios), por ser a última fonte oficial publicada. **⚠️ Aviso pendente:** quando o acervo fundiário do INCRA voltar, carregar os
+       territórios do INCRA (`incra/territorios_quilombolas/`, fonte própria, regra 4) e trocar a fonte do critério 12; até lá, todo resultado
+       informa que o critério usa a base do IBGE 2022.
     6. ~~**Atualização agendada:**~~ ✅ decidido em 2026-10-28: ICMBio, SEMA-MT e MTE (as três são fontes vivas) entram no `atualizar_fontes.ps1` e na retenção.
 
     **16.3 Próximos passos: decisões de metodologia (antes de escrever a verificação)**
     *(2026-10-28: levantadas 44 perguntas por camada em [`analises/verificacao_legalidade/PERGUNTAS_METODOLOGIA.md`](analises/verificacao_legalidade/PERGUNTAS_METODOLOGIA.md); responder lá.)*
+    *(2026-11-12: respostas do usuário registradas lá, com resumo das regras no fim do arquivo. **O desmatamento (bloco C, perguntas 12 a 19) saiu da
+    pré-análise de legalidade:** vai para uma análise separada, a **convergência de evidência**, onde o desmatamento é identificado; os itens de PRODES abaixo
+    ficam para ela. Em aberto: data de referência, "sem dado", medida de área, SIGEF e direitos de uso da terra, embargo vigente e titular, tempo e formato de
+    saída. Fontes novas a pesquisar: embargos estaduais de MG, MS, BA, SP, ES, RJ e RO; áreas militares; ANM; focos de queimada; Fundação Palmares.)*
     - **Corte de 31/12/2020 no PRODES:** o ano PRODES cobre agosto a julho; decidir se vale `image_date > 2020-12-31` ou os anos PRODES
       2021 em diante (que incluem agosto a dezembro de 2020).
     - **Tolerância de sobreposição:** área ou percentual mínimo para não acusar ruído de borda entre bases de escalas diferentes (o relatório
