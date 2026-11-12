@@ -91,8 +91,10 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 
 ## G. Tempo e frescor
 
-39. **Defasagem tolerada** de cada fonte: **Decisão:** o resultado registra a data de cada fonte e há um **limite por fonte**: passou dele, a fonte sai como
-    "desatualizada". Limites propostos por fonte, a aprovar, no ROADMAP item 19.
+39. **Defasagem tolerada** de cada fonte: **Decisão (revista em 2026-11-12):** a idade do dado **não muda o resultado** de nenhum critério; a pré-análise é apoio à
+    decisão, e a decisão é do cliente. O relatório entrega a versão do banco, um anexo "Fontes e versões" (onde e como cada fonte foi baixada, data da coleta,
+    edição, número de registros, última tentativa de atualização e o motivo da falha) e uma seção "Limitações". Fonte mais velha que o ritmo esperado aparece
+    destacada no anexo. Detalhe no ROADMAP item 19.
 40. **Foto por data:** **Decisão:** sim. O resultado de cada análise é guardado no banco com a versão de cada fonte usada, e a análise tem de ser reproduzível
     (pergunta 6, ROADMAP item 19).
 
@@ -127,5 +129,5 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 | Desmatamento | fora: vai para a convergência de evidência |
 | Geral | reparar geometria; sem buffer; duas versões (sem tolerância e 1%); área geodésica; cada polígono analisado sozinho |
 | Resultado | por polígono e critério (passa, reprova, alerta, não verificado, não se aplica, sem dado); planilha, GeoJSON e PDF; sem nome do embargado; perfil padrão + configuração por cliente |
-| Tempo | data da execução; resultado guardado com a versão do banco; limite de defasagem por fonte (ROADMAP item 19) |
+| Tempo | data da execução; resultado guardado com a versão do banco; anexo "Fontes e versões" e seção "Limitações" (idade do dado não muda o resultado; ROADMAP item 19) |
 | Validação | todos os lotes já analisados do CECAFÉ (conferir quais critérios cobrem) |

@@ -998,15 +998,15 @@ erDiagram
     - **Backups:** o **backup geral de domingo continua** (banco inteiro, recuperação de desastre; é também o "backup antes" da atualização agendada). **Depois das
       atualizações, o backup do banco inteiro sai** e entra só o **arquivo das fontes que mudaram** (passos 1 a 3 acima). Muda o passo 5 de
       `infra/scripts/atualizar_fontes.ps1` (hoje: backup inteiro com cópia para o Drive).
-    **Ainda a decidir:** os limites de defasagem por fonte (pergunta 39), explicados abaixo, com proposta.
-    **Limite de defasagem por fonte (o que é):** cada análise usa o dado que o banco tem naquele dia. Se a atualização de uma fonte falhar e ninguém notar (o INPE
-    devolver erro, o servidor do CAR sair do ar), a análise roda com dado velho sem avisar: um embargo lavrado na semana passada não aparece. O limite é a idade
-    máxima aceita da última atualização bem-sucedida de cada fonte; passou dele, o critério daquela fonte sai como **"fonte desatualizada"** em vez de "passa".
-    Proposta, a partir do ritmo de cada fonte e da atualização agendada a cada 14 dias (tolera uma rodada perdida):
-    | Fonte | Atualiza na origem | Limite proposto |
-    |---|---|---|
-    | IBAMA, ICMBio, SEMA-MT, SICAR, FUNAI | diário a mensal; aqui, a cada 14 dias | 30 dias |
-    | MTE (lista suja) | semestral; aqui, a cada 14 dias | 30 dias (a edição nova precisa entrar logo) |
-    | CNUC (MMA) | por edição; carga manual | 6 meses desde a última verificação (`--verificar`) |
-    | SFB (florestas públicas) | uma edição por ano | 15 meses desde a edição |
-    | IBGE quilombolas | edição 2022, sem atualização prevista | sem limite; o resultado sempre avisa "edição 2022, substituto do INCRA" |
+    **Transparência em vez de bloqueio (decidido em 2026-11-12, pergunta 39):** a pré-análise é **apoio à decisão**; a decisão é do cliente. Por isso a idade do dado
+    **não muda o resultado de nenhum critério**: o resultado é o que o banco tinha disponível, e o relatório diz com clareza de quando é cada dado e quais são as
+    limitações. Todo relatório leva:
+    - **a versão do banco** usada (passo 2);
+    - **um anexo "Fontes e versões"**, uma linha por fonte, montado do catálogo que já existe (`catalogo.coletas` e `catalogo.cargas`, `dim.fontes`): órgão e nome
+      da fonte, endereço de onde foi baixada (`url`) e como (`metodo`), data e hora da coleta (`coletado_em`), edição (`edicao`), número de registros, versão da
+      fonte e a data da última tentativa de atualização, com o motivo quando ela falhou (fonte fora do ar, por exemplo);
+    - **uma seção "Limitações"**, com o que vale para aquele relatório: fonte usada com dado mais antigo porque a atualização falhou (o ritmo esperado de cada fonte
+      fica no anexo, para o leitor julgar), critério quilombola pela base do IBGE 2022 (substituto do INCRA), análise documental feita ou não, documentação
+      fundiária fora do escopo, desmatamento fora (convergência de evidência), camadas estaduais só do estado do imóvel.
+    O anexo sai junto com o resultado (página no PDF e arquivo próprio, CSV/JSON, na entrega) e o catálogo de versões fica consultável no banco para auditoria.
+    O "limite de defasagem" deixa de existir como regra: vira o destaque no anexo da fonte cuja coleta está mais velha que o ritmo esperado dela.
