@@ -92,7 +92,7 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 ## G. Tempo e frescor
 
 39. **Defasagem tolerada** de cada fonte: **Decisão:** o resultado registra a data de cada fonte e há um **limite por fonte**: passou dele, a fonte sai como
-    "desatualizada". Os limites serão propostos por fonte para aprovação, junto com o desenho de versões (pergunta 6, ROADMAP item 19).
+    "desatualizada". Limites propostos por fonte, a aprovar, no ROADMAP item 19.
 40. **Foto por data:** **Decisão:** sim. O resultado de cada análise é guardado no banco com a versão de cada fonte usada, e a análise tem de ser reproduzível
     (pergunta 6, ROADMAP item 19).
 

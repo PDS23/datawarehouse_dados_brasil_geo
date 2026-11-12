@@ -967,7 +967,7 @@ erDiagram
     **Próximos passos sugeridos (a decidir):** (1) CNUC automático pelo WFS da INDE; (2) ~~quilombolas do IBGE~~ ✅ carregados em 12/11 (`ibge/territorios_quilombolas/`); (3) autos de infração do IBAMA e do ICMBio; (4) terras da União (SPU).
 
 
-19. **Versão por fonte e versão do banco, para reproduzir uma análise antiga (proposta do usuário, 2026-11-12)** — 📐 desenho a aprovar.
+19. **Versão por fonte e versão do banco, para reproduzir uma análise antiga (proposta do usuário, 2026-11-12)** — ✅ desenho aprovado em 2026-11-12 (decisões no fim do item); a implementar.
     **Pedido:** rodar a pré-análise de novo no futuro (auditoria externa) e obter o mesmo resultado. Hoje isso não é possível depois de 30 dias: a retenção apaga
     as versões fechadas (`infra/retencao.yaml`) e o backup é do banco inteiro.
     **Ideia do usuário:** cada fonte tem a **sua versão**; a **versão do banco** é o conjunto das versões das fontes naquele momento; o **backup é só das fontes que
@@ -989,5 +989,24 @@ erDiagram
     4. **Resultado da análise** grava o número da versão do banco e a data de cada fonte (pergunta 39: fonte além do limite de defasagem sai como "desatualizada").
     5. **Reproduzir:** pela versão do banco, pegar a versão de cada fonte; se ainda está dentro da retenção, ler direto do banco; se não, montar a fonte a partir do
        arquivo (versão inteira + diferenças até a versão pedida) num schema temporário e rodar a mesma versão do script (o commit do git fica no resultado).
-    **A decidir:** (a) onde guardar o arquivo (MinIO local + cópia no Drive?); (b) por quanto tempo (a EUDR pede guardar a due diligence por 5 anos); (c) os limites
-    de defasagem por fonte (pergunta 39); (d) se o backup inteiro atual continua como está (recuperação de desastre) ao lado do arquivo por fonte.
+    **Decidido (2026-11-12):**
+    - **Onde:** no PC local, por enquanto, para testar a estrutura e validar os resultados. Pasta `arquivo/fontes/<fonte>/` dentro do repositório (o contêiner
+      `etl` já monta a raiz em `/app`), fora do git (`.gitignore`) e fora da cópia para o Drive (`dw.ps1 sync-drive`), como `bruto/`. MinIO e cópia externa ficam
+      para depois da validação.
+    - **Por quanto tempo:** **5 anos** desde já (o prazo da EUDR para guardar a due diligence). A retenção de 30 dias continua valendo para as versões fechadas
+      **dentro do banco**; o que ela apaga já terá ido para o arquivo da fonte.
+    - **Backups:** o **backup geral de domingo continua** (banco inteiro, recuperação de desastre; é também o "backup antes" da atualização agendada). **Depois das
+      atualizações, o backup do banco inteiro sai** e entra só o **arquivo das fontes que mudaram** (passos 1 a 3 acima). Muda o passo 5 de
+      `infra/scripts/atualizar_fontes.ps1` (hoje: backup inteiro com cópia para o Drive).
+    **Ainda a decidir:** os limites de defasagem por fonte (pergunta 39), explicados abaixo, com proposta.
+    **Limite de defasagem por fonte (o que é):** cada análise usa o dado que o banco tem naquele dia. Se a atualização de uma fonte falhar e ninguém notar (o INPE
+    devolver erro, o servidor do CAR sair do ar), a análise roda com dado velho sem avisar: um embargo lavrado na semana passada não aparece. O limite é a idade
+    máxima aceita da última atualização bem-sucedida de cada fonte; passou dele, o critério daquela fonte sai como **"fonte desatualizada"** em vez de "passa".
+    Proposta, a partir do ritmo de cada fonte e da atualização agendada a cada 14 dias (tolera uma rodada perdida):
+    | Fonte | Atualiza na origem | Limite proposto |
+    |---|---|---|
+    | IBAMA, ICMBio, SEMA-MT, SICAR, FUNAI | diário a mensal; aqui, a cada 14 dias | 30 dias |
+    | MTE (lista suja) | semestral; aqui, a cada 14 dias | 30 dias (a edição nova precisa entrar logo) |
+    | CNUC (MMA) | por edição; carga manual | 6 meses desde a última verificação (`--verificar`) |
+    | SFB (florestas públicas) | uma edição por ano | 15 meses desde a edição |
+    | IBGE quilombolas | edição 2022, sem atualização prevista | sem limite; o resultado sempre avisa "edição 2022, substituto do INCRA" |
