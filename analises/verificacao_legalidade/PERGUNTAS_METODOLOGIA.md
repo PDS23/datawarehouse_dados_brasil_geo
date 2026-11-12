@@ -60,8 +60,9 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
     (pode haver produção de uso sustentável dentro dela; era o motivo de liberar a APA). Vale para todas as esferas (federal, estadual, municipal).
     Categorias no CNUC (só polígonos): Proteção Integral = Estação Ecológica, Reserva Biológica, Parque, Monumento Natural, Refúgio de Vida Silvestre;
     Uso Sustentável = APA, ARIE, Floresta (Nacional/Estadual/Municipal), Reserva Extrativista, Reserva de Fauna, Reserva de Desenvolvimento Sustentável, RPPN.
-    *Em aberto:* RPPN (gravada em perpetuidade para conservação, só pesquisa e visitação), Reserva Extrativista, RDS, Floresta e Reserva de Fauna (posse e domínio
-    públicos, uso só pelas populações tradicionais) não comportam produção agropecuária comum, embora sejam de uso sustentável: passam direto, ou passam com alerta?
+    **Alerta (decidido em 2026-11-12):** RPPN (gravada em perpetuidade para conservação, só pesquisa e visitação), Reserva Extrativista, RDS, Floresta e Reserva de
+    Fauna (posse e domínio públicos, uso só pelas populações tradicionais ou manejo florestal) não comportam produção agropecuária comum: **passam, mas com alerta**
+    no resultado. APA e ARIE passam sem alerta.
 28. **UC sem polígono** (170 só com ponto): **Decisão:** usar só a camada de polígonos; as UCs só com ponto ficam fora.
 29. **Quilombolas:** substituto enquanto o INCRA está fora do ar.
     **Decisão:** territórios quilombolas do **IBGE 2022** (decisão de 2026-11-12, já carregados), até o INCRA voltar. *Nota:* o documento de requisitos diz "camada de territórios quilombolas do MapBiomas", mas o MapBiomas não publica os limites dos territórios (só estatísticas por território, a partir de IBGE e INCRA); por isso prevalece o IBGE 2022.
@@ -97,7 +98,7 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 |---|---|
 | CAR (SICAR) | analisa qualquer status; só ativo ou pendente passa; CAR sobreposto vira alerta |
 | Terra indígena (FUNAI) | todas as fases da camada reprovam |
-| Unidade de conservação (CNUC) | só polígonos; por grupo: Proteção Integral reprova, Uso Sustentável passa (alerta para RPPN, RESEX, RDS, Floresta e Reserva de Fauna em aberto) |
+| Unidade de conservação (CNUC) | só polígonos; por grupo: Proteção Integral reprova, Uso Sustentável passa (APA e ARIE sem alerta; RPPN, RESEX, RDS, Floresta e Reserva de Fauna com alerta) |
 | Quilombola | IBGE 2022 até o INCRA voltar; reprova |
 | Embargos IBAMA e ICMBio | por polígono; por CPF/CNPJ só quando o documento vier |
 | Embargos SEMA-MT | por polígono; por CPF/CNPJ só quando o documento vier (vale para Mato Grosso) |
