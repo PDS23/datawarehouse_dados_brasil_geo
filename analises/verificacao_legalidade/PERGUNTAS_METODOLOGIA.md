@@ -9,7 +9,9 @@ decisão, há uma **Nota**. O foco é **cada camada**: o que ela diz, o que vamo
 1. **Quais entradas aceitamos?** Código do imóvel no SICAR, parcela do SIGEF, polígono de lote (vários talhões), CPF/CNPJ do produtor, município. Todas, ou começamos por uma?
    **Decisão:** código do CAR (um imóvel ou um lote de códigos) e polígono enviado em arquivo espacial (GeoJSON, shapefile e afins).
 2. **CPF/CNPJ como entrada:** serve só para as listas por documento (embargos, lista suja) ou também para **achar os imóveis do titular**?
-   **Decisão:** só para as listas por documento; não é usado para achar imóveis. *Nota:* a resposta diz "listar os embargos"; entendemos que vale também para a lista suja do MTE, que é a outra lista por documento.
+   **Decisão:** só para as listas por documento; não é usado para achar imóveis. **O CPF/CNPJ é opcional** (decisão de 2026-11-12): muitas vezes a demanda chega sem ele, e aí
+   roda só a análise espacial do polígono. A verificação tem dois modos, **com** e **sem análise documental** (embargos IBAMA, ICMBio e SEMA-MT por documento, e lista suja
+   do MTE), e o resultado sempre diz **se a análise documental foi feita ou não**. Sem documento, os critérios por documento saem como "não verificado", nunca como "passa".
 3. **Unidade de resultado:** o lote inteiro, cada talhão ou cada imóvel? Uma reprovação em um talhão reprova o lote?
    **Decisão:** qualquer polígono de entrada (imóvel ou talhão); o resultado sai por polígono. *Em aberto:* se um polígono reprovado reprova o lote.
 4. **Geometria de entrada inválida** (auto-interseção, anel aberto): reparamos ou recusamos?
@@ -54,7 +56,12 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 
 26. **Terra indígena, fases que contam:** **Decisão:** todas as fases que a camada da FUNAI traz; sem buffer (pergunta 9).
 27. **Unidade de conservação:** só proteção integral reprova, ou também uso sustentável?
-    **Decisão:** **APA não reprova** e pode sair da análise. *Nota:* entendemos que as demais categorias (proteção integral e as de uso sustentável que não são APA, como RESEX, FLONA e RDS) reprovam, em todas as esferas; confirmar.
+    **Decisão (revista em 2026-11-12):** a regra é **por grupo**, não por categoria (Lei 9.985/2000, SNUC): **Proteção Integral reprova**, **Uso Sustentável passa**
+    (pode haver produção de uso sustentável dentro dela; era o motivo de liberar a APA). Vale para todas as esferas (federal, estadual, municipal).
+    Categorias no CNUC (só polígonos): Proteção Integral = Estação Ecológica, Reserva Biológica, Parque, Monumento Natural, Refúgio de Vida Silvestre;
+    Uso Sustentável = APA, ARIE, Floresta (Nacional/Estadual/Municipal), Reserva Extrativista, Reserva de Fauna, Reserva de Desenvolvimento Sustentável, RPPN.
+    *Em aberto:* RPPN (gravada em perpetuidade para conservação, só pesquisa e visitação), Reserva Extrativista, RDS, Floresta e Reserva de Fauna (posse e domínio
+    públicos, uso só pelas populações tradicionais) não comportam produção agropecuária comum, embora sejam de uso sustentável: passam direto, ou passam com alerta?
 28. **UC sem polígono** (170 só com ponto): **Decisão:** usar só a camada de polígonos; as UCs só com ponto ficam fora.
 29. **Quilombolas:** substituto enquanto o INCRA está fora do ar.
     **Decisão:** territórios quilombolas do **IBGE 2022** (decisão de 2026-11-12, já carregados), até o INCRA voltar. *Nota:* o documento de requisitos diz "camada de territórios quilombolas do MapBiomas", mas o MapBiomas não publica os limites dos territórios (só estatísticas por território, a partir de IBGE e INCRA); por isso prevalece o IBGE 2022.
@@ -69,8 +76,8 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 35. **Embargos estaduais fora de Mato Grosso:** **Decisão:** fazer o levantamento das fontes de embargo estadual de **MG, MS, BA, SP, ES, RJ e RO**.
 36. **Autos de infração** sem embargo: contam? **Decisão:** em aberto.
 37. **Lista suja do trabalho escravo:** só quem consta hoje? O TAC fica como lacuna? **Decisão:** a lista suja entra; *em aberto:* quem saiu há pouco e o TAC.
-38. **Outras camadas a pesquisar:** **Decisão:** pesquisar mineração (ANM), focos de queimada (INPE) e Fundação Palmares (certidões quilombolas).
-    *Nota:* o documento também lista terras da União (SPU), mas a pergunta 25 decide que elas não são analisadas; confirmar se a SPU sai da pesquisa.
+38. **Outras camadas a pesquisar** (mineração/ANM, terras da União/SPU, focos de queimada, Fundação Palmares)? **Decisão:** em aberto. A SPU sai, porque a
+    pergunta 25 decidiu que terras da União não são analisadas (ela só entrou na lista como sugestão deste levantamento, no ROADMAP 16.5).
 
 ## G. Tempo e frescor
 
@@ -90,11 +97,12 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 |---|---|
 | CAR (SICAR) | analisa qualquer status; só ativo ou pendente passa; CAR sobreposto vira alerta |
 | Terra indígena (FUNAI) | todas as fases da camada reprovam |
-| Unidade de conservação (CNUC) | só polígonos; APA não reprova (sai da análise); as demais reprovam (a confirmar) |
+| Unidade de conservação (CNUC) | só polígonos; por grupo: Proteção Integral reprova, Uso Sustentável passa (alerta para RPPN, RESEX, RDS, Floresta e Reserva de Fauna em aberto) |
 | Quilombola | IBGE 2022 até o INCRA voltar; reprova |
-| Embargos IBAMA e ICMBio | por polígono e por CPF/CNPJ |
-| Embargos SEMA-MT | por polígono e por CPF/CNPJ (vale para Mato Grosso) |
-| Lista suja (MTE) | por CPF/CNPJ |
+| Embargos IBAMA e ICMBio | por polígono; por CPF/CNPJ só quando o documento vier |
+| Embargos SEMA-MT | por polígono; por CPF/CNPJ só quando o documento vier (vale para Mato Grosso) |
+| Lista suja (MTE) | por CPF/CNPJ, só quando o documento vier |
+| CPF/CNPJ | opcional; o resultado diz se a análise documental foi feita; sem documento, os critérios por documento saem "não verificado" |
 | Floresta pública não destinada (SFB) | alerta, não reprova |
 | Área militar | reprova (camada a pesquisar) |
 | Assentamentos, terras da União, faixa de fronteira, APP, reserva legal, áreas prioritárias | não analisados |

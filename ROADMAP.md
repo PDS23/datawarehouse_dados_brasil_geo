@@ -921,7 +921,8 @@ erDiagram
     *(2026-11-12: respostas do usuário registradas lá, com resumo das regras no fim do arquivo. **O desmatamento (bloco C, perguntas 12 a 19) saiu da
     pré-análise de legalidade:** vai para uma análise separada, a **convergência de evidência**, onde o desmatamento é identificado; os itens de PRODES abaixo
     ficam para ela. Em aberto: data de referência, "sem dado", medida de área, SIGEF e direitos de uso da terra, embargo vigente e titular, tempo e formato de
-    saída. Fontes novas a pesquisar: embargos estaduais de MG, MS, BA, SP, ES, RJ e RO; áreas militares; ANM; focos de queimada; Fundação Palmares.)*
+    saída. Fontes novas a pesquisar: embargos estaduais de MG, MS, BA, SP, ES, RJ e RO; áreas militares. UC por grupo (Proteção Integral reprova, Uso
+    Sustentável passa); CPF/CNPJ opcional, com o resultado dizendo se a análise documental foi feita; SPU fora.)*
     - **Corte de 31/12/2020 no PRODES:** o ano PRODES cobre agosto a julho; decidir se vale `image_date > 2020-12-31` ou os anos PRODES
       2021 em diante (que incluem agosto a dezembro de 2020).
     - **Tolerância de sobreposição:** área ou percentual mínimo para não acusar ruído de borda entre bases de escalas diferentes (o relatório
