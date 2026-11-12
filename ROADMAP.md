@@ -966,3 +966,28 @@ erDiagram
     **Sem camadas:** **ANM (mineração) responde `GetCapabilities` vazio** na INDE (0 camadas): a mineração não vem por aqui; ANP, ANTT, DNIT, EPE e Marinha são de outros temas.
     **Próximos passos sugeridos (a decidir):** (1) CNUC automático pelo WFS da INDE; (2) ~~quilombolas do IBGE~~ ✅ carregados em 12/11 (`ibge/territorios_quilombolas/`); (3) autos de infração do IBAMA e do ICMBio; (4) terras da União (SPU).
 
+
+19. **Versão por fonte e versão do banco, para reproduzir uma análise antiga (proposta do usuário, 2026-11-12)** — 📐 desenho a aprovar.
+    **Pedido:** rodar a pré-análise de novo no futuro (auditoria externa) e obter o mesmo resultado. Hoje isso não é possível depois de 30 dias: a retenção apaga
+    as versões fechadas (`infra/retencao.yaml`) e o backup é do banco inteiro.
+    **Ideia do usuário:** cada fonte tem a **sua versão**; a **versão do banco** é o conjunto das versões das fontes naquele momento; o **backup é só das fontes que
+    mudaram**. O resultado de cada análise guarda a versão do banco, e reproduzir é juntar as versões das fontes que essa versão aponta.
+    **Por que faz sentido:**
+    - As fontes mudam em ritmos diferentes (IBAMA todo dia, DETER e MapBiomas toda semana, lista suja a cada seis meses, PRODES uma vez por ano, CNUC e SFB por
+      edição). Numa atualização agendada só algumas mudam; um backup inteiro guarda de novo, a cada vez, as fontes que não mudaram (SICAR e PRODES são o grosso).
+    - A versão do banco como conjunto de versões de fonte diz **onde** foi a mudança entre duas versões do banco: se um imóvel passou numa e reprovou noutra,
+      dá para ver que só o IBAMA mudou entre elas.
+    - O banco já tem as peças: cada linha guarda `vigente_desde`/`vigente_ate` (espelho versionado) e cada carga fica em `catalogo.cargas`. Dentro dos 30 dias, o
+      estado de uma fonte numa data T já se reconstrói por `vigente_desde <= T AND (vigente_ate IS NULL OR vigente_ate > T)`. Falta guardar além dos 30 dias.
+    **Desenho proposto:**
+    1. **Versão da fonte** = a carga (`catalogo.cargas`) que **mudou** alguma linha daquela fonte; carga sem mudança não cria versão.
+    2. **Versão do banco** = uma linha nova num catálogo (ex.: `catalogo.versoes_banco`: número, data, e para cada fonte a sua versão) sempre que pelo menos uma
+       fonte muda. O número da versão do banco cresce; o conteúdo diz qual fonte mudou.
+    3. **Arquivo por fonte:** antes de a retenção apagar as versões fechadas, o que mudou naquela versão da fonte (linhas que fecharam e linhas que abriram) vai
+       para um arquivo próprio da fonte (GeoParquet no armazenamento de objetos, o MinIO de "Caminho 1"). A primeira versão de cada fonte vai inteira; as
+       seguintes, só a diferença. Assim o arquivo cresce no ritmo das mudanças, não no tamanho do banco.
+    4. **Resultado da análise** grava o número da versão do banco e a data de cada fonte (pergunta 39: fonte além do limite de defasagem sai como "desatualizada").
+    5. **Reproduzir:** pela versão do banco, pegar a versão de cada fonte; se ainda está dentro da retenção, ler direto do banco; se não, montar a fonte a partir do
+       arquivo (versão inteira + diferenças até a versão pedida) num schema temporário e rodar a mesma versão do script (o commit do git fica no resultado).
+    **A decidir:** (a) onde guardar o arquivo (MinIO local + cópia no Drive?); (b) por quanto tempo (a EUDR pede guardar a due diligence por 5 anos); (c) os limites
+    de defasagem por fonte (pergunta 39); (d) se o backup inteiro atual continua como está (recuperação de desastre) ao lado do arquivo por fonte.

@@ -13,12 +13,16 @@ decisão, há uma **Nota**. O foco é **cada camada**: o que ela diz, o que vamo
    roda só a análise espacial do polígono. A verificação tem dois modos, **com** e **sem análise documental** (embargos IBAMA, ICMBio e SEMA-MT por documento, e lista suja
    do MTE), e o resultado sempre diz **se a análise documental foi feita ou não**. Sem documento, os critérios por documento saem como "não verificado", nunca como "passa".
 3. **Unidade de resultado:** o lote inteiro, cada talhão ou cada imóvel? Uma reprovação em um talhão reprova o lote?
-   **Decisão:** qualquer polígono de entrada (imóvel ou talhão); o resultado sai por polígono. *Em aberto:* se um polígono reprovado reprova o lote.
+   **Decisão:** qualquer polígono de entrada (imóvel ou talhão). **Cada polígono é analisado sozinho**, independentemente dos outros do mesmo lote, e o resultado é
+   sempre por polígono; o lote só mostra a contagem (ex.: 12 passam, 1 reprova), sem resultado próprio.
 4. **Geometria de entrada inválida** (auto-interseção, anel aberto): reparamos ou recusamos?
    **Decisão:** reparar sempre (`ST_MakeValid`) e seguir com a análise.
 5. **Imóvel do SICAR:** quais status aceitos (ativo, pendente, suspenso, cancelado)? Imóvel cancelado reprova?
    **Decisão:** a análise roda para qualquer status, e o resultado informa o status do CAR. Status diferente de **ativo** ou **pendente** não passa no critério do CAR.
-6. **Data de referência:** hoje, a data da produção/colheita ou a do embarque? **Decisão:** em aberto.
+6. **Data de referência:** hoje, a data da produção/colheita ou a do embarque?
+   **Decisão:** a data em que a análise roda. **Com rastreabilidade para auditoria:** rodar de novo no futuro tem de dar o mesmo resultado. Para isso, o usuário propôs
+   **versão por fonte** e **versão do banco = o conjunto das versões das fontes** naquele momento, com **backup só das fontes que mudaram** (e não do banco inteiro).
+   Desenho no ROADMAP, item 19. Cobre também as perguntas 39 e 40.
 
 ## B. Regras comuns de sobreposição
 
@@ -27,8 +31,11 @@ decisão, há uma **Nota**. O foco é **cada camada**: o que ela diz, o que vamo
 8. **Onde conta a sobreposição:** no imóvel inteiro, ou só na parte produtiva?
    **Decisão:** no polígono que está sendo analisado; para o Brasil, a priori, o imóvel inteiro.
 9. **Buffer/entorno:** alguma camada exige distância? **Decisão:** não; só interseção direta.
-10. **"Sem dado":** como tratar o que a camada não cobre (SEMA-MT só vale em Mato Grosso; UC só com ponto)? **Decisão:** em aberto.
-11. **Medida de área:** `geography` (exata) ou EPSG 5880 (mais rápida)? **Decisão:** em aberto.
+10. **"Sem dado":** como tratar o que a camada não cobre?
+    **Decisão:** "não se aplica" (fora da cobertura por definição) e "sem dado" (a fonte deveria cobrir e não cobre) ficam separados, nunca "passa". **Camada estadual
+    só roda no próprio estado:** um imóvel de MG não é cruzado com a SEMA-MT e o resultado dele não cita a SEMA-MT; ele é cruzado com o órgão de MG que tem a mesma
+    função (a levantar, pergunta 35). Cada camada estadual declara a UF que cobre.
+11. **Medida de área:** **Decisão:** área geodésica (`geography`, sobre o elipsoide).
 
 ## C. Desmatamento — fora desta análise
 
@@ -45,8 +52,8 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 ## D. Imóvel, posse e terra pública (SICAR, SIGEF, INCRA, SFB)
 
 20. **Sobreposição entre CAR:** reprova? **Decisão:** não reprova; o resultado leva um **alerta de sobreposição**.
-21. **SIGEF/SNCI:** exigir o imóvel certificado para comprovar posse? **Decisão:** em aberto.
-22. **Direitos de uso da terra** (matrícula, CCIR, ITR): ficam fora ou entram como declaração do produtor? **Decisão:** em aberto.
+21. **SIGEF/SNCI:** exigir o imóvel certificado para comprovar posse? **Decisão:** fica fora da análise.
+22. **Direitos de uso da terra** (matrícula, CCIR, ITR): **Decisão:** ficam fora; o resultado avisa que a análise não cobre a documentação fundiária.
 23. **Florestas públicas não destinadas:** sobreposição reprova? **Decisão:** não reprova; o resultado leva um **alerta**.
 24. **Assentamentos:** sobreposição reprova? **Decisão:** não são analisados.
 25. **Outras terras públicas:** terras da União, áreas militares, faixa de fronteira.
@@ -70,27 +77,36 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 
 ## F. Embargos, infrações e trabalho (IBAMA, ICMBio, SEMA-MT, MTE)
 
-31. **Embargo vigente:** o que exclui (desembargado, cancelado, desembargo parcial)? Há data limite? **Decisão:** em aberto.
-32. **Por área e por documento:** **Decisão:** os dois, no IBAMA e no ICMBio (polígono e CPF/CNPJ). *Em aberto:* o que fazer com o embargo só com ponto (42 mil no IBAMA).
-33. **Titular:** CPF/CNPJ exato, raiz do CNPJ, sócios, arrendatários? **Decisão:** em aberto.
-34. **ICMBio:** o julgamento muda alguma coisa? **Decisão:** em aberto.
+31. **Embargo vigente:** **Decisão:** vigente = sem desembargo e sem cancelamento, **de qualquer data** (sem data limite). Desembargados e cancelados aparecem no
+    resultado só como informação, sem reprovar. Na SEMA-MT, a camada de desembargadas tira o embargo correspondente.
+32. **Por área e por documento:** **Decisão:** os dois, no IBAMA e no ICMBio (polígono e CPF/CNPJ). **Embargo só com ponto** dentro do polígono vira **alerta**, sem
+    reprovar (o ponto não diz a área embargada); embargo sem nenhuma geometria só é achado pelo documento.
+33. **Titular:** **Decisão:** CPF/CNPJ exato reprova; mesma raiz de CNPJ (matriz e filiais) vira alerta; sócios, arrendatários e proprietários anteriores ficam fora.
+34. **ICMBio:** o julgamento muda alguma coisa? **Decisão:** não; embargo na camada conta, e o julgamento sai no resultado como informação.
 35. **Embargos estaduais fora de Mato Grosso:** **Decisão:** fazer o levantamento das fontes de embargo estadual de **MG, MS, BA, SP, ES, RJ e RO**.
-36. **Autos de infração** sem embargo: contam? **Decisão:** em aberto.
-37. **Lista suja do trabalho escravo:** só quem consta hoje? O TAC fica como lacuna? **Decisão:** a lista suja entra; *em aberto:* quem saiu há pouco e o TAC.
-38. **Outras camadas a pesquisar** (mineração/ANM, terras da União/SPU, focos de queimada, Fundação Palmares)? **Decisão:** em aberto. A SPU sai, porque a
-    pergunta 25 decidiu que terras da União não são analisadas (ela só entrou na lista como sugestão deste levantamento, no ROADMAP 16.5).
+36. **Autos de infração** sem embargo (IBAMA e ICMBio): **Decisão:** ficam fora.
+37. **Lista suja do trabalho escravo:** **Decisão:** só quem consta na edição atual; a lacuna do cadastro em ajustamento de conduta (TAC) é aceita e registrada no resultado.
+38. **Outras camadas a pesquisar** (mineração/ANM, terras da União/SPU, focos de queimada, Fundação Palmares)? **Decisão:** todas fora por enquanto (a SPU já tinha
+    saído pela pergunta 25).
 
 ## G. Tempo e frescor
 
-39. **Defasagem tolerada** de cada fonte: **Decisão:** em aberto.
-40. **Foto por data:** precisamos reproduzir o resultado de uma data passada? **Decisão:** em aberto.
+39. **Defasagem tolerada** de cada fonte: **Decisão:** o resultado registra a data de cada fonte e há um **limite por fonte**: passou dele, a fonte sai como
+    "desatualizada". Os limites serão propostos por fonte para aprovação, junto com o desenho de versões (pergunta 6, ROADMAP item 19).
+40. **Foto por data:** **Decisão:** sim. O resultado de cada análise é guardado no banco com a versão de cada fonte usada, e a análise tem de ser reproduzível
+    (pergunta 6, ROADMAP item 19).
 
 ## H. Saída, privacidade e validação
 
-41. **Formato do resultado:** "passa / não passa / sem dado", com área sobreposta e identificador da feição. **Decisão:** em aberto. Já decidido em outras perguntas: o resultado tem também **alertas que não reprovam** (CAR sobreposto, floresta pública não destinada) e informa o status do CAR.
-42. **Dado pessoal no resultado:** pode aparecer o nome do embargado? **Decisão:** em aberto.
-43. **Regras por cliente:** **Decisão:** em aberto.
-44. **Validação:** contra quais relatórios de referência? **Decisão:** em aberto.
+41. **Formato do resultado:** **Decisão:** por polígono e por critério, com os estados passa, reprova, alerta, não verificado, não se aplica e sem dado, a área
+    sobreposta e o identificador da feição; resultado geral do polígono = qualquer reprovação reprova; sem nota ou pontuação. Sai em **planilha, GeoJSON** (com as
+    sobreposições) **e PDF** tipo relatório. O resultado informa também o status do CAR e se a análise documental foi feita.
+42. **Dado pessoal no resultado:** **Decisão:** não aparece nome nem documento do embargado; só o número do termo de embargo. Quem tem acesso ao banco consulta o titular.
+43. **Regras por cliente:** **Decisão:** um perfil padrão (esta metodologia) e um arquivo de configuração por cliente que muda o que reprova e o que é alerta;
+    começa só com o padrão.
+44. **Validação:** **Decisão:** comparar com os resultados que já temos do CECAFÉ, **todos os lotes**. *A conferir:* quais critérios desta análise os resultados do
+    CECAFÉ cobrem (o notebook v4 usa CAR, PRODES e MapBiomas Alerta, que é desmatamento); a regra de diferença aceita ficou sem resposta, e o padrão proposto é
+    explicar cada diferença por escrito, sem percentual.
 
 ## Resumo das regras decididas
 
@@ -100,12 +116,16 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 | Terra indígena (FUNAI) | todas as fases da camada reprovam |
 | Unidade de conservação (CNUC) | só polígonos; por grupo: Proteção Integral reprova, Uso Sustentável passa (APA e ARIE sem alerta; RPPN, RESEX, RDS, Floresta e Reserva de Fauna com alerta) |
 | Quilombola | IBGE 2022 até o INCRA voltar; reprova |
-| Embargos IBAMA e ICMBio | por polígono; por CPF/CNPJ só quando o documento vier |
-| Embargos SEMA-MT | por polígono; por CPF/CNPJ só quando o documento vier (vale para Mato Grosso) |
-| Lista suja (MTE) | por CPF/CNPJ, só quando o documento vier |
+| Embargos IBAMA e ICMBio | vigente = sem desembargo nem cancelamento, de qualquer data; por polígono (ponto vira alerta) e por CPF/CNPJ quando o documento vier (exato reprova, raiz do CNPJ alerta); julgamento do ICMBio só informa |
+| Embargos estaduais | só rodam no estado da camada (SEMA-MT só para MT); outros estados a levantar |
+| Lista suja (MTE) | por CPF/CNPJ, só quando o documento vier; só a edição atual; lacuna do TAC aceita |
+| Fora | SIGEF, direitos de uso da terra (com aviso), autos de infração, ANM, queimadas, Fundação Palmares |
 | CPF/CNPJ | opcional; o resultado diz se a análise documental foi feita; sem documento, os critérios por documento saem "não verificado" |
 | Floresta pública não destinada (SFB) | alerta, não reprova |
 | Área militar | reprova (camada a pesquisar) |
 | Assentamentos, terras da União, faixa de fronteira, APP, reserva legal, áreas prioritárias | não analisados |
 | Desmatamento | fora: vai para a convergência de evidência |
-| Geral | reparar geometria; sem buffer; duas versões (sem tolerância e 1%) |
+| Geral | reparar geometria; sem buffer; duas versões (sem tolerância e 1%); área geodésica; cada polígono analisado sozinho |
+| Resultado | por polígono e critério (passa, reprova, alerta, não verificado, não se aplica, sem dado); planilha, GeoJSON e PDF; sem nome do embargado; perfil padrão + configuração por cliente |
+| Tempo | data da execução; resultado guardado com a versão do banco; limite de defasagem por fonte (ROADMAP item 19) |
+| Validação | todos os lotes já analisados do CECAFÉ (conferir quais critérios cobrem) |
