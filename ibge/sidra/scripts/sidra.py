@@ -10,6 +10,10 @@ Uso (a partir da raiz do repositório):
     --cat 227=4961,laranja        carrega estas categorias da classificação 227 (código SIDRA ou slug); repita --cat se a tabela
                                   tiver mais de uma classificação "pedido"
     (nenhum dos dois)             só em tabela SEM classificação "pedido": carrega o recorte fixado no config.yaml
+  RECORTE TERRITORIAL (opcional; sem ele, o nível inteiro: todos os municípios ou todas as UFs):
+    --locais 1500107,1501204      só estes municípios (nível n6)
+    --locais PA,MT                só estas UFs (nível n3) ou, no nível n6, todos os municípios delas (sigla ou código da UF)
+    Com --locais, as versões só se comparam dentro dos locais pedidos e a conferência com o total do Brasil não se aplica.
   OPÇÕES: --periodos 2017 | --nivel n6|n3|n1 | --simular | --sem-bruto | --aceitar-queda
 
 Regras de gravação (ver ibge/sidra/LEIAME_sidra.md):
@@ -39,6 +43,7 @@ RAIZ = Path(__file__).resolve().parents[1]               # ibge/sidra
 CFG = yaml.safe_load((RAIZ / "config.yaml").read_text(encoding="utf-8"))
 NIVEIS = {"n1": 1, "n3": 3, "n6": 6}
 SITUACAO = {"-": 1, "X": 2, "...": 3, "..": 4}           # dim.sidra_situacao
+UNIDADES_VISTAS = {}                                     # {id_unidade: nome} vistas na enumeração (preenchido por enumerar)
 CATS = [f"id_cat{i}" for i in range(1, 7)]
 COLUNAS_STAGE = ["periodo", "nivel", "id_municipio", "id_estado", "id_variavel", "c1", "c2", "c3", "c4", "c5", "c6",
                  "valor", "id_situacao", "id_unidade"]
@@ -84,7 +89,11 @@ def enumerar(tab, nivel_n1="n1"):
     for r in regs:
         for k in cats:
             cats[k][r[f"D{4 + k}C"]] = r[f"D{4 + k}N"].strip()
-        variaveis.setdefault(r["D2C"], (r["D2N"].strip(), int(r["MC"]), r["MN"].strip()))
+        if r["MC"]:
+            # Em algumas tabelas (ex.: PEVS 289) a unidade muda POR CATEGORIA (toneladas, m³...) e o "Total" vem sem unidade:
+            # a variável fica com a 1ª unidade vista; a unidade certa de cada valor é a da linha (id_unidade em sidra_valor)
+            variaveis.setdefault(r["D2C"], (r["D2N"].strip(), int(r["MC"]), r["MN"].strip()))
+            UNIDADES_VISTAS[int(r["MC"])] = r["MN"].strip()
     return cats, variaveis
 
 
@@ -103,7 +112,7 @@ def gravar_dimensoes(conn, tab, fonte, cats, variaveis, nomes_class):
                     "WHERE (dim.sidra_tabela.id_pesquisa, dim.sidra_tabela.nome, dim.sidra_tabela.periodicidade, dim.sidra_tabela.id_fonte) "
                     "IS DISTINCT FROM (EXCLUDED.id_pesquisa, EXCLUDED.nome, EXCLUDED.periodicidade, EXCLUDED.id_fonte)",
                     (tab["id"], id_pesquisa, tab["nome"], tab.get("periodicidade"), fonte))
-        unidades = {}
+        unidades = dict(UNIDADES_VISTAS)          # todas as unidades do recorte, não só a 1ª de cada variável
         for nome, id_un, nome_un in variaveis.values():
             unidades[id_un] = nome_un
         for id_un, nome_un in unidades.items():
@@ -193,16 +202,19 @@ def transformar(registros, tab, escolhidas, ids_cat, nivel, municipios_dim, esta
                 continue
         cats6 = [ids_cat[(k, cods[k])] for k in range(n_cl)] + [0] * (6 - n_cl)
         chave = (int(r["D3C"]), nivel, mun, est, int(r["D2C"]), *cats6)
-        linhas[chave] = chave + (valor, sit, int(r["MC"]))
+        linhas[chave] = chave + (valor, sit, int(r["MC"]) if r["MC"] else None)
     return list(linhas.values()), somas, sigilos, rejeitados
 
 
-def reconciliar(conn, tab, nivel, escolhidas_ids, variaveis, periodos, linhas, id_carga, hoje, max_queda, aceitar_queda):
+def reconciliar(conn, tab, nivel, escolhidas_ids, variaveis, periodos, linhas, id_carga, hoje, max_queda, aceitar_queda, locais_ids=None):
     """Compara o stage com os valores vigentes do recorte e grava. Devolve (novos, fechados, reabertos, vigentes_antes)."""
     escopo = ["v.id_tabela = %(t)s", "v.vigente_ate IS NULL", "v.nivel = %(nivel)s", "v.periodo = ANY(%(periodos)s)",
               "v.id_variavel = ANY(%(variaveis)s)"]
     par = {"t": tab["id"], "nivel": nivel, "periodos": [int(p) for p in periodos], "variaveis": [int(v) for v in variaveis],
            "hoje": hoje, "carga": id_carga}
+    if locais_ids is not None:               # recorte territorial: só compara (e fecha) versões dos locais pedidos
+        escopo.append("v.id_municipio = ANY(%(locais)s)" if nivel == 6 else "v.id_estado = ANY(%(locais)s)")
+        par["locais"] = list(locais_ids)
     for k, ids in escolhidas_ids.items():
         escopo.append(f"v.id_cat{k + 1} = ANY(%(cat{k + 1})s)")
         par[f"cat{k + 1}"] = list(ids)
@@ -260,6 +272,36 @@ def reconciliar(conn, tab, nivel, escolhidas_ids, variaveis, periodos, linhas, i
 
 
 # --------------------------------------------------------------------------- principal
+def resolver_locais(conn, texto, nivel):
+    """--locais -> (ids para o escopo da reconciliação, expressão de territórios da API, rótulo do arquivo bruto)."""
+    tokens = [x.upper() for x in re.split(r"[,\s]+", texto) if x]   # vírgula ou espaço (o PowerShell troca vírgulas por espaço)
+    with conn.cursor() as cur:
+        cur.execute("SELECT sigla_uf, id_estado FROM dim.estados")
+        uf = {}
+        for sigla, id_est in cur.fetchall():
+            uf[sigla.upper()] = id_est
+            uf[str(id_est)] = id_est
+        cur.execute("SELECT id_municipio, id_estado FROM dim.municipios")
+        mun_uf = dict(cur.fetchall())
+    if nivel == 1:
+        raise SystemExit("--locais não se aplica ao nível n1 (Brasil)")
+    if all(re.fullmatch(r"\d{7}", x) for x in tokens):
+        if nivel != 6:
+            raise SystemExit("códigos de 7 dígitos são municípios: use --nivel n6")
+        fora = [x for x in tokens if int(x) not in mun_uf]
+        if fora:
+            raise SystemExit(f"municípios fora de dim.municipios: {fora}")
+        ids = sorted({int(x) for x in tokens})
+        return ids, ",".join(map(str, ids)), f"{len(ids)}mun"
+    if all(x in uf for x in tokens):
+        ufs = sorted({uf[x] for x in tokens})
+        siglas = "-".join(sorted({k for k, v in uf.items() if v in ufs and not k.isdigit()}))
+        if nivel == 3:
+            return ufs, ",".join(map(str, ufs)), f"uf_{siglas}"
+        return sorted(m for m, e in mun_uf.items() if e in ufs), "in n3 " + ",".join(map(str, ufs)), f"mun_de_{siglas}"
+    raise SystemExit(f"--locais: use só códigos de município (7 dígitos) OU só UFs (sigla ou código), sem misturar: {tokens}")
+
+
 def resolver_pedido(tab, cats, args_cat):
     """{posicao: [códigos]} das categorias a carregar em cada classificação."""
     pedidas = {}
@@ -318,6 +360,7 @@ def main():
     ap.add_argument("--simular", action="store_true")
     ap.add_argument("--sem-bruto", action="store_true")
     ap.add_argument("--aceitar-queda", action="store_true")
+    ap.add_argument("--locais", help="recorte territorial: municípios (7 dígitos, nível n6) ou UFs (sigla/código; n3, ou n6 = municípios delas)")
     args = ap.parse_args()
     if args.tabela not in CFG["tabelas"]:
         raise SystemExit(f"tabela {args.tabela} não consta em ibge/sidra/config.yaml (tabelas: {sorted(CFG['tabelas'])})")
@@ -335,6 +378,9 @@ def main():
 
     conn = db.conectar()
     fonte = db.id_fonte(conn, CFG["fonte"])
+    locais_ids, territorios, rotulo_locais = (None, "all", "") if not args.locais else resolver_locais(conn, args.locais, nivel)
+    if args.locais:
+        log(f"recorte territorial: {len(locais_ids)} {'municípios' if nivel == 6 else 'UFs'} ({args.locais})")
     cats, variaveis = enumerar(tab)
     if args.listar:
         listar(conn, tab, cats)
@@ -363,12 +409,14 @@ def main():
 
         log(f"== 2) total do Brasil do recorte, para validar a soma dos {'municípios' if nivel == 6 else 'estados'}")
         nac = {}
-        if nivel in (6, 3):
+        if args.locais:
+            log("  recorte por --locais: a soma não é o Brasil, conferência pulada")
+        elif nivel in (6, 3):
             for r in sidra.valores_cubo(tab["id"], "n1", tab["variaveis"], tab["periodos"], classes_pedido):
                 nac[(r["D3C"], r["D2C"], tuple(r[f"D{4 + k}C"] for k in range(len(tab["classificacoes"]))))] = sidra.parse_valor(r["V"])
 
         log(f"== 3) coleta no nível {nivel_n} ({len(tab['variaveis'])} variável(is), {len(tab['periodos'])} período(s); a API é lenta, é normal demorar)")
-        regs = sidra.valores_cubo(tab["id"], nivel_n, tab["variaveis"], tab["periodos"], classes_pedido)
+        regs = sidra.valores_cubo(tab["id"], nivel_n, tab["variaveis"], tab["periodos"], classes_pedido, territorios)
         carga.lidas += len(regs)
         log(f"  {len(regs):,} valores lidos em {time.time() - t0:.0f} s".replace(",", "."))
         linhas, somas, sigilos, rejeitados = transformar(regs, tab, escolhidas, ids_cat, nivel, municipios_dim, estados_dim, guardar)
@@ -381,7 +429,7 @@ def main():
                 cur.execute("SELECT min(id) FROM catalogo.cargas")
                 id_carga = cur.fetchone()[0]
         novos, fechados, reabertos, antes = reconciliar(conn, tab, nivel, escolhidas_ids, tab["variaveis"], tab["periodos"], linhas, id_carga,
-                                                       hoje, CFG["max_queda"], args.aceitar_queda)
+                                                       hoje, CFG["max_queda"], args.aceitar_queda, locais_ids)
         carga.inseridas += novos
         carga.atualizadas += fechados
         log(f"  vigentes antes: {antes:,}; no SIDRA agora: {len(linhas):,}; novas versões: {novos:,}; fechadas: {fechados:,}; reabertas: {reabertos:,}"
@@ -416,7 +464,7 @@ def main():
             conn.execute("INSERT INTO catalogo.sidra_recorte (id_tabela, nivel, periodo_inicio, periodo_fim, filtros, linhas_lidas, linhas_gravadas, id_carga) "
                          "VALUES (%s, %s, %s, %s, %s::jsonb, %s, %s, %s)",
                          (tab["id"], nivel, int(min(tab["periodos"])), int(max(tab["periodos"])),
-                          json.dumps({"classificacoes": classes_pedido, "variaveis": tab["variaveis"], "periodos": tab["periodos"]}),
+                          json.dumps({"classificacoes": classes_pedido, "variaveis": tab["variaveis"], "periodos": tab["periodos"], "locais": args.locais}),
                           len(regs), len(linhas), carga.id))
             registrar_dataset(conn, "IBGE - SIDRA (camada genérica de valores)", "tabular.sidra_valor", fonte,
                               licenca="Dados abertos do IBGE (citar a fonte); confirmar termos",
@@ -428,8 +476,8 @@ def main():
                                   for k, c in enumerate(tab["classificacoes"]) if c["filtro"] == "pedido")
                 guardados = [r for r in regs if r["V"] not in ("-", "...", "..", "")]
                 destino, n = bruto.salvar_jsonl_gz(
-                    RAIZ / "bruto" / f"sidra_{args.tabela}", f"{args.tabela}_{rotulo}_{nivel_n}", guardados,
-                    fonte=f"https://apisidra.ibge.gov.br/values/t/{args.tabela}/{nivel_n}/all/v/{','.join(tab['variaveis'])}/p/{','.join(tab['periodos'])}",
+                    RAIZ / "bruto" / f"sidra_{args.tabela}", f"{args.tabela}_{rotulo}_{nivel_n}{'_' + rotulo_locais if rotulo_locais else ''}", guardados,
+                    fonte=f"https://apisidra.ibge.gov.br/values/t/{args.tabela}/{nivel_n}/{territorios}/v/{','.join(tab['variaveis'])}/p/{','.join(tab['periodos'])}",
                     filtro="células '-' (zero) e '...' (não se aplica) omitidas; 'X' (sigilo) mantidas; demais como a API devolveu",
                     extra={"classificacoes": classes_pedido})
                 log(f"  bruto {destino.name}: {n} registros")

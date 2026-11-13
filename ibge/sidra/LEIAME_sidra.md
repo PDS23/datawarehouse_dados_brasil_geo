@@ -66,6 +66,23 @@ GROUP BY 1, 2;
 
 Cada carga confere a soma dos municípios com o total do Brasil em cada célula e avisa se houver diferença que o sigilo não explique.
 
+### Recorte territorial (`--locais`)
+
+Sem `--locais`, o nível pedido vem inteiro (todos os municípios em `n6`, todas as UFs em `n3`). Com ele, só os locais da lista:
+
+```powershell
+# só estes municípios (códigos IBGE de 7 dígitos), nível n6
+.\infra\scripts\dw.ps1 etl ibge/sidra/scripts/sidra.py --tabela 9515 --nivel n6 --locais "1500107,1501204"
+# todos os municípios de uma ou mais UFs (sigla ou código da UF), nível n6
+.\infra\scripts\dw.ps1 etl ibge/sidra/scripts/sidra.py --tabela 9515 --nivel n6 --locais "PA,MT"
+# só estas UFs, nível n3
+.\infra\scripts\dw.ps1 etl ibge/sidra/scripts/sidra.py --tabela 9515 --nivel n3 --locais "PA,51"
+```
+
+Vírgula ou espaço separam os locais (não misture municípios e UFs na mesma lista). Com recorte, a reconciliação de versões **só olha os locais pedidos**
+(o que já está gravado para os outros municípios ou UFs não é fechado), a conferência com o total do Brasil é pulada (a soma de um recorte não é o Brasil)
+e o arquivo bruto ganha o recorte no nome. `catalogo.sidra_recorte.filtros` registra os `locais`.
+
 ## Acrescentar uma tabela do SIDRA
 
 Só edite `config.yaml` (sem SQL novo): número da tabela, pesquisa, períodos, variáveis e a lista de classificações na ordem que virará
@@ -77,12 +94,13 @@ Se a tabela precisar de mais de 6 classificações ou de um nível além de Bras
 | Tabela SIDRA | Conteúdo | Estado |
 |---|---|---|
 | 6956 | Censo Agropecuário 2017: estabelecimentos com lavoura permanente (municípios) | em uso: `tabular.ibge_censoagro2017_estab_lavoura_perm` é a visão tipada (sql/02); ver HISTORICO.md |
-| 202, 9923 | Censo Demográfico 2010 e 2022: população residente por situação do domicílio | carregadas em 2026-10-27 (municípios, UF e Brasil) para o diagnóstico do Baixo Tocantins |
+| 202, 9923 | Censo Demográfico 2010 e 2022: população residente por situação do domicílio | carregadas em 2026-10-27 (municípios, UF e Brasil), sob demanda |
 | 9515 | Censo 2022: razão de sexo (tabela sem classificações: carrega sem `--cat`) | idem |
 | 10268, 10299, 10261 | Censo 2022: ocupação 10+, rendimento 14+ por sexo, posição na ocupação (formal/informal) | idem |
 | 10295 | Censo 2022: rendimento domiciliar per capita (RDPC) | idem |
 | 9542, 9543, 10061 | Censo 2022: alfabetização 15+ (contagem e taxa), nível de instrução 18+ | idem |
 | 6804, 6805, 6806 | Censo 2022: abastecimento de água, esgotamento sanitário, banheiro | idem |
+| 289, 291, 5930 | PEVS: extração vegetal e silvicultura (quantidade e valor, todos os produtos) e área de silvicultura, 2016-2025 | carregadas em 2026-11-05 (municípios, UF e Brasil), sob demanda. A quantidade tem unidade por produto (`id_unidade`); as categorias incluem grupos e subgrupos (não somar todas) |
 
 Nas tabelas do Censo Demográfico, os eixos que não foram pedidos ficam fixos no "Total" (`config.yaml`). Onde a variável é taxa, razão, média ou mediana,
 a conferência "soma dos municípios = Brasil" sempre acusa divergência (esses valores não se somam): é esperado. Nas tabelas da amostra (emprego, rendimento,

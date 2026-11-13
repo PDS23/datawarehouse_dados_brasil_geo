@@ -21,7 +21,7 @@ tabelas:
       - {codigo: "220", filtro: todas, excluir: ["110085"], faixas: true}  # grupos de área total (Total fora)
       - {codigo: "829", filtro: fixa, categorias: ["46302"]}            # tipologia: sempre Total (sem separar agricultura familiar/Pronaf/Pronamp)
 
-  # ---------------------------------------------------------------- Censo Demográfico (pedido de 2026-10-27: diagnóstico do Baixo Tocantins, PA)
+  # ---------------------------------------------------------------- Censo Demográfico (pedido sob demanda de 2026-10-27)
   # Eixos que o diagnóstico não usa ficam FIXOS no "Total". Onde a variável é taxa, razão, média ou mediana, o "Total" fica DENTRO do recorte:
   # esses valores não se somam, e a conferência "soma dos municípios = Brasil" avisa divergência nessas células (esperado).
   "202":
@@ -184,3 +184,39 @@ tabelas:
     classificacoes:
       - {codigo: "458", filtro: pedido}                        # existência de banheiro ou sanitário
       - {codigo: "11558", filtro: fixa, categorias: ["46292"]}  # esgotamento: Total
+
+  # ---------------------------------------------------------------- PEVS (pedido sob demanda de 2026-11-05)
+  # A quantidade (144 / 142) tem unidade POR PRODUTO (toneladas, m³, mil frutos...): vem por valor em id_unidade; não some produtos diferentes.
+  # As categorias incluem grupos e subgrupos (ex.: "1 - Alimentícios" e "1.1 - Açaí"): somar todas as categorias conta em dobro.
+  "289":
+    pesquisa: {codigo: pevs, nome: "Produção da Extração Vegetal e da Silvicultura"}
+    nome: "Quantidade produzida e valor da produção na extração vegetal, por tipo de produto extrativo"
+    periodicidade: anual
+    nivel_padrao: n6
+    periodos: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
+    variaveis: ["144", "145"]               # quantidade produzida; valor da produção (mil reais de 1994 em diante)
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "193", filtro: pedido}     # tipo de produto extrativo (ver --listar)
+
+  "291":
+    pesquisa: {codigo: pevs, nome: "Produção da Extração Vegetal e da Silvicultura"}
+    nome: "Quantidade produzida e valor da produção na silvicultura, por tipo de produto da silvicultura"
+    periodicidade: anual
+    nivel_padrao: n6
+    periodos: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
+    variaveis: ["142", "143"]
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "194", filtro: pedido}     # tipo de produto da silvicultura
+
+  "5930":
+    pesquisa: {codigo: pevs, nome: "Produção da Extração Vegetal e da Silvicultura"}
+    nome: "Área total existente em 31/12 dos efetivos da silvicultura, por espécie florestal"
+    periodicidade: anual
+    nivel_padrao: n6
+    periodos: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
+    variaveis: ["6549"]                     # hectares
+    guardar_simbolos: false
+    classificacoes:
+      - {codigo: "734", filtro: pedido}     # espécie florestal
