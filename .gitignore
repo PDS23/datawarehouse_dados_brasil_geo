@@ -41,13 +41,15 @@ infra/monitoramento/
 infra/logs/
 *.log
 
+# Aplicações para clientes (projetos/): uso interno, NUNCA versionar — dados, listas de produtores, CAR, resultados e scripts de cada pedido
+# (decisão de 2026-11-13: o data warehouse é o projeto; as aplicações dele para clientes são outra coisa)
+projetos/
+
 # Material interno, pessoal ou de clientes: fica fora do repositorio publico (decisao de 2026-10-23; revisar antes do primeiro commit)
 HANDOFF_DESKTOP.md
 DICAS_DESENVOLVIMENTO_VAGAS.md
 infra/MIGRACAO_DESKTOP.md
 infra/migracao/
-projetos/mda/
-projetos/cecafe/
 **/*.xlsx
 pam_soja_2015_2025.sql
 
@@ -72,7 +74,6 @@ infra/postgres/analistas_setup.sql
 infra/postgres/novo_analista.sql
 infra/scripts/monitorar_docker_tailscale.ps1
 .claude/skills/
-projetos/wcs/
 
 # Configuracao local do assistente de IA (permissoes de comando desta maquina)
 .claude/

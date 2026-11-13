@@ -253,7 +253,7 @@ referência que todo dataset novo segue.
 > `README.md` na raiz (com o diagrama do banco), `LICENSE` (MIT; o titular está só como "Pedro": trocar pelo nome completo antes de publicar),
 > `.gitignore` reforçado (sem dados, segredos, logs, infraestrutura de acesso em equipe, material interno e trabalhos de clientes) e varredura de
 > segredos, e-mails e IPs nos arquivos versionados (nenhum segredo encontrado; identificadores trocados por placeholders). **Fora do repositório público,
-> por decisão do usuário:** `infra/tailscale/`, `infra/colab/`, `pg_hba`, papéis de analistas, `projetos/mda` e `projetos/cecafe`, `HANDOFF_DESKTOP.md`,
+> por decisão do usuário:** `infra/tailscale/`, `infra/colab/`, `pg_hba`, papéis de analistas, `projetos/` inteira (aplicações para clientes, uso interno; regra de 2026-11-13), `HANDOFF_DESKTOP.md`,
 > `DICAS_DESENVOLVIMENTO_VAGAS.md` e `infra/migracao/`. **Resolvido depois (2026-10-23):** autor dos commits = `Pedro Henrique da Silva` com o e-mail noreply do GitHub (o e-mail pessoal não aparece no histórico público), `.gitattributes` com fim de linha LF e `infra/LEIAME_infra.md` reescrito. `LICENSE` com o nome completo e repositório criado no GitHub (`PDS23/datawarehouse_dados_brasil_geo`). **Falta:** enviar (só quando o usuário pedir) e conferir lá a renderização do README.
 
 

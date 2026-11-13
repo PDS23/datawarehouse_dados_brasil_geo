@@ -13,8 +13,9 @@ ibge/PAM/
 ├── sql/01_esquema.sql   dim.cultura e tabular.ibge_pam (DDL, por administrador)
 ├── sql/02_unidade_valor.sql   coluna unidade_valor (para bancos criados antes dela)
 ├── scripts/pam.py       coleta e carga          
+├── scripts/validar_mate_rs.py + mate_rs_2023_2025_ibge_pam.csv   teste de regressão contra a coleta manual de erva-mate do RS
 ├── bruto/sidra_5457/    pam_<cod>_<ini>-<fim>.jsonl.gz + manifesto (fora do git)
-(a coleta manual de erva-mate do RS e o teste de regressão estão em projetos/mate_rs/)
+(a coleta manual de erva-mate do RS não entra no banco: serve só de gabarito para o teste de regressão)
 ```
 
 ## Modelo
@@ -69,7 +70,7 @@ docker compose -f docker-compose.stack.yml -f docker-compose.etl.yml run --rm et
 # ensaio sem gravar (uma transação desfeita no fim)
 ... run --rm etl ibge/PAM/scripts/pam.py --culturas laranja --simular
 # teste de regressão contra a coleta manual de erva-mate do RS
-... run --rm etl projetos/mate_rs/validar_mate_rs.py
+... run --rm etl ibge/PAM/scripts/validar_mate_rs.py
 ```
 
 Reexecutar é seguro: o upsert só regrava linhas cujo valor mudou.

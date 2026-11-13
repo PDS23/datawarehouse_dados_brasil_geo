@@ -1,5 +1,5 @@
 """Teste de regressão da automação do PAM: compara tabular.ibge_pam com a coleta MANUAL de erva-mate do RS
-(projetos/mate_rs/mate_rs_2023_2025_ibge_pam.csv, baixada à mão do SIDRA).
+(mate_rs_2023_2025_ibge_pam.csv, ao lado deste script, baixada à mão do SIDRA; só gabarito, não entra no banco).
 
 Para cada município do CSV e cada ano (2023-2025) compara:
   area_destinada_colheita_ha_AAAA   com  area_plantada_ha        (variável 8331)

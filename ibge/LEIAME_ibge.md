@@ -54,7 +54,7 @@ data de atualização gravada no `.dbf` de cada arquivo (`ogrinfo`, campo
 | `pedo_area/` | BDiA pedologia | 2021 (`.dbf` 24/06/2021) | 1:250.000 | `informacoes_ambientais/pedologia/vetores/escala_250_mil/versao_2021/pedo_area.zip` |
 | `vege_area/` | BDiA vegetação | 2026 (`.dbf` 08/06/2026) | 1:250.000 | `informacoes_ambientais/vegetacao/vetores/escala_250_mil/versao_2026/vege_area.zip` |
 | `Clima_5000mil/` | Mapa de Climas do Brasil | 2002 | 1:5.000.000 | `informacoes_ambientais/climatologia/vetores/brasil/Clima_5000mil.zip` |
-| `projetos/mate_rs/` | SIDRA Tabela 1613 (erva-mate, RS; coleta manual, projeto) | 2023–2025 | n/a | <https://sidra.ibge.gov.br/tabela/1613> |
+| `PAM/scripts/mate_rs_2023_2025_ibge_pam.csv` | SIDRA Tabela 1613 (erva-mate, RS; coleta manual usada só como teste de regressão do PAM) | 2023–2025 | n/a | <https://sidra.ibge.gov.br/tabela/1613> |
 
 Pastas de versão existentes hoje para geologia, geomorfologia, pedologia e
 vegetação: 2017, 2018, 2019, 2021, 2023, 2025 e 2026. **Geomorfologia e

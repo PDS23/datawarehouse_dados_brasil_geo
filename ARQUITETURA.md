@@ -242,7 +242,7 @@ Alinhado ao padrão em 2026-10-20: `sicar/imoveis`, `ibge/censo_agropecuario` (e
 (só o download é script; falta `config.yaml`, `sql/` e carga), `elevacao/topodata` e `mapbiomas/uso_do_solo` (processamento
 feito por comandos soltos documentados no LEIAME; falta script). Os rasters ficam onde estão: GeoServer e
 `catalogo.datasets` apontam para esses caminhos. Em `ibge/`, `municipios/` e `PAM/` ainda têm sobras fora do padrão
-(sem sobras: `PAM/mate` foi para `projetos/mate_rs/` em 2026-10-20).
+(sem sobras: `PAM/mate` foi para `projetos/mate_rs/` em 2026-10-20 e voltou como teste de regressão em `ibge/PAM/scripts/` em 2026-11-13).
 
 **Decisão explícita**: a raiz do repositório é organizada **por fonte**,
 não por tipo de dado (`vetorial/`, `raster/` como pastas físicas) — essa
