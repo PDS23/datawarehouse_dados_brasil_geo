@@ -15,6 +15,8 @@ Estado e decisões: `ROADMAP.md` (o que falta), `ARQUITETURA.md` (como é), diá
 - **depois de criar, alterar ou remover tabela, view ou chave estrangeira, regenerar o diagrama** (`dw.ps1 etl infra/scripts/gerar_diagrama_banco.py`; se uma tabela nova
   não aparecer, acrescente-a ao `LAYOUT` do script) **e republicar o artefato do esquema** (https://claude.ai/artifact/1EkaSLVbEXyWXg6QW9xPiW, arquivo `infra/diagrama/modelo_banco_pagina.html`). **Descreva toda coluna nova** em
   `infra/diagrama/descricoes_colunas.yaml` (o que é e de onde vem) e aplique (`dw.ps1 etl infra/scripts/aplicar_descricoes_colunas.py`, depois `dw.ps1 psql -Arquivo infra/diagrama/descricoes_colunas.sql`): é o texto do balão do esquema;
+  **e libere para o servidor MCP**: coluna com dado pessoal entra em `colunas_pessoais` (mesmo YAML), depois `dw.ps1 etl servicos/consulta_ia/scripts/gerar_permissoes.py` e
+  `dw.ps1 psql -Arquivo servicos/consulta_ia/sql/permissoes_consulta_ia.sql` (sem isso a tabela ou coluna nova fica invisível para a IA: falha fechada);
 - comandos longos em segundo plano, adiantando o resto enquanto rodam.
 
 **Pergunte (e espere o "sim") só para:**

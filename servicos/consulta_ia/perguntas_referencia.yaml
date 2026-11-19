@@ -1,0 +1,64 @@
+# Perguntas de referência do servidor MCP de consulta: o SQL que uma IA bem orientada deveria escrever e o que o resultado precisa satisfazer.
+# Rodadas por scripts/testar.py a cada mudança no servidor ou no banco. Os números mudam a cada atualização das fontes, então as verificações
+# são faixas largas (detectam o quebrado, não o normal). Para avaliar uma IA: faça a pergunta a ela e compare com o SQL e a faixa daqui.
+#
+# verificacoes: colunas (nomes exatos), linhas_min, valor_min / valor_max (primeira célula), aviso (trecho que deve aparecer em avisos),
+#               sem_aviso (true = avisos vazio), tabela_lida (deve aparecer em proveniencia), geometria_resumida (coluna com resumo).
+
+perguntas:
+  - pergunta: Quantas UFs existem na dimensão de estados?
+    sql: SELECT count(*) AS n FROM dim.estados
+    verificacoes: {valor_min: 27, valor_max: 27}
+
+  - pergunta: Quantos municípios existem na malha do IBGE?
+    sql: SELECT count(*) AS n FROM dim.municipios
+    verificacoes: {valor_min: 5565, valor_max: 5580}
+
+  - pergunta: Quantos imóveis do CAR estão vigentes no Acre hoje?
+    sql: |
+      SELECT count(*) AS n FROM vetorial.sicar_imoveis
+      WHERE vigente_ate IS NULL AND id_estado = (SELECT id_estado FROM dim.estados WHERE sigla_uf = 'AC')
+    verificacoes: {valor_min: 40000, valor_max: 120000, sem_aviso: true, tabela_lida: vetorial.sicar_imoveis}
+
+  - pergunta: Quantos imóveis do CAR o banco tinha no Acre em 1º de novembro de 2026 (retrato em data passada)?
+    sql: |
+      SELECT count(*) AS n FROM vetorial.sicar_imoveis
+      WHERE id_estado = 12 AND vigente_desde <= DATE '2026-11-01' AND (vigente_ate IS NULL OR vigente_ate > DATE '2026-11-01')
+    verificacoes: {valor_min: 40000, valor_max: 120000, sem_aviso: true}
+
+  - pergunta: Quantas terras indígenas a FUNAI publica hoje?
+    sql: SELECT count(*) AS n FROM vetorial.funai_terras_indigenas WHERE vigente_ate IS NULL
+    verificacoes: {valor_min: 500, valor_max: 900}
+
+  - pergunta: Quantos termos de embargo do IBAMA com polígono estão vigentes em Mato Grosso?
+    sql: SELECT count(*) AS n FROM vetorial.ibama_embargos WHERE vigente_ate IS NULL AND geom IS NOT NULL AND id_estado = 51
+    verificacoes: {valor_min: 1, tabela_lida: vetorial.ibama_embargos}
+
+  - pergunta: Quanto do desmatamento do PRODES cai dentro de imóveis do CAR em Senador Guiomard (AC), em hectares?
+    sql: |
+      SELECT count(*) AS cruzamentos, round(sum(ST_Area(ST_Intersection(s.geom, p.geom)::geography)) / 10000) AS ha
+      FROM vetorial.sicar_imoveis s JOIN vetorial.prodes_desmatamento p ON ST_Intersects(s.geom, p.geom)
+      WHERE s.vigente_ate IS NULL AND p.vigente_ate IS NULL AND s.id_municipio = 1200450
+    verificacoes: {colunas: [cruzamentos, ha], valor_min: 1000, tabela_lida: vetorial.prodes_desmatamento}
+
+  - pergunta: Quantos empregadores constam hoje na lista suja do trabalho escravo, por UF (sem identificar ninguém)?
+    sql: |
+      SELECT e.sigla_uf, count(*) AS n FROM tabular.mte_cadastro_empregadores m JOIN dim.estados e USING (id_estado)
+      WHERE m.vigente_ate IS NULL GROUP BY 1 ORDER BY 2 DESC
+    verificacoes: {colunas: [sigla_uf, n], linhas_min: 5}
+
+  - pergunta: Quantos alertas do DETER foram vistos em 2025?
+    sql: SELECT count(*) AS n FROM vetorial.deter_alertas WHERE vigente_ate IS NULL AND view_date >= DATE '2025-01-01' AND view_date < DATE '2026-01-01'
+    verificacoes: {valor_min: 1000}
+
+  - pergunta: (resumo de geometria) Mostre dois imóveis do CAR do Acre com a geometria.
+    sql: SELECT cod_imovel, geom FROM vetorial.sicar_imoveis WHERE vigente_ate IS NULL AND id_estado = 12 LIMIT 2
+    verificacoes: {linhas_min: 2, geometria_resumida: geom}
+
+  - pergunta: (aviso) Contar imóveis do CAR do Acre sem filtrar a versão.
+    sql: SELECT count(*) AS n FROM vetorial.sicar_imoveis WHERE id_estado = 12
+    verificacoes: {aviso: "sem filtrar a versão"}
+
+  - pergunta: (aviso) Área em graus.
+    sql: SELECT ST_Area(geom) AS a FROM vetorial.funai_terras_indigenas WHERE vigente_ate IS NULL LIMIT 1
+    verificacoes: {aviso: "graus"}

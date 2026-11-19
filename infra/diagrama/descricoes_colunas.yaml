@@ -786,3 +786,16 @@ tabelas:
     geom_anomala: "Controle: true se a geometria caiu fora da caixa do Brasil (geom fica NULL)."
     geom_origem_texto: "Controle: geometria original em texto quando anômala."
     edicao: "Derivado: versão da BHO (ex.: 02_03) em que esta versão entrou."
+
+# Colunas com DADO PESSOAL (LGPD): nome, CPF/CNPJ, hash de CPF, tipo e validade do documento e texto livre que pode citar pessoas.
+# Quem lê esta lista: servicos/consulta_ia/scripts/gerar_permissoes.py, que dá ao papel consulta_ia (o servidor MCP, cujas respostas
+# vão para o provedor de IA escolhido pelo analista) SELECT em todas as colunas dos schemas de consulta MENOS estas. É a mesma regra das
+# views do GeoServer (infra/postgres/views_geoserver.sql). Coluna nova com dado pessoal: acrescente aqui ANTES de rodar o gerador.
+# O hash de CPF também fica de fora: é dado pseudonimizado, continua sendo dado pessoal.
+colunas_pessoais:
+  vetorial.ibama_embargos: [nome_embargado, cpf_cnpj_embargado, tipo_doc_embargado, cpf_embargado_hash, num_pessoa_embargo,
+                            des_tad, des_localizacao, justificativa_alteracao, des_desembargo]
+  vetorial.icmbio_areas_embargadas: [autuado, cpf_cnpj, tipo_doc_autuado, doc_valido, cpf_autuado_hash, obs]
+  vetorial.sema_mt_areas_embargadas: [nome, cpf_cnpj, tipo_doc_embargado, doc_valido, cpf_embargado_hash, obs]
+  vetorial.sema_mt_areas_desembargadas: [nome, cpf_cnpj, tipo_doc_embargado, doc_valido, cpf_embargado_hash, obs]
+  tabular.mte_cadastro_empregadores: [empregador, cpf_cnpj, tipo_doc_empregador, doc_valido, cpf_empregador_hash, estabelecimento]

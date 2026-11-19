@@ -1,0 +1,29 @@
+# Configuração do servidor MCP de consulta (servicos/consulta_ia). Versionada: mudar um limite é mudar este arquivo.
+
+papel: consulta_ia                       # papel do banco (servicos/consulta_ia/sql/papel_consulta_ia.sql)
+
+# Schemas que a IA pode consultar. "analises" (área de trabalho dos analistas) fica de fora: pode ter dado de projeto.
+schemas: [catalogo, dim, resultados, tabular, vetorial]
+
+consulta:
+  tempo_maximo_s: 60                     # SET LOCAL statement_timeout a cada chamada (o papel tem 120 s de teto)
+  linhas_padrao: 50                      # linhas devolvidas quando a IA não pede outro número
+  linhas_maximo: 500                     # teto de linhas devolvidas por chamada
+  # custo total estimado pelo EXPLAIN acima do qual a consulta é recusada. Calibrado em 2026-11-19 com PRODES x CAR por município
+  # (soma da área de interseção): Rio Branco 74 mi = 3,0 s; Sorriso 74 mi = 2,3 s; Altamira 256 mi = 5,4 s; uma UF inteira (MT) = 4,4 bi.
+  # 1 bi deixa passar qualquer município e recusa UF ou Brasil inteiros; o tempo_maximo_s segura o resto.
+  custo_maximo: 1000000000
+  texto_maximo: 400                      # caracteres por célula de texto; o resto é cortado com aviso
+  geometria: resumo                      # "resumo": tipo, área (ha), comprimento (km) e um ponto interno, em vez do WKB/WKT inteiro
+
+documentacao:
+  # Arquivos que ler_documentacao entrega. projetos/ (clientes) e segredos nunca entram.
+  raiz_arquivos: [ARQUITETURA.md, GUIA_DE_USO.md, README.md]
+  padrao_leiame: "**/LEIAME_*.md"
+  # Também fica fora o que o .gitignore guarda como infraestrutura interna (rede, papéis, Colab): só documentação pública vai para a IA.
+  excluir: ["projetos/**", "_dump/**", "**/bruto/**", "**/processado/**", "**/segredo/**", "infra/logs/**", "infra/migracao/**",
+            "infra/tailscale/**", "infra/colab/**", "infra/postgres/LEIAME_pg_hba.md", ".claude/**"]
+  caracteres_maximo: 60000
+
+registro:
+  pasta: infra/logs/consulta_ia          # um arquivo JSONL por mês (fora do git)

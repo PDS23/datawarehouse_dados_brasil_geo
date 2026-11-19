@@ -1032,3 +1032,21 @@ erDiagram
       fundiária fora do escopo, desmatamento fora (convergência de evidência), camadas estaduais só do estado do imóvel.
     O anexo sai junto com o resultado (página no PDF e arquivo próprio, CSV/JSON, na entrega) e o catálogo de versões fica consultável no banco para auditoria.
     O "limite de defasagem" deixa de existir como regra: vira o destaque no anexo da fonte cuja coleta está mais velha que o ritmo esperado dela.
+20. **Consulta por IA (servidor MCP) e visão de produto** — visão discutida em 2026-11-18/19: o projeto vira um **gerenciador de banco de dados público
+    geoespacial**. Engenheiros e arquitetos de dados reproduzem o código; analistas e cientistas de dados de qualquer setor usam o resultado. O histórico
+    das fontes é a identidade. Mudança entra primeiro em código; a interface só reproduz. O projeto complementa o QGIS, sem concorrer com ele.
+    - ✅ **Fase 1 feita em 2026-11-19:** servidor MCP somente leitura, sem dado pessoal, stdio, só nesta máquina
+      ([LEIAME](servicos/consulta_ia/LEIAME_consulta_ia.md)). Papel `consulta_ia` com permissão por coluna gerada de `colunas_pessoais`
+      (`infra/diagrama/descricoes_colunas.yaml`); 5 ferramentas; 32 testes passando.
+    - **Fase 2 (a aprovar):** transporte HTTP pela tailnet, atrás do Tailscale Serve, com a identidade do Tailscale no registro. Exige regra nova na
+      política do Tailscale.
+    - **Próximas etapas da visão (decididas, sem desenho ainda):**
+      - schema próprio por analista para gravar análises (as fontes continuam só leitura);
+      - gravar resultado com a versão das fontes usada (liga ao item 19);
+      - CNPJ da Receita Federal como pacote opcional, sob demanda;
+      - retenção como variável da instalação;
+      - instalação modular (escolher fontes e recorte territorial, ex.: UF); cuidado com o recorte: ausência de dado fora da cobertura não vale
+        como "limpo";
+      - nome do produto.
+    - **Licença:** fica MIT e público por enquanto (portfólio). Se houver monetização, a sugestão registrada é manter o núcleo aberto e as partes
+      pagas em repositório privado separado, em vez de fechar o repositório.

@@ -459,3 +459,16 @@ A partir daqui, **todo dataset novo já nasce seguindo esse padrão** (schema
 certo, `id_fonte` desde a criação, registro em `catalogo.datasets` assim que
 importado) — não é mais um retrofit, é o processo normal de adicionar dado
 novo. Ver [ROADMAP.md](ROADMAP.md) pra status/próximos datasets.
+
+## Serviços (`servicos/`)
+
+O que **usa** o banco, em vez de alimentá-lo, fica em `servicos/<serviço>/`, com a mesma estrutura das fontes (LEIAME, HISTORICO, `config.yaml`,
+`sql/`, `scripts/`). Primeiro serviço (2026-11-19): `servicos/consulta_ia/`, o servidor MCP de consulta por IA.
+
+Regras que valem para qualquer serviço:
+- **Papel próprio no banco, com o mínimo necessário.** O `consulta_ia` só faz `SELECT`, coluna a coluna, sem as colunas de `colunas_pessoais`.
+  Os papéis existentes (`leitura`, `etl`) não são reaproveitados para outra função.
+- **Falha fechada.** Tabela ou coluna nova não aparece para um serviço até ser liberada de propósito (gerador de permissões). Esquecer leva a
+  "não vê", nunca a "vê dado pessoal".
+- **Lógica testável sem o transporte.** O protocolo (MCP, e depois HTTP) é uma vitrine fina sobre funções Python comuns.
+- **Contêiner próprio**, com o repositório montado somente leitura e processo sem root.

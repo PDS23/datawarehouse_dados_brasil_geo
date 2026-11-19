@@ -1,0 +1,32 @@
+# Servidor MCP de consulta (servicos/consulta_ia): a IA do analista consulta o banco por ele, só leitura e sem dado pessoal.
+#
+# Fase 1 (só nesta máquina): transporte stdio. O cliente de IA (Claude Desktop, Claude Code...) inicia o contêiner e conversa com ele pela
+# entrada/saída padrão; nada fica exposto na rede. Comando que o cliente roda (a partir de qualquer pasta, caminhos absolutos):
+#   docker compose -f D:\data_warehouse\infra\docker-compose.stack.yml -f D:\data_warehouse\infra\docker-compose.consulta_ia.yml run --rm -T consulta_ia
+# Teste das ferramentas e das perguntas de referência (sem IA):
+#   docker compose -f docker-compose.stack.yml -f docker-compose.consulta_ia.yml run --rm -T --entrypoint python consulta_ia servicos/consulta_ia/scripts/testar.py
+#
+# Banco: papel consulta_ia (servicos/consulta_ia/sql/papel_consulta_ia.sql), senha CONSULTA_IA_PASSWORD do .env
+# (gerada por infra/scripts/senha_papel_servico.ps1), por "postgis":5432.
+services:
+  consulta_ia:
+    build:
+      context: ./consulta_ia
+    image: dw-consulta-ia:local
+    profiles: ["consulta_ia"]
+    depends_on:
+      postgis:
+        condition: service_healthy
+    environment:
+      PGHOST: postgis
+      PGPORT: "5432"
+      PGDATABASE: data_warehouse
+      PGUSER: consulta_ia
+      PGPASSWORD: ${CONSULTA_IA_PASSWORD:?defina CONSULTA_IA_PASSWORD no .env (rode infra/scripts/senha_papel_servico.ps1)}
+      CONSULTA_IA_ORIGEM: stdio
+      TZ: America/Sao_Paulo
+    stdin_open: true
+    volumes:
+      - ..:/app:ro                                        # código e documentação: o servidor não altera nada no repositório
+      - ./logs/consulta_ia:/app/infra/logs/consulta_ia    # único lugar com escrita: o registro das chamadas (fora do git)
+    working_dir: /app

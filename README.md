@@ -54,6 +54,10 @@ O banco tem 17 GB, 32 tabelas e 16 datasets catalogados. O esquema completo, ger
   objetos, e a criação das partições do SIDRA passa por uma função com os direitos do administrador.
 - **Sob demanda, por padrão.** Pipelines carregam só o que foi pedido (o SIDRA nunca carrega "tudo"). As fontes vivas são atualizadas por uma rotina
   agendada, com backup antes e depois (`infra/scripts/atualizar_fontes.ps1`).
+- **Consulta por IA, sem IA própria.** Um servidor MCP (protocolo aberto) deixa qualquer IA compatível consultar o banco: descobre as fontes, lê a
+  documentação, escreve o SQL e responde com fonte e data da coleta. Papel próprio só de leitura, com permissão **coluna a coluna** que deixa o dado
+  pessoal de fora (falha fechada: coluna nova só aparece depois de liberada), SQL embrulhado em subconsulta somente leitura, custo conferido pelo
+  `EXPLAIN` antes de rodar e 32 testes, incluindo os ataques que precisam ser barrados. Detalhes: [`servicos/consulta_ia/LEIAME_consulta_ia.md`](servicos/consulta_ia/LEIAME_consulta_ia.md).
 - **Estrutura de pastas idêntica por fonte:** `<órgão>/<fonte>/` com `LEIAME`, `HISTORICO.md`, `config.yaml`, `sql/`, `scripts/` e `bruto/`.
 
 ## Como o repositório está organizado
@@ -65,6 +69,7 @@ O banco tem 17 GB, 32 tabelas e 16 datasets catalogados. O esquema completo, ger
 │   ├── LEIAME_<fonte>.md · HISTORICO.md          ibge/{municipios,sidra,PAM}, incra/assentamentos, elevacao/topodata...
 │   ├── config.yaml · sql/ · scripts/ · bruto/    (bruto/ fica fora do git)
 ├── analises/                                     resultados derivados sob demanda (desmatamento por imóvel, PRODES x município)
+├── servicos/consulta_ia/                         servidor MCP: a IA do analista consulta o banco (só leitura, sem dado pessoal)
 ├── scripts_comuns/dwlib/                         biblioteca dos pipelines: banco, HTTP com retentativa, WFS, SIDRA, catálogo de cargas
 └── infra/                                        Docker (PostGIS, GeoServer, contêiner de ETL), backup, retenção,
                                                   atualização agendada, diagrama do banco, publicação do GeoServer
