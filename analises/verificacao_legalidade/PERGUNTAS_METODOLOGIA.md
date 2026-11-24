@@ -19,6 +19,7 @@ decisão, há uma **Nota**. O foco é **cada camada**: o que ela diz, o que vamo
    **Decisão:** reparar sempre (`ST_MakeValid`) e seguir com a análise.
 5. **Imóvel do SICAR:** quais status aceitos (ativo, pendente, suspenso, cancelado)? Imóvel cancelado reprova?
    **Decisão:** a análise roda para qualquer status, e o resultado informa o status do CAR. Status diferente de **ativo** ou **pendente** não passa no critério do CAR.
+   **Polígono sem CAR** (decidido em 2026-11-24, alinhado ao AB+S): quando a entrada é só um polígono e não há CAR para ele, o critério do CAR **reprova**.
 6. **Data de referência:** hoje, a data da produção/colheita ou a do embarque?
    **Decisão:** a data em que a análise roda. **Com rastreabilidade para auditoria:** rodar de novo no futuro tem de dar o mesmo resultado. Para isso, o usuário propôs
    **versão por fonte** e **versão do banco = o conjunto das versões das fontes** naquele momento, com **backup só das fontes que mudaram** (e não do banco inteiro).
@@ -28,6 +29,9 @@ decisão, há uma **Nota**. O foco é **cada camada**: o que ela diz, o que vamo
 
 7. **Tolerância:** área mínima e/ou percentual para não acusar ruído de borda?
    **Decisão:** duas versões: **sem tolerância** e **com tolerância de 1%** (a testar, para comparar as duas).
+   **Terra indígena e quilombola** (decidido em 2026-11-24): adotamos a **tolerância por porte do AB+S (MAPA)** no lugar dos 1%: sobreposição acima de 10% da
+   área do imóvel (até 100 ha), 8% (100 a 499,9999 ha), 6% (500 a 999,9999 ha), 4% (1.000 a 2.999,9999 ha) ou 2% (3.000 ha ou mais) reprova. A versão sem
+   tolerância continua rodando para comparação. As demais camadas seguem sem tolerância e com 1%.
 8. **Onde conta a sobreposição:** no imóvel inteiro, ou só na parte produtiva?
    **Decisão:** no polígono que está sendo analisado; para o Brasil, a priori, o imóvel inteiro.
 9. **Buffer/entorno:** alguma camada exige distância? **Decisão:** não; só interseção direta.
@@ -52,8 +56,12 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 ## D. Imóvel, posse e terra pública (SICAR, SIGEF, INCRA, SFB)
 
 20. **Sobreposição entre CAR:** reprova? **Decisão:** não reprova; o resultado leva um **alerta de sobreposição**.
-21. **SIGEF/SNCI:** exigir o imóvel certificado para comprovar posse? **Decisão:** fica fora da análise.
+21. **SIGEF/SNCI:** exigir o imóvel certificado para comprovar posse? **Decisão:** fica fora da análise. **Lacuna registrada (2026-11-24):** o AB+S cruza o
+    polígono do SIGEF com o do CAR e **impede** quando as duas áreas são completamente distintas; não fazemos esse cruzamento porque o INCRA está fora do ar.
+    Quando voltar, avaliar incluir o critério com a mesma regra (sobreposição = conforme; sem SIGEF = alerta; áreas distintas = reprova).
 22. **Direitos de uso da terra** (matrícula, CCIR, ITR): **Decisão:** ficam fora; o resultado avisa que a análise não cobre a documentação fundiária.
+    **Lacuna registrada (2026-11-24):** o AB+S **impede** quando os dados cadastrais do imóvel no **SNCR** (INCRA) são inválidos; o SNCR não tem base pública
+    aberta (é consultado pelo CPF/CNPJ do titular, com login gov.br), então fica como limitação do relatório.
 23. **Florestas públicas não destinadas:** sobreposição reprova? **Decisão:** não reprova; o resultado leva um **alerta**.
 24. **Assentamentos:** sobreposição reprova? **Decisão:** não são analisados.
 25. **Outras terras públicas:** terras da União, áreas militares, faixa de fronteira.
@@ -110,14 +118,35 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
     CECAFÉ cobrem (o notebook v4 usa CAR, PRODES e MapBiomas Alerta, que é desmatamento); a regra de diferença aceita ficou sem resposta, e o padrão proposto é
     explicar cada diferença por escrito, sem percentual.
 
+## I. Comparação com a qualificação socioambiental do AB+S (MAPA)
+
+Conferido em 2026-11-24 no FAQ da Plataforma Agro Brasil + Sustentável (MAPA, página atualizada em 15/12/2025), seção "Qualificação socioambiental do
+estabelecimento rural". O AB+S avalia 11 critérios; a análise "Área de produção para exportação" do AB+S junta essa qualificação com a ausência de supressão
+de vegetação nativa nos talhões depois de 31/12/2020, a mesma divisão que fizemos entre legalidade e convergência de evidência.
+| Critério | AB+S | Nesta metodologia |
+|---|---|---|
+| SNCR (dados cadastrais, INCRA) | impeditivo | **lacuna**: sem base pública (pergunta 22) |
+| SIGEF-GEO (existência de geometria) | informativo | fora (INCRA fora do ar) |
+| SIGEF × CAR | impeditivo se as áreas forem distintas; sem SIGEF não impede | **lacuna** até o INCRA voltar (pergunta 21) |
+| CAR | só ativo ou pendente; ausência impede | igual (pergunta 5) |
+| Lista suja (MTE) | impeditivo (proprietários do SNCR) | igual, quando o CPF/CNPJ vier (opcional) |
+| Terra indígena | impeditivo, tolerância por porte | igual, tolerância por porte adotada |
+| Quilombola | impeditivo (INCRA), tolerância por porte | igual na regra; fonte IBGE 2022 até o INCRA voltar |
+| Embargos IBAMA | informativo (recomendado tornar impeditivo); polígono ou coordenada dentro do imóvel | **mais rigoroso**: polígono reprova, ponto vira alerta |
+| Unidade de conservação | qualquer sobreposição é não conforme, não impeditivo | **mais rigoroso**: Proteção Integral reprova |
+| Florestas públicas (CNFP) | informativo | igual (alerta) |
+| PRODES | informativo | fora (convergência de evidência) |
+| Embargos ICMBio, estaduais, área militar | não avalia | avaliamos |
+
 ## Resumo das regras decididas
 
 | Camada | Regra |
 |---|---|
-| CAR (SICAR) | analisa qualquer status; só ativo ou pendente passa; CAR sobreposto vira alerta |
-| Terra indígena (FUNAI) | todas as fases da camada reprovam |
+| CAR (SICAR) | analisa qualquer status; só ativo ou pendente passa; polígono sem CAR reprova; CAR sobreposto vira alerta |
+| Terra indígena (FUNAI) | todas as fases da camada reprovam, com a tolerância por porte do AB+S (10% a 2% da área) |
 | Unidade de conservação (CNUC) | só polígonos; por grupo: Proteção Integral reprova, Uso Sustentável passa (APA e ARIE sem alerta; RPPN, RESEX, RDS, Floresta e Reserva de Fauna com alerta) |
-| Quilombola | IBGE 2022 até o INCRA voltar; reprova |
+| Quilombola | IBGE 2022 até o INCRA voltar; reprova, com a tolerância por porte do AB+S |
+| SNCR e SIGEF × CAR | lacunas registradas nas limitações (avaliados pelo AB+S; INCRA fora do ar e SNCR sem base pública) |
 | Embargos IBAMA e ICMBio | vigente = sem desembargo nem cancelamento, de qualquer data; por polígono (ponto vira alerta) e por CPF/CNPJ quando o documento vier (exato reprova, raiz do CNPJ alerta); julgamento do ICMBio só informa |
 | Embargos estaduais | só rodam no estado da camada (SEMA-MT só para MT); outros estados a levantar |
 | Lista suja (MTE) | por CPF/CNPJ, só quando o documento vier; só a edição atual; lacuna do TAC aceita |
@@ -127,7 +156,7 @@ As camadas que o usuário já listou para a convergência de evidência ficam re
 | Área militar | reprova (camada a pesquisar) |
 | Assentamentos, terras da União, faixa de fronteira, APP, reserva legal, áreas prioritárias | não analisados |
 | Desmatamento | fora: vai para a convergência de evidência |
-| Geral | reparar geometria; sem buffer; duas versões (sem tolerância e 1%); área geodésica; cada polígono analisado sozinho |
+| Geral | reparar geometria; sem buffer; duas versões (sem tolerância e 1%; TI e quilombola com a tolerância por porte); área geodésica; cada polígono analisado sozinho |
 | Resultado | por polígono e critério (passa, reprova, alerta, não verificado, não se aplica, sem dado); planilha, GeoJSON e PDF; sem nome do embargado; perfil padrão + configuração por cliente |
 | Tempo | data da execução; resultado guardado com a versão do banco; anexo "Fontes e versões" e seção "Limitações" (idade do dado não muda o resultado; ROADMAP item 19) |
 | Validação | todos os lotes já analisados do CECAFÉ (conferir quais critérios cobrem) |
