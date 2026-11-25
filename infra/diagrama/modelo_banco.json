@@ -5,8 +5,8 @@
    "sch": "catalogo",
    "nome": "cargas",
    "view": false,
-   "linhas": 191,
-   "bytes": 131072,
+   "linhas": 210,
+   "bytes": 147456,
    "coment": "Uma linha por execução de pipeline: quem rodou, quando, com que parâmetros e quantas linhas.",
    "cols": [
     {
@@ -100,8 +100,8 @@
    "sch": "catalogo",
    "nome": "coletas",
    "view": false,
-   "linhas": 148,
-   "bytes": 155648,
+   "linhas": 218,
+   "bytes": 172032,
    "coment": "Cada coleta de dados de uma fonte (dataset x recorte): origem, metodo, quando e quanto. A ultima de cada recorte esta em catalogo.v_ultima_coleta.",
    "cols": [
     {
@@ -230,7 +230,7 @@
    "sch": "catalogo",
    "nome": "coletas_duplicados",
    "view": false,
-   "linhas": 43,
+   "linhas": 45,
    "bytes": 90112,
    "coment": "cod_imovel repetido no WFS do CAR: a feicao mantida e a descartada de cada coleta, com a regra aplicada.",
    "cols": [
@@ -1571,8 +1571,8 @@
    "sch": "tabular",
    "nome": "mte_cadastro_empregadores",
    "view": false,
-   "linhas": 508,
-   "bytes": 450560,
+   "linhas": 518,
+   "bytes": 458752,
    "coment": "Cadastro de Empregadores que submeteram trabalhadores a condição análoga à de escravo (a lista suja), do Ministério do Trabalho e Emprego; 508 empregadores na carga de 27/10/2026. Sem geometria. Espelho versionado: vigente = consta na lista hoje (o MTE retira os nomes após 2 anos). Dado pessoal: CPF só como HMAC. Ver mte/cadastro_empregadores/LEIAME_cadastro_empregadores.md.",
    "cols": [
     {
@@ -5156,8 +5156,8 @@
    "sch": "vetorial",
    "nome": "deter_alertas",
    "view": false,
-   "linhas": 599537,
-   "bytes": 719822848,
+   "linhas": 633393,
+   "bytes": 786849792,
    "coment": "DETER (INPE): alertas de desmatamento e degradação quase em tempo real, Amazônia e Cerrado, do servidor de mapas do TerraBrasilis. Espelho versionado: vigente = vigente_ate IS NULL. É um sistema de alerta, não o dado oficial de desmatamento (PRODES). Ver deter/alertas/LEIAME_deter_alertas.md.",
    "cols": [
     {
@@ -5377,8 +5377,8 @@
    "sch": "vetorial",
    "nome": "funai_terras_indigenas",
    "view": false,
-   "linhas": 665,
-   "bytes": 30949376,
+   "linhas": 683,
+   "bytes": 32464896,
    "coment": "Terras indígenas (poligonais) da FUNAI, camada Funai:tis_poligonais do servidor de mapas da FUNAI. Espelho versionado: vigente = vigente_ate IS NULL. Ver funai/terras_indigenas/LEIAME_terras_indigenas.md.",
    "cols": [
     {
@@ -5577,8 +5577,8 @@
    "sch": "vetorial",
    "nome": "ibama_embargos",
    "view": false,
-   "linhas": 117636,
-   "bytes": 224886784,
+   "linhas": 118404,
+   "bytes": 228114432,
    "coment": "Termos de embargo do IBAMA, do CSV dos dados abertos (regerado todo dia). Espelho versionado: vigente = vigente_ate IS NULL. Traz o nome do embargado e o CNPJ como o IBAMA publica; o CPF de pessoa física só como hash. Ver ibama/embargos/LEIAME_embargos.md.",
    "cols": [
     {
@@ -7415,8 +7415,8 @@
    "sch": "vetorial",
    "nome": "icmbio_areas_embargadas",
    "view": false,
-   "linhas": 14886,
-   "bytes": 39903232,
+   "linhas": 14954,
+   "bytes": 40001536,
    "coment": "Áreas embargadas do ICMBio (camada pública do ArcGIS Online do ICMBio): uma linha por polígono; 14.779 na carga de 27/10/2026. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome do autuado como a fonte publica. Ver icmbio/areas_embargadas/LEIAME_areas_embargadas.md.",
    "cols": [
     {
@@ -7878,8 +7878,8 @@
    "sch": "vetorial",
    "nome": "mapbiomas_alerta",
    "view": false,
-   "linhas": 546536,
-   "bytes": 917315584,
+   "linhas": 553016,
+   "bytes": 948854784,
    "coment": "MapBiomas Alerta: poligonos de alertas de desmatamento (camada dashboard-alert-shapefile do servidor de mapas do MapBiomas Alerta), espelho versionado: vigente = vigente_ate IS NULL. Inclui alertas cancelados (status_name). Ver mapbiomas/alerta/LEIAME_mapbiomas_alerta.md.",
    "cols": [
     {
@@ -8625,8 +8625,8 @@
    "sch": "vetorial",
    "nome": "prodes_desmatamento",
    "view": false,
-   "linhas": 6936963,
-   "bytes": 7532797952,
+   "linhas": 7607143,
+   "bytes": 9084624896,
    "coment": "PRODES: poligonos de desmatamento anual por bioma (yearly_deforestation; Amazonia tambem a nao-floresta), espelho do INPE/TerraBrasilis. Historico por versao: vigente = vigente_ate IS NULL. Ver prodes/desmatamento/LEIAME_prodes_desmatamento.md.",
    "cols": [
     {
@@ -8839,8 +8839,8 @@
    "sch": "vetorial",
    "nome": "sema_mt_areas_desembargadas",
    "view": false,
-   "linhas": 4751,
-   "bytes": 12902400,
+   "linhas": 4778,
+   "bytes": 12992512,
    "coment": "Áreas desembargadas da SEMA-MT (Secretaria de Estado de Meio Ambiente de Mato Grosso): uma linha por polígono, WFS do Geoportal da SEMA. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome como a fonte publica. Embargo ENCERRADO: não conta como embargo vigente. Ver sema_mt/areas_embargadas/LEIAME_areas_embargadas.md.",
    "cols": [
     {
@@ -9060,8 +9060,8 @@
    "sch": "vetorial",
    "nome": "sema_mt_areas_embargadas",
    "view": false,
-   "linhas": 8372,
-   "bytes": 20529152,
+   "linhas": 8389,
+   "bytes": 20602880,
    "coment": "Áreas embargadas da SEMA-MT (Secretaria de Estado de Meio Ambiente de Mato Grosso): uma linha por polígono, WFS do Geoportal da SEMA. Espelho versionado. Dado pessoal: CPF só como HMAC (mesma chave do IBAMA), nome como a fonte publica. Embargo vigente. Ver sema_mt/areas_embargadas/LEIAME_areas_embargadas.md.",
    "cols": [
     {
@@ -9523,8 +9523,8 @@
    "sch": "vetorial",
    "nome": "sicar_imoveis",
    "view": false,
-   "linhas": 8840034,
-   "bytes": 8761155584,
+   "linhas": 9105443,
+   "bytes": 9202401280,
    "coment": "Imóveis do SICAR (CAR), coletados do WFS público do CAR, cancelados inclusive. Espelho versionado: vigente = vigente_ate IS NULL. Ver sicar/imoveis/LEIAME_sicar_imoveis.md.",
    "cols": [
     {
@@ -11878,6 +11878,129 @@
      "nn": false,
      "pk": false,
      "c": "Geometria em SIRGAS 2000 (EPSG:4674)."
+    }
+   ]
+  },
+  {
+   "id": "vetorial.v_incra_assentamentos",
+   "sch": "vetorial",
+   "nome": "v_incra_assentamentos",
+   "view": true,
+   "linhas": 0,
+   "bytes": null,
+   "coment": null,
+   "cols": [
+    {
+     "n": "id",
+     "t": "bigint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "gid_incra",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "cd_sipra",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "nome_projeto",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "municipio",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "id_estado",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_declarada_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "area_calc_ha",
+     "t": "numeric",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "capacidade_familias",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "num_familias",
+     "t": "integer",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "fase",
+     "t": "smallint",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "data_criacao",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "forma_obtencao",
+     "t": "text",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "data_obtencao",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "visto_em",
+     "t": "date",
+     "nn": false,
+     "pk": false,
+     "c": null
+    },
+    {
+     "n": "geom",
+     "t": "geometry(MultiPolygon,4674)",
+     "nn": false,
+     "pk": false,
+     "c": null
     }
    ]
   },

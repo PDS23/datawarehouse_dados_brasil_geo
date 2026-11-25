@@ -52,6 +52,7 @@ ESTILOS = [
     ("sicar_imoveis", "sicar_imoveis.sld"),
     ("terra_indigena", "terra_indigena.sld"),
     ("territorio_quilombola", "territorio_quilombola.sld"),
+    ("assentamento", "assentamento.sld"),
     ("unidade_conservacao", "unidade_conservacao.sld"),
     ("floresta_publica", "floresta_publica.sld"),
     ("alerta_desmatamento", "alerta_desmatamento.sld"),
@@ -107,6 +108,9 @@ VETORIAIS = [
     {"store": "dw_vetorial", "nome": "v_ibge_territorios_quilombolas", "titulo": "IBGE - Territórios quilombolas",
      "resumo": "495 territórios quilombolas oficialmente delimitados (IBGE, edição 2022; não é a base do INCRA), versão vigente. status diz a fase do processo (titulado, RTID, decreto...).",
      "estilo": "territorio_quilombola"},
+    {"store": "dw_vetorial", "nome": "v_incra_assentamentos", "titulo": "INCRA - Assentamentos rurais",
+     "resumo": "7.525 polígonos de projetos de assentamento do INCRA nas 27 UFs. ATENÇÃO: carga única de 15/10/2026, sem atualização (o acervo fundiário do INCRA está fora do ar); o Pará veio de shapefile.",
+     "estilo": "assentamento"},
     {"store": "dw_vetorial", "nome": "v_mma_unidades_conservacao", "titulo": "MMA - Unidades de conservação (CNUC)",
      "resumo": "3.406 unidades de conservação com polígono (CNUC, MMA), edição 2026_07, versão vigente. As 170 UCs que só têm ponto esquemático não estão nesta camada. "
                "esfera varia a capitalização (Federal/federal): use lower().",

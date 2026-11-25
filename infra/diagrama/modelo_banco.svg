@@ -237,7 +237,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">mte_cadastro_empregadores</text>
-<text class="sub" x="12" y="35">tabular · 508 linhas · 440 kB</text>
+<text class="sub" x="12" y="35">tabular · 518 linhas · 448 kB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -415,7 +415,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">prodes_desmatamento</text>
-<text class="sub" x="12" y="35">vetorial · 6.936.963 linhas · 7,0 GB</text>
+<text class="sub" x="12" y="35">vetorial · 7.607.143 linhas · 8,5 GB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -459,7 +459,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">sicar_imoveis</text>
-<text class="sub" x="12" y="35">vetorial · 8.840.034 linhas · 8,2 GB</text>
+<text class="sub" x="12" y="35">vetorial · 9.105.443 linhas · 8,6 GB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -546,7 +546,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">mapbiomas_alerta</text>
-<text class="sub" x="12" y="35">vetorial · 546.536 linhas · 875 MB</text>
+<text class="sub" x="12" y="35">vetorial · 553.016 linhas · 905 MB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -588,7 +588,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">funai_terras_indigenas</text>
-<text class="sub" x="12" y="35">vetorial · 665 linhas · 30 MB</text>
+<text class="sub" x="12" y="35">vetorial · 683 linhas · 31 MB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -674,7 +674,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">deter_alertas</text>
-<text class="sub" x="12" y="35">vetorial · 599.537 linhas · 686 MB</text>
+<text class="sub" x="12" y="35">vetorial · 633.393 linhas · 750 MB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -718,7 +718,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">ibama_embargos</text>
-<text class="sub" x="12" y="35">vetorial · 117.636 linhas · 214 MB</text>
+<text class="sub" x="12" y="35">vetorial · 118.404 linhas · 218 MB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -1360,7 +1360,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">icmbio_areas_embargadas</text>
-<text class="sub" x="12" y="35">vetorial · 14.886 linhas · 38 MB</text>
+<text class="sub" x="12" y="35">vetorial · 14.954 linhas · 38 MB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -1403,7 +1403,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">sema_mt_areas_embargadas</text>
-<text class="sub" x="12" y="35">vetorial · 8.372 linhas · 20 MB</text>
+<text class="sub" x="12" y="35">vetorial · 8.389 linhas · 20 MB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -1445,7 +1445,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">sema_mt_areas_desembargadas</text>
-<text class="sub" x="12" y="35">vetorial · 4.751 linhas · 12 MB</text>
+<text class="sub" x="12" y="35">vetorial · 4.778 linhas · 12 MB</text>
 <text class="selo" x="280" y="18" text-anchor="end">espelho versionado</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
@@ -1745,7 +1745,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">cargas</text>
-<text class="sub" x="12" y="35">catalogo · 191 linhas · 128 kB</text>
+<text class="sub" x="12" y="35">catalogo · 210 linhas · 144 kB</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
 <text class="tp" x="280" y="57" text-anchor="end">bigint</text>
@@ -1784,7 +1784,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">coletas</text>
-<text class="sub" x="12" y="35">catalogo · 148 linhas · 152 kB</text>
+<text class="sub" x="12" y="35">catalogo · 218 linhas · 168 kB</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
 <text class="tp" x="280" y="57" text-anchor="end">bigint</text>
@@ -1823,7 +1823,7 @@
 <rect class="corpo" width="290" height="226" rx="6"/>
 <path class="cab" d="M0 6a6 6 0 0 1 6-6h278a6 6 0 0 1 6 6v38H0z"/>
 <text class="nome" x="12" y="18">coletas_duplicados</text>
-<text class="sub" x="12" y="35">catalogo · 43 linhas · 88 kB</text>
+<text class="sub" x="12" y="35">catalogo · 45 linhas · 88 kB</text>
 <text class="m PK" x="10" y="57">PK</text>
 <text class="col pk" x="44" y="57">id</text>
 <text class="tp" x="280" y="57" text-anchor="end">bigint</text>

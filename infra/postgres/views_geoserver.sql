@@ -16,6 +16,12 @@ SELECT id, terrai_codigo, terrai_nome, etnia_nome, municipio_nome, uf_sigla, id_
        undadm_nome, undadm_sigla, dominio_uniao, data_atualizacao, vigente_desde, geom
 FROM vetorial.funai_terras_indigenas WHERE vigente_ate IS NULL AND geom IS NOT NULL;
 
+-- Assentamentos rurais do INCRA: tabela sem versionamento (carga unica de 2026-10-15); so atributos do projeto, sem pessoa.
+CREATE OR REPLACE VIEW vetorial.v_incra_assentamentos AS
+SELECT id, gid_incra, cd_sipra, nome_projeto, municipio, id_estado, area_declarada_ha, area_calc_ha, capacidade_familias, num_familias, fase,
+       data_criacao, forma_obtencao, data_obtencao, visto_em, geom
+FROM vetorial.incra_assentamentos WHERE geom IS NOT NULL;
+
 CREATE OR REPLACE VIEW vetorial.v_ibge_territorios_quilombolas AS
 SELECT id, cd_recorte, cd_tq, nm_tq, status, sg_uf, id_estado, camada_origem, vigente_desde, geom
 FROM vetorial.ibge_territorios_quilombolas WHERE vigente_ate IS NULL AND geom IS NOT NULL;
