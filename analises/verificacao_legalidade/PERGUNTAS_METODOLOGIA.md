@@ -1,5 +1,8 @@
 # Pré-análise de legalidade: perguntas de metodologia por camada
 
+> **Histórico, não é a versão vigente.** Desde 2026-11-26 a metodologia mora no repositório do projeto da PFF (plataforma AURA+), que já tem as
+> decisões de 25/11/2026. Este arquivo fica como registro de como as decisões foram tomadas até 24/11; o data warehouse cuida só das fontes (ROADMAP, item 16).
+
 Levantamento de 2026-10-28 (ROADMAP, item 16.3). **Respostas do usuário registradas em 2026-11-12** (documento de trabalho "Requisitos_Metodologia", no Drive do
 usuário). Cada pergunta tem **Decisão:**; onde ainda não há resposta, está escrito **em aberto**. Onde a resposta precisou de interpretação, ou conflita com outra
 decisão, há uma **Nota**. O foco é **cada camada**: o que ela diz, o que vamos considerar e o que falta.

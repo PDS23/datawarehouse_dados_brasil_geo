@@ -876,6 +876,11 @@ erDiagram
     *(2026-10-27: SFB/CNFP, CNUC, IBAMA e DETER já carregados; os demais ✅ "automatizáveis" seguem a fazer. ICMBio, SEMA-MT e MTE, abaixo, entram pelo item 16.)*
 
 16. **Preparar o banco para uma pré-análise de legalidade EUDR no Brasil (levantamento de 2026-10-27; a executar)** — 📐 desenho a aprovar. **Situação (2026-10-27):** 11 dos 12 critérios já têm a fonte no banco (itens 1 a 11); o quilombola (12) entrou em 12/11 pela base do IBGE 2022, escape enquanto o INCRA está fora do ar.
+    **Mudança de casa (2026-11-26):** a metodologia e o código da pré-análise de legalidade e da convergência de evidência passaram para o **projeto da
+    PFF** (repositório próprio, privado; as análises serão acessadas pela plataforma AURA+). **Aqui fica só a parte de dados:** as fontes, o versionamento
+    (item 19) e as fontes novas que a metodologia pedir (embargos de MG e ES, PRODES marco UE, RADAM). O texto abaixo e
+    `analises/verificacao_legalidade/PERGUNTAS_METODOLOGIA.md` são o histórico até 24/11; as decisões de 25/11 (embargos viram alerta, proteção integral
+    com tolerância, uso sustentável só alerta, áreas militares fora, PRODES informativo depois de 2008) só estão na PFF.
     **Objetivo:** o banco ter todas as fontes públicas que uma checagem prévia de imóveis contra o Regulamento Europeu de Desmatamento
     (EUDR, Reg. UE 2023/1115) usa, para barrar **antes do envio** os imóveis que seriam negados. **Regra do usuário:** as fontes entram como
     qualquer outra, no padrão `<grupo>/<fonte>/` e com **nome pela fonte**; nada no banco (schema, tabela, coluna, LEIAME de fonte) cita
